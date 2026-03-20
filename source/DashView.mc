@@ -15,6 +15,10 @@ class DashView extends WatchUi.DataField {
     private var mHeartRate = 0;
     private var mPower3s = 0;
     private var mTemp = 0.0;
+    private var mCadence = 0;
+    private var mCalories = 0;
+    private var mAvgHeartRate = 0;
+    private var mAvgPower = 0;
 
     // Header Fields
     private var mGrade = 0.0;
@@ -86,6 +90,9 @@ class DashView extends WatchUi.DataField {
                 mHeartRate = actInfo.currentHeartRate;
             }
         }
+        if (info.averageHeartRate != null) {
+            mAvgHeartRate = info.averageHeartRate;
+        }
 
         // 3s Power
         if (info.currentPower != null) {
@@ -95,6 +102,19 @@ class DashView extends WatchUi.DataField {
             if (actInfo != null && actInfo.currentPower != null) {
                 mPower3s = actInfo.currentPower;
             }
+        }
+        if (info.averagePower != null) {
+            mAvgPower = info.averagePower;
+        }
+
+        // Cadence
+        if (info.currentCadence != null) {
+            mCadence = info.currentCadence;
+        }
+
+        // Calories
+        if (info.calories != null) {
+            mCalories = info.calories;
         }
 
         // Temperature
@@ -167,50 +187,50 @@ class DashView extends WatchUi.DataField {
         var topBarH = 65;
         dc.setPenWidth(1);
         dc.setColor(isDark ? 0x222222 : 0xdddddd, Graphics.COLOR_TRANSPARENT);
-        dc.drawLine(0, topBarY + topBarH, width, topBarY + topBarH); // Divider
 
-        var colW = width / 4.0;
-        for (var i = 1; i < 4; i++) {
-            dc.drawLine(colW * i, topBarY + 5, colW * i, topBarY + topBarH);
-        }
+        // dc.drawLine(0, topBarY + topBarH, width, topBarY + topBarH); // Divider
 
-        var topLabels = ["GRADE", "ELEV", "ASCENT", "DESCENT"];
+        var colW = width / 3.0;
+        // for (var i = 1; i < 3; i++) {
+        //     dc.drawLine(colW * i, topBarY + 5, colW * i, topBarY + topBarH);
+        // }
+
+        // var topLabels = ["CADENCE", "GRADE", "ELEV"];
         var topValues = [
-            mGrade.format("%.1f") + "%",
+            mCadence.format("%.0f"),
+            mGrade.format("%.0f") + "%",
             mElevation.format("%.0f"),
-            mAscent.format("%.0f"),
-            mDescent.format("%.0f"),
         ];
 
-        for (var i = 0; i < 4; i++) {
+        for (var i = 0; i < 3; i++) {
             var x = colW * (i + 0.5);
-            dc.setColor(dimColor, Graphics.COLOR_TRANSPARENT);
-            dc.drawText(
-                x,
-                topBarY + 8,
-                Graphics.FONT_XTINY,
-                topLabels[i],
-                Graphics.TEXT_JUSTIFY_CENTER
-            );
+            // dc.setColor(dimColor, Graphics.COLOR_TRANSPARENT);
+            // dc.drawText(
+            //     x,
+            //     topBarY + 8,
+            //     Graphics.FONT_XTINY,
+            //     topLabels[i],
+            //     Graphics.TEXT_JUSTIFY_CENTER
+            // );
             dc.setColor(fgColor, Graphics.COLOR_TRANSPARENT);
             dc.drawText(
                 x,
-                topBarY + 28,
-                Graphics.FONT_MEDIUM,
+                topBarY + 8,
+                Graphics.FONT_LARGE,
                 topValues[i],
                 Graphics.TEXT_JUSTIFY_CENTER
             );
         }
 
         // --- GAUGE LAYOUT (Adjusted height) ---
-        var centerX = width / 2.0;
-        var centerY = height * 0.48;
         var minDim = width < height ? width : height;
+        var trackWidth = 40;
         var radius = minDim * 0.36;
+        var centerX = width / 2.0;
+        var centerY = radius + topBarH + trackWidth;
         var maxVal = mIsMetric ? 60.0 : 40.0;
         var gaugeStart = 210.0;
         var gaugeSweep = 240.0;
-        var trackWidth = 40;
 
         // --- SEGMENTED ARC GAUGE (SPEED) ---
         var arcSegCount = 24;
@@ -279,15 +299,15 @@ class DashView extends WatchUi.DataField {
         dc.setColor(fgColor, Graphics.COLOR_TRANSPARENT);
         dc.drawText(
             centerX - radius * 0.35,
-            centerY - radius * 0.48,
-            Graphics.FONT_SMALL,
+            centerY - radius * 0.54,
+            Graphics.FONT_MEDIUM,
             mAvgSpeed.format("%.1f"),
             Graphics.TEXT_JUSTIFY_CENTER
         );
         dc.drawText(
             centerX + radius * 0.35,
-            centerY - radius * 0.48,
-            Graphics.FONT_SMALL,
+            centerY - radius * 0.54,
+            Graphics.FONT_MEDIUM,
             mMaxSpeed.format("%.1f"),
             Graphics.TEXT_JUSTIFY_CENTER
         );
@@ -310,11 +330,29 @@ class DashView extends WatchUi.DataField {
             Graphics.TEXT_JUSTIFY_CENTER
         );
 
+        // --- ELAPSED TIME ---
+
+        var totalSecs = mElapsedMs / 1000;
+        var elapsedStr = Lang.format("$1$:$2$:$3$", [
+            (totalSecs / 3600).format("%d"),
+            ((totalSecs % 3600) / 60).format("%02d"),
+            (totalSecs % 60).format("%02d"),
+        ]);
+
+        dc.setColor(fgColor, Graphics.COLOR_TRANSPARENT);
+        dc.drawText(
+            centerX,
+            2 * radius + topBarH / 2,
+            Graphics.FONT_LARGE,
+            elapsedStr,
+            Graphics.TEXT_JUSTIFY_CENTER
+        );
+
         // Footer Y needed by panels
-        var footerY = height - 65;
+        var footerY = height - topBarH;
 
         // --- HR & POWER PANELS ---
-        var panelTop = centerY + radius * 0.55;
+        var panelTop = centerY + radius * 0.5 + topBarH;
         var panelH = footerY - panelTop - 8;
         var barH = panelH - 4;
         var segCount = 10;
@@ -371,6 +409,14 @@ class DashView extends WatchUi.DataField {
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
         );
 
+        dc.drawText(
+            lPanelCenterX,
+            lPanelCenterY + 70,
+            Graphics.FONT_MEDIUM,
+            mAvgHeartRate.format("%.0f"),
+            Graphics.TEXT_JUSTIFY_CENTER
+        );
+
         // ---- RIGHT PANEL: 3s Power ----
         var rBarX = width - 18;
         var rPanelCenterX = (width / 2.0 + rBarX - rBarW / 2) / 2.0;
@@ -419,18 +465,26 @@ class DashView extends WatchUi.DataField {
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
         );
 
+        dc.drawText(
+            rPanelCenterX,
+            rPanelCenterY + 70,
+            Graphics.FONT_MEDIUM,
+            mAvgPower.format("%.0f"),
+            Graphics.TEXT_JUSTIFY_CENTER
+        );
+
         // --- STATS BAR (BOTTOM) ---
         dc.setPenWidth(1);
         dc.setColor(isDark ? 0x222222 : 0xdddddd, Graphics.COLOR_TRANSPARENT);
-        dc.drawLine(0, footerY, width, footerY);
 
-        for (var i = 1; i < 4; i++) {
-            dc.drawLine(colW * i, footerY, colW * i, height);
-        }
+        // dc.drawLine(0, footerY, width, footerY);
 
-        var bottomLabels = ["TIME", "TEMP", "DIST", "TIMER"];
+        // for (var i = 1; i < 4; i++) {
+        //     dc.drawLine(colW * i, footerY, colW * i, height);
+        // }
+
+        // var bottomLabels = ["TIME", "TEMP", "DIST", "TIMER"];
         var now = System.getClockTime();
-        var totalSecs = mElapsedMs / 1000;
         var bottomValues = [
             Lang.format("$1$:$2$", [
                 now.hour.format("%02d"),
@@ -438,28 +492,23 @@ class DashView extends WatchUi.DataField {
             ]),
             mTemp.format("%d") + "°" + mTempUnit,
             mDistance.format("%.1f"),
-            Lang.format("$1$:$2$:$3$", [
-                (totalSecs / 3600).format("%d"),
-                ((totalSecs % 3600) / 60).format("%02d"),
-                (totalSecs % 60).format("%02d"),
-            ]),
         ];
 
-        for (var i = 0; i < 4; i++) {
+        for (var i = 0; i < 3; i++) {
             var x = colW * (i + 0.5);
             dc.setColor(dimColor, Graphics.COLOR_TRANSPARENT);
-            dc.drawText(
-                x,
-                footerY + 8,
-                Graphics.FONT_XTINY,
-                bottomLabels[i],
-                Graphics.TEXT_JUSTIFY_CENTER
-            );
+            // dc.drawText(
+            //     x,
+            //     footerY + 8,
+            //     Graphics.FONT_XTINY,
+            //     bottomLabels[i],
+            //     Graphics.TEXT_JUSTIFY_CENTER
+            // );
             dc.setColor(fgColor, Graphics.COLOR_TRANSPARENT);
             dc.drawText(
                 x,
-                footerY + 28,
-                Graphics.FONT_MEDIUM,
+                footerY + 8,
+                Graphics.FONT_LARGE,
                 bottomValues[i],
                 Graphics.TEXT_JUSTIFY_CENTER
             );
