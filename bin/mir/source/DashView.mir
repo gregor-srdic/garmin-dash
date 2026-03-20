@@ -1,0 +1,2753 @@
+[ @file = "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc"; @line = 1; @symbol_importdef<0> = [Toybox,1,7,13]; @symbol_importdef<1> = [WatchUi,1,14,21]; ]
+import Toybox.WatchUi;
+[ @file = "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc"; @line = 2; @symbol_importdef<0> = [Toybox,2,7,13]; @symbol_importdef<1> = [Graphics,2,14,22]; ]
+import Toybox.Graphics;
+[ @file = "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc"; @line = 3; @symbol_importdef<0> = [Toybox,3,7,13]; @symbol_importdef<1> = [System,3,14,20]; ]
+import Toybox.System;
+[ @file = "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc"; @line = 4; @symbol_importdef<0> = [Toybox,4,7,13]; @symbol_importdef<1> = [Activity,4,14,22]; ]
+import Toybox.Activity;
+[ @file = "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc"; @line = 5; @symbol_importdef<0> = [Toybox,5,7,13]; @symbol_importdef<1> = [Lang,5,14,18]; ]
+import Toybox.Lang;
+[ @file = "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc"; @line = 6; @symbol_importdef<0> = [Toybox,6,7,13]; @symbol_importdef<1> = [Time,6,14,18]; ]
+import Toybox.Time;
+[ @file = "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc"; @line = 7; @symbol_importdef<0> = [Toybox,7,7,13]; @symbol_importdef<1> = [Time,7,14,18]; @symbol_importdef<2> = [Gregorian,7,19,28]; ]
+import Toybox.Time.Gregorian;
+[ @file = "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc"; @line = 9; @symbol_classdef = [DashView,9,6,14]; @symbol_extends<0> = [WatchUi,9,23,30]; @symbol_extends<1> = [DataField,9,31,40]; ]
+class DashView extends WatchUi.DataField {
+    [ @file = "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc"; @line = 9; ]
+    <init> {
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 28 16 ]
+        %tmp.1 = newa 24;
+        %tmp.2 = 0x29ff00;
+        %tmp.3 = dup %tmp.1;
+        %tmp.4 = aputv %tmp.3 0 %tmp.2;
+        %tmp.5 = 0x45ff00;
+        %tmp.6 = dup %tmp.4;
+        %tmp.7 = aputv %tmp.6 1 %tmp.5;
+        %tmp.8 = 0x60ff00;
+        %tmp.9 = dup %tmp.7;
+        %tmp.10 = aputv %tmp.9 2 %tmp.8;
+        %tmp.11 = 0x7cff00;
+        %tmp.12 = dup %tmp.10;
+        %tmp.13 = aputv %tmp.12 3 %tmp.11;
+        %tmp.14 = 0x97ff00;
+        %tmp.15 = dup %tmp.13;
+        %tmp.16 = aputv %tmp.15 4 %tmp.14;
+        %tmp.17 = 0xb3ff00;
+        %tmp.18 = dup %tmp.16;
+        %tmp.19 = aputv %tmp.18 5 %tmp.17;
+        %tmp.20 = 0xceff00;
+        %tmp.21 = dup %tmp.19;
+        %tmp.22 = aputv %tmp.21 6 %tmp.20;
+        %tmp.23 = 0xeaff00;
+        %tmp.24 = dup %tmp.22;
+        %tmp.25 = aputv %tmp.24 7 %tmp.23;
+        %tmp.26 = 0xfaff00;
+        %tmp.27 = dup %tmp.25;
+        %tmp.28 = aputv %tmp.27 8 %tmp.26;
+        %tmp.29 = 0xfff500;
+        %tmp.30 = dup %tmp.28;
+        %tmp.31 = aputv %tmp.30 9 %tmp.29;
+        %tmp.32 = 0xffeb00;
+        %tmp.33 = dup %tmp.31;
+        %tmp.34 = aputv %tmp.33 10 %tmp.32;
+        %tmp.35 = 0xffe000;
+        %tmp.36 = dup %tmp.34;
+        %tmp.37 = aputv %tmp.36 11 %tmp.35;
+        %tmp.38 = 0xffd600;
+        %tmp.39 = dup %tmp.37;
+        %tmp.40 = aputv %tmp.39 12 %tmp.38;
+        %tmp.41 = 0xffcb00;
+        %tmp.42 = dup %tmp.40;
+        %tmp.43 = aputv %tmp.42 13 %tmp.41;
+        %tmp.44 = 0xffc100;
+        %tmp.45 = dup %tmp.43;
+        %tmp.46 = aputv %tmp.45 14 %tmp.44;
+        %tmp.47 = 0xffb600;
+        %tmp.48 = dup %tmp.46;
+        %tmp.49 = aputv %tmp.48 15 %tmp.47;
+        %tmp.50 = 0xffac00;
+        %tmp.51 = dup %tmp.49;
+        %tmp.52 = aputv %tmp.51 16 %tmp.50;
+        %tmp.53 = 0xffa100;
+        %tmp.54 = dup %tmp.52;
+        %tmp.55 = aputv %tmp.54 17 %tmp.53;
+        %tmp.56 = 0xff9100;
+        %tmp.57 = dup %tmp.55;
+        %tmp.58 = aputv %tmp.57 18 %tmp.56;
+        %tmp.59 = 0xff7c00;
+        %tmp.60 = dup %tmp.58;
+        %tmp.61 = aputv %tmp.60 19 %tmp.59;
+        %tmp.62 = 0xff6200;
+        %tmp.63 = dup %tmp.61;
+        %tmp.64 = aputv %tmp.63 20 %tmp.62;
+        %tmp.65 = 0xff4800;
+        %tmp.66 = dup %tmp.64;
+        %tmp.67 = aputv %tmp.66 21 %tmp.65;
+        %tmp.68 = 0xff2d00;
+        %tmp.69 = dup %tmp.67;
+        %tmp.70 = aputv %tmp.69 22 %tmp.68;
+        %tmp.71 = 0xff0000;
+        %tmp.72 = dup %tmp.70;
+        %tmp.73 = aputv %tmp.72 23 %tmp.71;
+        putv self :mGaugeColors %tmp.73;
+    }
+    [ @file = "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc"; @line = 9; ]
+    static
+    <init> {
+    }
+    [ @file = "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc"; @line = 10; @position = 16; @symbol_vardef = [mSpeed,10,16,22]; ]
+    private
+    var mSpeed = 0.0;
+    [ @file = "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc"; @line = 11; @position = 16; @symbol_vardef = [mAvgSpeed,11,16,25]; ]
+    private
+    var mAvgSpeed = 0.0;
+    [ @file = "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc"; @line = 12; @position = 16; @symbol_vardef = [mMaxSpeed,12,16,25]; ]
+    private
+    var mMaxSpeed = 0.0;
+    [ @file = "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc"; @line = 13; @position = 16; @symbol_vardef = [mDistance,13,16,25]; ]
+    private
+    var mDistance = 0.0;
+    [ @file = "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc"; @line = 14; @position = 16; @symbol_vardef = [mElapsedMs,14,16,26]; ]
+    private
+    var mElapsedMs = 0;
+    [ @file = "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc"; @line = 15; @position = 16; @symbol_vardef = [mHeartRate,15,16,26]; ]
+    private
+    var mHeartRate = 0;
+    [ @file = "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc"; @line = 16; @position = 16; @symbol_vardef = [mPower3s,16,16,24]; ]
+    private
+    var mPower3s = 0;
+    [ @file = "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc"; @line = 17; @position = 16; @symbol_vardef = [mTemp,17,16,21]; ]
+    private
+    var mTemp = 0.0;
+    [ @file = "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc"; @line = 20; @position = 16; @symbol_vardef = [mGrade,20,16,22]; ]
+    private
+    var mGrade = 0.0;
+    [ @file = "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc"; @line = 21; @position = 16; @symbol_vardef = [mElevation,21,16,26]; ]
+    private
+    var mElevation = 0.0;
+    [ @file = "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc"; @line = 22; @position = 16; @symbol_vardef = [mAscent,22,16,23]; ]
+    private
+    var mAscent = 0.0;
+    [ @file = "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc"; @line = 23; @position = 16; @symbol_vardef = [mDescent,23,16,24]; ]
+    private
+    var mDescent = 0.0;
+    [ @file = "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc"; @line = 25; @position = 16; @symbol_vardef = [mIsMetric,25,16,25]; ]
+    private
+    var mIsMetric = true;
+    [ @file = "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc"; @line = 26; @position = 16; @symbol_vardef = [mIsElevationMetric,26,16,34]; ]
+    private
+    var mIsElevationMetric = true;
+    [ @file = "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc"; @line = 27; @position = 16; @symbol_vardef = [mTempUnit,27,16,25]; ]
+    private
+    var mTempUnit = "C";
+    [ @file = "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc"; @line = 28; @position = 16; @symbol_vardef = [mGaugeColors,28,16,28]; ]
+    private
+    var mGaugeColors;
+    [ @file = "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc"; @line = 35; @symbol_functiondef = [initialize,35,13,23]; ]
+    function initialize() as Void {
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_35_26_40_4_start:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 36 8 ]
+        symbol [ DataField %tmp.2 36 8 17 ];
+        %tmp.2 = getv ? :DataField;
+        symbol [ initialize %tmp.3 36 18 28 ];
+        %tmp.3 = getv function %tmp.2 :initialize;
+        invoke %tmp.2 %tmp.3();
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 37 8 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_35_26_40_4_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_35_26_40_4_stop" ]
+        %settings.1 = local;
+        symbol [ settings %settings.1 37 12 20 ];
+        symbol [ System %tmp.4 37 23 29 ];
+        %tmp.4 = getm $.Toybox.System;
+        symbol [ getDeviceSettings %tmp.5 37 30 47 ];
+        %tmp.5 = getv function %tmp.4 :getDeviceSettings;
+        %tmp.6 = invoke %tmp.4 %tmp.5();
+        lputv %settings.1 %tmp.6;
+        symbol [ settings %settings.1 37 12 20 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 38 8 ]
+        %tmp.7 = lgetv %settings.1;
+        symbol [ settings %tmp.7 38 20 28 ];
+        symbol [ paceUnits %tmp.8 38 29 38 ];
+        %tmp.8 = getv %tmp.7 :paceUnits;
+        symbol [ System %tmp.9 38 42 48 ];
+        %tmp.9 = getm $.Toybox.System;
+        symbol [ UNIT_METRIC %tmp.10 38 49 60 ];
+        %tmp.10 = getv %tmp.9 :UNIT_METRIC;
+        %tmp.11 = eq %tmp.8 %tmp.10;
+        symbol [ mIsMetric ? 38 8 17 ];
+        putv self :mIsMetric %tmp.11;
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 39 8 ]
+        %tmp.12 = lgetv %settings.1;
+        symbol [ settings %tmp.12 39 29 37 ];
+        symbol [ elevationUnits %tmp.13 39 38 52 ];
+        %tmp.13 = getv %tmp.12 :elevationUnits;
+        symbol [ System %tmp.14 39 56 62 ];
+        %tmp.14 = getm $.Toybox.System;
+        symbol [ UNIT_METRIC %tmp.15 39 63 74 ];
+        %tmp.15 = getv %tmp.14 :UNIT_METRIC;
+        %tmp.16 = eq %tmp.13 %tmp.15;
+        symbol [ mIsElevationMetric ? 39 8 26 ];
+        putv self :mIsElevationMetric %tmp.16;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_35_26_40_4_stop:
+    }
+    [ @file = "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc"; @line = 42; @symbol_functiondef = [compute,42,13,20]; @symbol_param<0> = [info,42,21,25]; @symbol_param<0>_type<0> = [Activity,42,29,37]; @symbol_param<0>_type<1> = [Info,42,38,42]; ]
+    function compute(info as Activity.Info) as Void {
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_42_52_128_4_start:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 43 8 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_42_52_128_4_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_42_52_128_4_stop" ]
+        %settings.1 = local;
+        symbol [ settings %settings.1 43 12 20 ];
+        symbol [ System %tmp.1 43 23 29 ];
+        %tmp.1 = getm $.Toybox.System;
+        symbol [ getDeviceSettings %tmp.2 43 30 47 ];
+        %tmp.2 = getv function %tmp.1 :getDeviceSettings;
+        %tmp.3 = invoke %tmp.1 %tmp.2();
+        lputv %settings.1 %tmp.3;
+        symbol [ settings %settings.1 43 12 20 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 46 8 ]
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_46_8_52_8_if_stmt:
+        %tmp.4 = lgetv %info;
+        symbol [ info %tmp.4 46 12 16 ];
+        symbol [ currentSpeed %tmp.5 46 17 29 ];
+        %tmp.5 = getv %tmp.4 :currentSpeed;
+        %tmp.6 = null;
+        %tmp.7 = ne %tmp.5 %tmp.6;
+        bf %tmp.7 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_46_8_52_8_if_else_false;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_46_8_52_8_if_true:
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_46_39_50_8_start:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 47 12 ]
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_47_21_49_38_begin:
+        symbol [ mIsMetric %tmp.9 47 21 30 ];
+        %tmp.9 = getv ? :mIsMetric;
+        bf %tmp.9 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_47_21_49_38_else_false;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_47_21_49_38_true:
+        %tmp.10 = lgetv %info;
+        symbol [ info %tmp.10 48 18 22 ];
+        symbol [ currentSpeed %tmp.11 48 23 35 ];
+        %tmp.11 = getv %tmp.10 :currentSpeed;
+        %tmp.12 = 3.6;
+        %tmp.13 = mul %tmp.11 %tmp.12;
+        push %tmp.13;
+        goto @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_47_21_49_38_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_47_21_49_38_else_false:
+        %tmp.14 = lgetv %info;
+        symbol [ info %tmp.14 49 18 22 ];
+        symbol [ currentSpeed %tmp.15 49 23 35 ];
+        %tmp.15 = getv %tmp.14 :currentSpeed;
+        %tmp.16 = 2.23694;
+        %tmp.17 = mul %tmp.15 %tmp.16;
+        push %tmp.17;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_47_21_49_38_end:
+        %tmp.18 = phi [%tmp.9 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_47_21_49_38_begin] [%tmp.13 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_47_21_49_38_true] [%tmp.17 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_47_21_49_38_else_false] [%tmp.18 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_47_21_49_38_end];
+        symbol [ mSpeed ? 47 12 18 ];
+        putv self :mSpeed %tmp.18;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_46_39_50_8_stop:
+        goto @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_46_8_52_8_if_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_46_8_52_8_if_else_false:
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_50_15_52_8_start:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 51 12 ]
+        %tmp.19 = 0.0;
+        symbol [ mSpeed ? 51 12 18 ];
+        putv self :mSpeed %tmp.19;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_50_15_52_8_stop:
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_46_8_52_8_if_end:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 55 8 ]
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_55_8_59_8_if_stmt:
+        %tmp.20 = lgetv %info;
+        symbol [ info %tmp.20 55 12 16 ];
+        symbol [ averageSpeed %tmp.21 55 17 29 ];
+        %tmp.21 = getv %tmp.20 :averageSpeed;
+        %tmp.22 = null;
+        %tmp.23 = ne %tmp.21 %tmp.22;
+        bf %tmp.23 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_55_8_59_8_if_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_55_8_59_8_if_true:
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_55_39_59_8_start:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 56 12 ]
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_56_24_58_38_begin:
+        symbol [ mIsMetric %tmp.25 56 24 33 ];
+        %tmp.25 = getv ? :mIsMetric;
+        bf %tmp.25 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_56_24_58_38_else_false;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_56_24_58_38_true:
+        %tmp.26 = lgetv %info;
+        symbol [ info %tmp.26 57 18 22 ];
+        symbol [ averageSpeed %tmp.27 57 23 35 ];
+        %tmp.27 = getv %tmp.26 :averageSpeed;
+        %tmp.28 = 3.6;
+        %tmp.29 = mul %tmp.27 %tmp.28;
+        push %tmp.29;
+        goto @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_56_24_58_38_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_56_24_58_38_else_false:
+        %tmp.30 = lgetv %info;
+        symbol [ info %tmp.30 58 18 22 ];
+        symbol [ averageSpeed %tmp.31 58 23 35 ];
+        %tmp.31 = getv %tmp.30 :averageSpeed;
+        %tmp.32 = 2.23694;
+        %tmp.33 = mul %tmp.31 %tmp.32;
+        push %tmp.33;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_56_24_58_38_end:
+        %tmp.34 = phi [%tmp.25 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_56_24_58_38_begin] [%tmp.29 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_56_24_58_38_true] [%tmp.33 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_56_24_58_38_else_false] [%tmp.34 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_56_24_58_38_end];
+        symbol [ mAvgSpeed ? 56 12 21 ];
+        putv self :mAvgSpeed %tmp.34;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_55_39_59_8_stop:
+        goto @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_55_8_59_8_if_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_55_8_59_8_if_end:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 62 8 ]
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_62_8_66_8_if_stmt:
+        %tmp.35 = lgetv %info;
+        symbol [ info %tmp.35 62 12 16 ];
+        symbol [ maxSpeed %tmp.36 62 17 25 ];
+        %tmp.36 = getv %tmp.35 :maxSpeed;
+        %tmp.37 = null;
+        %tmp.38 = ne %tmp.36 %tmp.37;
+        bf %tmp.38 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_62_8_66_8_if_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_62_8_66_8_if_true:
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_62_35_66_8_start:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 63 12 ]
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_63_24_65_34_begin:
+        symbol [ mIsMetric %tmp.40 63 24 33 ];
+        %tmp.40 = getv ? :mIsMetric;
+        bf %tmp.40 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_63_24_65_34_else_false;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_63_24_65_34_true:
+        %tmp.41 = lgetv %info;
+        symbol [ info %tmp.41 64 18 22 ];
+        symbol [ maxSpeed %tmp.42 64 23 31 ];
+        %tmp.42 = getv %tmp.41 :maxSpeed;
+        %tmp.43 = 3.6;
+        %tmp.44 = mul %tmp.42 %tmp.43;
+        push %tmp.44;
+        goto @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_63_24_65_34_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_63_24_65_34_else_false:
+        %tmp.45 = lgetv %info;
+        symbol [ info %tmp.45 65 18 22 ];
+        symbol [ maxSpeed %tmp.46 65 23 31 ];
+        %tmp.46 = getv %tmp.45 :maxSpeed;
+        %tmp.47 = 2.23694;
+        %tmp.48 = mul %tmp.46 %tmp.47;
+        push %tmp.48;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_63_24_65_34_end:
+        %tmp.49 = phi [%tmp.40 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_63_24_65_34_begin] [%tmp.44 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_63_24_65_34_true] [%tmp.48 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_63_24_65_34_else_false] [%tmp.49 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_63_24_65_34_end];
+        symbol [ mMaxSpeed ? 63 12 21 ];
+        putv self :mMaxSpeed %tmp.49;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_62_35_66_8_stop:
+        goto @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_62_8_66_8_if_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_62_8_66_8_if_end:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 69 8 ]
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_69_8_73_8_if_stmt:
+        %tmp.50 = lgetv %info;
+        symbol [ info %tmp.50 69 12 16 ];
+        symbol [ elapsedDistance %tmp.51 69 17 32 ];
+        %tmp.51 = getv %tmp.50 :elapsedDistance;
+        %tmp.52 = null;
+        %tmp.53 = ne %tmp.51 %tmp.52;
+        bf %tmp.53 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_69_8_73_8_if_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_69_8_73_8_if_true:
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_69_42_73_8_start:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 70 12 ]
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_70_24_72_41_begin:
+        symbol [ mIsMetric %tmp.55 70 24 33 ];
+        %tmp.55 = getv ? :mIsMetric;
+        bf %tmp.55 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_70_24_72_41_else_false;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_70_24_72_41_true:
+        %tmp.56 = lgetv %info;
+        symbol [ info %tmp.56 71 18 22 ];
+        symbol [ elapsedDistance %tmp.57 71 23 38 ];
+        %tmp.57 = getv %tmp.56 :elapsedDistance;
+        %tmp.58 = 1000.0;
+        %tmp.59 = div %tmp.57 %tmp.58;
+        push %tmp.59;
+        goto @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_70_24_72_41_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_70_24_72_41_else_false:
+        %tmp.60 = lgetv %info;
+        symbol [ info %tmp.60 72 18 22 ];
+        symbol [ elapsedDistance %tmp.61 72 23 38 ];
+        %tmp.61 = getv %tmp.60 :elapsedDistance;
+        %tmp.62 = 0.000621371;
+        %tmp.63 = mul %tmp.61 %tmp.62;
+        push %tmp.63;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_70_24_72_41_end:
+        %tmp.64 = phi [%tmp.55 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_70_24_72_41_begin] [%tmp.59 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_70_24_72_41_true] [%tmp.63 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_70_24_72_41_else_false] [%tmp.64 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_70_24_72_41_end];
+        symbol [ mDistance ? 70 12 21 ];
+        putv self :mDistance %tmp.64;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_69_42_73_8_stop:
+        goto @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_69_8_73_8_if_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_69_8_73_8_if_end:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 76 8 ]
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_76_8_78_8_if_stmt:
+        %tmp.65 = lgetv %info;
+        symbol [ info %tmp.65 76 12 16 ];
+        symbol [ timerTime %tmp.66 76 17 26 ];
+        %tmp.66 = getv %tmp.65 :timerTime;
+        %tmp.67 = null;
+        %tmp.68 = ne %tmp.66 %tmp.67;
+        bf %tmp.68 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_76_8_78_8_if_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_76_8_78_8_if_true:
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_76_36_78_8_start:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 77 12 ]
+        %tmp.69 = lgetv %info;
+        symbol [ info %tmp.69 77 25 29 ];
+        symbol [ timerTime %tmp.70 77 30 39 ];
+        %tmp.70 = getv %tmp.69 :timerTime;
+        symbol [ mElapsedMs ? 77 12 22 ];
+        putv self :mElapsedMs %tmp.70;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_76_36_78_8_stop:
+        goto @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_76_8_78_8_if_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_76_8_78_8_if_end:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 81 8 ]
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_81_8_88_8_if_stmt:
+        %tmp.71 = lgetv %info;
+        symbol [ info %tmp.71 81 12 16 ];
+        symbol [ currentHeartRate %tmp.72 81 17 33 ];
+        %tmp.72 = getv %tmp.71 :currentHeartRate;
+        %tmp.73 = null;
+        %tmp.74 = ne %tmp.72 %tmp.73;
+        bf %tmp.74 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_81_8_88_8_if_else_false;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_81_8_88_8_if_true:
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_81_43_83_8_start:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 82 12 ]
+        %tmp.75 = lgetv %info;
+        symbol [ info %tmp.75 82 25 29 ];
+        symbol [ currentHeartRate %tmp.76 82 30 46 ];
+        %tmp.76 = getv %tmp.75 :currentHeartRate;
+        symbol [ mHeartRate ? 82 12 22 ];
+        putv self :mHeartRate %tmp.76;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_81_43_83_8_stop:
+        goto @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_81_8_88_8_if_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_81_8_88_8_if_else_false:
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_83_15_88_8_start:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 84 12 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_83_15_88_8_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_83_15_88_8_stop" ]
+        %actInfo.2 = local;
+        symbol [ actInfo %actInfo.2 84 16 23 ];
+        symbol [ Activity %tmp.77 84 26 34 ];
+        %tmp.77 = getm $.Toybox.Activity;
+        symbol [ getActivityInfo %tmp.78 84 35 50 ];
+        %tmp.78 = getv function %tmp.77 :getActivityInfo;
+        %tmp.79 = invoke %tmp.77 %tmp.78();
+        lputv %actInfo.2 %tmp.79;
+        symbol [ actInfo %actInfo.2 84 16 23 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 85 12 ]
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_85_12_87_12_if_stmt:
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_85_16_85_63_begin:
+        %tmp.80 = lgetv %actInfo.2;
+        symbol [ actInfo %tmp.80 85 16 23 ];
+        %tmp.81 = null;
+        %tmp.82 = ne %tmp.80 %tmp.81;
+        bf %tmp.82 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_85_12_87_12_if_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_85_35_85_63_true:
+        %tmp.83 = lgetv %actInfo.2;
+        symbol [ actInfo %tmp.83 85 35 42 ];
+        %tmp.84 = as %tmp.83 { (!Null) };
+        symbol [ currentHeartRate %tmp.85 85 43 59 ];
+        %tmp.85 = getv %tmp.84 :currentHeartRate;
+        %tmp.86 = null;
+        %tmp.87 = ne %tmp.85 %tmp.86;
+        push %tmp.87;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_85_35_85_63_end:
+        %tmp.88 = phi [%tmp.82 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_85_16_85_63_begin] [%tmp.87 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_85_35_85_63_true] [%tmp.88 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_85_35_85_63_end];
+        bf %tmp.88 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_85_12_87_12_if_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_85_12_87_12_if_true:
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_85_69_87_12_start:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 86 16 ]
+        %tmp.89 = lgetv %actInfo.2;
+        symbol [ actInfo %tmp.89 86 29 36 ];
+        %tmp.90 = as %tmp.89 { (!Null) };
+        symbol [ currentHeartRate %tmp.91 86 37 53 ];
+        %tmp.91 = getv %tmp.90 :currentHeartRate;
+        symbol [ mHeartRate ? 86 16 26 ];
+        putv self :mHeartRate %tmp.91;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_85_69_87_12_stop:
+        goto @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_85_12_87_12_if_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_85_12_87_12_if_end:
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_83_15_88_8_stop:
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_81_8_88_8_if_end:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 91 8 ]
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_91_8_98_8_if_stmt:
+        %tmp.92 = lgetv %info;
+        symbol [ info %tmp.92 91 12 16 ];
+        symbol [ currentPower %tmp.93 91 17 29 ];
+        %tmp.93 = getv %tmp.92 :currentPower;
+        %tmp.94 = null;
+        %tmp.95 = ne %tmp.93 %tmp.94;
+        bf %tmp.95 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_91_8_98_8_if_else_false;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_91_8_98_8_if_true:
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_91_39_93_8_start:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 92 12 ]
+        %tmp.96 = lgetv %info;
+        symbol [ info %tmp.96 92 23 27 ];
+        symbol [ currentPower %tmp.97 92 28 40 ];
+        %tmp.97 = getv %tmp.96 :currentPower;
+        symbol [ mPower3s ? 92 12 20 ];
+        putv self :mPower3s %tmp.97;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_91_39_93_8_stop:
+        goto @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_91_8_98_8_if_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_91_8_98_8_if_else_false:
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_93_15_98_8_start:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 94 12 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_93_15_98_8_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_93_15_98_8_stop" ]
+        %actInfo.3 = local;
+        symbol [ actInfo %actInfo.3 94 16 23 ];
+        symbol [ Activity %tmp.98 94 26 34 ];
+        %tmp.98 = getm $.Toybox.Activity;
+        symbol [ getActivityInfo %tmp.99 94 35 50 ];
+        %tmp.99 = getv function %tmp.98 :getActivityInfo;
+        %tmp.100 = invoke %tmp.98 %tmp.99();
+        lputv %actInfo.3 %tmp.100;
+        symbol [ actInfo %actInfo.3 94 16 23 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 95 12 ]
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_95_12_97_12_if_stmt:
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_95_16_95_59_begin:
+        %tmp.101 = lgetv %actInfo.3;
+        symbol [ actInfo %tmp.101 95 16 23 ];
+        %tmp.102 = null;
+        %tmp.103 = ne %tmp.101 %tmp.102;
+        bf %tmp.103 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_95_12_97_12_if_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_95_35_95_59_true:
+        %tmp.104 = lgetv %actInfo.3;
+        symbol [ actInfo %tmp.104 95 35 42 ];
+        %tmp.105 = as %tmp.104 { (!Null) };
+        symbol [ currentPower %tmp.106 95 43 55 ];
+        %tmp.106 = getv %tmp.105 :currentPower;
+        %tmp.107 = null;
+        %tmp.108 = ne %tmp.106 %tmp.107;
+        push %tmp.108;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_95_35_95_59_end:
+        %tmp.109 = phi [%tmp.103 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_95_16_95_59_begin] [%tmp.108 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_95_35_95_59_true] [%tmp.109 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_95_35_95_59_end];
+        bf %tmp.109 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_95_12_97_12_if_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_95_12_97_12_if_true:
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_95_65_97_12_start:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 96 16 ]
+        %tmp.110 = lgetv %actInfo.3;
+        symbol [ actInfo %tmp.110 96 27 34 ];
+        %tmp.111 = as %tmp.110 { (!Null) };
+        symbol [ currentPower %tmp.112 96 35 47 ];
+        %tmp.112 = getv %tmp.111 :currentPower;
+        symbol [ mPower3s ? 96 16 24 ];
+        putv self :mPower3s %tmp.112;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_95_65_97_12_stop:
+        goto @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_95_12_97_12_if_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_95_12_97_12_if_end:
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_93_15_98_8_stop:
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_91_8_98_8_if_end:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 101 8 ]
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_101_8_112_8_if_stmt:
+        %tmp.113 = lgetv %info;
+        symbol [ info %tmp.113 101 12 16 ];
+        %tmp.115 = const :ambientTemperature;
+        symbol [ ambientTemperature %tmp.115 101 22 40 const ];
+        %tmp.116 = canhazplz %tmp.113 %tmp.115;
+        bf %tmp.116 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_101_8_112_8_if_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_101_8_112_8_if_true:
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_101_42_112_8_start:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 102 12 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_101_42_112_8_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_101_42_112_8_stop" ]
+        %rawTemp.4 = local;
+        symbol [ rawTemp %rawTemp.4 102 16 23 ];
+        %tmp.117 = lgetv %info;
+        symbol [ info %tmp.117 102 26 30 ];
+        %tmp.118 = as %tmp.117 { (interface { var ambientTemperature; }) };
+        symbol [ ambientTemperature %tmp.119 102 31 49 ];
+        %tmp.119 = getv %tmp.118 :ambientTemperature;
+        lputv %rawTemp.4 %tmp.119;
+        symbol [ rawTemp %rawTemp.4 102 16 23 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 103 12 ]
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_103_12_111_12_if_stmt:
+        %tmp.120 = lgetv %rawTemp.4;
+        symbol [ rawTemp %tmp.120 103 16 23 ];
+        %tmp.121 = null;
+        %tmp.122 = ne %tmp.120 %tmp.121;
+        bf %tmp.122 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_103_12_111_12_if_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_103_12_111_12_if_true:
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_103_33_111_12_start:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 104 16 ]
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_104_16_110_16_if_stmt:
+        %tmp.123 = lgetv %settings.1;
+        symbol [ settings %tmp.123 104 20 28 ];
+        symbol [ temperatureUnits %tmp.124 104 29 45 ];
+        %tmp.124 = getv %tmp.123 :temperatureUnits;
+        symbol [ System %tmp.125 104 49 55 ];
+        %tmp.125 = getm $.Toybox.System;
+        symbol [ UNIT_STATUTE %tmp.126 104 56 68 ];
+        %tmp.126 = getv %tmp.125 :UNIT_STATUTE;
+        %tmp.127 = eq %tmp.124 %tmp.126;
+        bf %tmp.127 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_104_16_110_16_if_else_false;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_104_16_110_16_if_true:
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_104_70_107_16_start:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 105 20 ]
+        %tmp.128 = lgetv %rawTemp.4;
+        symbol [ rawTemp %tmp.128 105 29 36 ];
+        %tmp.129 = as %tmp.128 { (!Null) };
+        %tmp.130 = 9.0;
+        %tmp.131 = mul %tmp.129 %tmp.130;
+        %tmp.132 = 5.0;
+        %tmp.133 = div %tmp.131 %tmp.132;
+        %tmp.134 = 32.0;
+        %tmp.135 = add %tmp.133 %tmp.134;
+        symbol [ mTemp ? 105 20 25 ];
+        putv self :mTemp %tmp.135;
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 106 20 ]
+        %tmp.136 = "F";
+        symbol [ mTempUnit ? 106 20 29 ];
+        putv self :mTempUnit %tmp.136;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_104_70_107_16_stop:
+        goto @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_104_16_110_16_if_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_104_16_110_16_if_else_false:
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_107_23_110_16_start:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 108 20 ]
+        %tmp.137 = lgetv %rawTemp.4;
+        symbol [ rawTemp %tmp.137 108 28 35 ];
+        %tmp.138 = as %tmp.137 { (!Null) };
+        symbol [ toFloat %tmp.139 108 36 43 ];
+        %tmp.139 = getv function %tmp.138 :toFloat;
+        %tmp.140 = invoke %tmp.138 %tmp.139();
+        symbol [ mTemp ? 108 20 25 ];
+        putv self :mTemp %tmp.140;
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 109 20 ]
+        %tmp.141 = "C";
+        symbol [ mTempUnit ? 109 20 29 ];
+        putv self :mTempUnit %tmp.141;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_107_23_110_16_stop:
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_104_16_110_16_if_end:
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_103_33_111_12_stop:
+        goto @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_103_12_111_12_if_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_103_12_111_12_if_end:
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_101_42_112_8_stop:
+        goto @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_101_8_112_8_if_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_101_8_112_8_if_end:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 115 8 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_42_52_128_4_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_42_52_128_4_stop" ]
+        %altMult.5 = local;
+        symbol [ altMult %altMult.5 115 12 19 ];
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_115_22_115_49_begin:
+        symbol [ mIsElevationMetric %tmp.143 115 22 40 ];
+        %tmp.143 = getv ? :mIsElevationMetric;
+        bf %tmp.143 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_115_22_115_49_else_false;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_115_22_115_49_true:
+        %tmp.144 = 1.0;
+        push %tmp.144;
+        goto @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_115_22_115_49_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_115_22_115_49_else_false:
+        %tmp.145 = 3.28084;
+        push %tmp.145;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_115_22_115_49_end:
+        %tmp.146 = phi [%tmp.143 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_115_22_115_49_begin] [%tmp.144 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_115_22_115_49_true] [%tmp.145 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_115_22_115_49_else_false] [%tmp.146 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_115_22_115_49_end];
+        lputv %altMult.5 %tmp.146;
+        symbol [ altMult %altMult.5 115 12 19 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 116 8 ]
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_116_8_118_8_if_stmt:
+        %tmp.147 = lgetv %info;
+        symbol [ info %tmp.147 116 12 16 ];
+        symbol [ altitude %tmp.148 116 17 25 ];
+        %tmp.148 = getv %tmp.147 :altitude;
+        %tmp.149 = null;
+        %tmp.150 = ne %tmp.148 %tmp.149;
+        bf %tmp.150 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_116_8_118_8_if_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_116_8_118_8_if_true:
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_116_35_118_8_start:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 117 12 ]
+        %tmp.151 = lgetv %info;
+        symbol [ info %tmp.151 117 25 29 ];
+        symbol [ altitude %tmp.152 117 30 38 ];
+        %tmp.152 = getv %tmp.151 :altitude;
+        %tmp.153 = lgetv %altMult.5;
+        symbol [ altMult %tmp.153 117 41 48 ];
+        %tmp.154 = mul %tmp.152 %tmp.153;
+        symbol [ mElevation ? 117 12 22 ];
+        putv self :mElevation %tmp.154;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_116_35_118_8_stop:
+        goto @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_116_8_118_8_if_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_116_8_118_8_if_end:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 119 8 ]
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_119_8_121_8_if_stmt:
+        %tmp.155 = lgetv %info;
+        symbol [ info %tmp.155 119 12 16 ];
+        symbol [ totalAscent %tmp.156 119 17 28 ];
+        %tmp.156 = getv %tmp.155 :totalAscent;
+        %tmp.157 = null;
+        %tmp.158 = ne %tmp.156 %tmp.157;
+        bf %tmp.158 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_119_8_121_8_if_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_119_8_121_8_if_true:
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_119_38_121_8_start:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 120 12 ]
+        %tmp.159 = lgetv %info;
+        symbol [ info %tmp.159 120 22 26 ];
+        symbol [ totalAscent %tmp.160 120 27 38 ];
+        %tmp.160 = getv %tmp.159 :totalAscent;
+        %tmp.161 = lgetv %altMult.5;
+        symbol [ altMult %tmp.161 120 41 48 ];
+        %tmp.162 = mul %tmp.160 %tmp.161;
+        symbol [ mAscent ? 120 12 19 ];
+        putv self :mAscent %tmp.162;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_119_38_121_8_stop:
+        goto @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_119_8_121_8_if_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_119_8_121_8_if_end:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 122 8 ]
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_122_8_124_8_if_stmt:
+        %tmp.163 = lgetv %info;
+        symbol [ info %tmp.163 122 12 16 ];
+        symbol [ totalDescent %tmp.164 122 17 29 ];
+        %tmp.164 = getv %tmp.163 :totalDescent;
+        %tmp.165 = null;
+        %tmp.166 = ne %tmp.164 %tmp.165;
+        bf %tmp.166 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_122_8_124_8_if_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_122_8_124_8_if_true:
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_122_39_124_8_start:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 123 12 ]
+        %tmp.167 = lgetv %info;
+        symbol [ info %tmp.167 123 23 27 ];
+        symbol [ totalDescent %tmp.168 123 28 40 ];
+        %tmp.168 = getv %tmp.167 :totalDescent;
+        %tmp.169 = lgetv %altMult.5;
+        symbol [ altMult %tmp.169 123 43 50 ];
+        %tmp.170 = mul %tmp.168 %tmp.169;
+        symbol [ mDescent ? 123 12 20 ];
+        putv self :mDescent %tmp.170;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_122_39_124_8_stop:
+        goto @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_122_8_124_8_if_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_122_8_124_8_if_end:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 125 8 ]
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_125_8_127_8_if_stmt:
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_125_12_125_45_begin:
+        %tmp.171 = lgetv %info;
+        symbol [ info %tmp.171 125 12 16 ];
+        %tmp.173 = const :grade;
+        symbol [ grade %tmp.173 125 22 27 const ];
+        %tmp.174 = canhazplz %tmp.171 %tmp.173;
+        bf %tmp.174 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_125_8_127_8_if_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_125_31_125_45_true:
+        %tmp.175 = lgetv %info;
+        symbol [ info %tmp.175 125 31 35 ];
+        %tmp.176 = as %tmp.175 { (interface { var grade; }) };
+        symbol [ grade %tmp.177 125 36 41 ];
+        %tmp.177 = getv %tmp.176 :grade;
+        %tmp.178 = null;
+        %tmp.179 = ne %tmp.177 %tmp.178;
+        push %tmp.179;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_125_31_125_45_end:
+        %tmp.180 = phi [%tmp.174 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_125_12_125_45_begin] [%tmp.179 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_125_31_125_45_true] [%tmp.180 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_125_31_125_45_end];
+        bf %tmp.180 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_125_8_127_8_if_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_125_8_127_8_if_true:
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_125_51_127_8_start:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 126 12 ]
+        %tmp.181 = lgetv %info;
+        symbol [ info %tmp.181 126 21 25 ];
+        %tmp.182 = as %tmp.181 { (interface { var grade; }) };
+        symbol [ grade %tmp.183 126 26 31 ];
+        %tmp.183 = getv %tmp.182 :grade;
+        symbol [ mGrade ? 126 12 18 ];
+        putv self :mGrade %tmp.183;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_125_51_127_8_stop:
+        goto @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_125_8_127_8_if_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_125_8_127_8_if_end:
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_42_52_128_4_stop:
+    }
+    [ @file = "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc"; @line = 130; @symbol_functiondef = [onUpdate,130,13,21]; @symbol_param<0> = [dc,130,22,24]; @symbol_param<0>_type<0> = [Graphics,130,28,36]; @symbol_param<0>_type<1> = [Dc,130,37,39]; ]
+    function onUpdate(dc as Graphics.Dc) as Void {
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_start:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 131 8 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_stop" ]
+        %width.1 = local;
+        symbol [ width %width.1 131 12 17 ];
+        %tmp.1 = lgetv %dc;
+        symbol [ dc %tmp.1 131 20 22 ];
+        symbol [ getWidth %tmp.2 131 23 31 ];
+        %tmp.2 = getv function %tmp.1 :getWidth;
+        %tmp.3 = invoke %tmp.1 %tmp.2();
+        lputv %width.1 %tmp.3;
+        symbol [ width %width.1 131 12 17 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 132 8 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_stop" ]
+        %height.2 = local;
+        symbol [ height %height.2 132 12 18 ];
+        %tmp.4 = lgetv %dc;
+        symbol [ dc %tmp.4 132 21 23 ];
+        symbol [ getHeight %tmp.5 132 24 33 ];
+        %tmp.5 = getv function %tmp.4 :getHeight;
+        %tmp.6 = invoke %tmp.4 %tmp.5();
+        lputv %height.2 %tmp.6;
+        symbol [ height %height.2 132 12 18 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 133 8 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_stop" ]
+        %bgColor.3 = local;
+        symbol [ bgColor %bgColor.3 133 12 19 ];
+        %tmp.7 = self;
+        symbol [ getBackgroundColor %tmp.8 133 22 40 ];
+        %tmp.8 = getv function %tmp.7 :getBackgroundColor;
+        %tmp.9 = invoke %tmp.7 %tmp.8();
+        lputv %bgColor.3 %tmp.9;
+        symbol [ bgColor %bgColor.3 133 12 19 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 134 8 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_stop" ]
+        %isDark.4 = local;
+        symbol [ isDark %isDark.4 134 12 18 ];
+        %tmp.10 = lgetv %bgColor.3;
+        symbol [ bgColor %tmp.10 134 21 28 ];
+        symbol [ Graphics %tmp.11 134 32 40 ];
+        %tmp.11 = getm $.Toybox.Graphics;
+        symbol [ COLOR_BLACK %tmp.12 134 41 52 ];
+        %tmp.12 = getv %tmp.11 :COLOR_BLACK;
+        %tmp.13 = eq %tmp.10 %tmp.12;
+        lputv %isDark.4 %tmp.13;
+        symbol [ isDark %isDark.4 134 12 18 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 135 8 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_stop" ]
+        %fgColor.5 = local;
+        symbol [ fgColor %fgColor.5 135 12 19 ];
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_135_22_135_63_begin:
+        %tmp.14 = lgetv %isDark.4;
+        symbol [ isDark %tmp.14 135 22 28 ];
+        bf %tmp.14 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_135_22_135_63_else_false;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_135_22_135_63_true:
+        symbol [ Graphics %tmp.15 135 31 39 ];
+        %tmp.15 = getm $.Toybox.Graphics;
+        symbol [ COLOR_WHITE %tmp.16 135 40 51 ];
+        %tmp.16 = getv %tmp.15 :COLOR_WHITE;
+        push %tmp.16;
+        goto @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_135_22_135_63_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_135_22_135_63_else_false:
+        symbol [ Graphics %tmp.17 135 54 62 ];
+        %tmp.17 = getm $.Toybox.Graphics;
+        symbol [ COLOR_BLACK %tmp.18 135 63 74 ];
+        %tmp.18 = getv %tmp.17 :COLOR_BLACK;
+        push %tmp.18;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_135_22_135_63_end:
+        %tmp.19 = phi [%tmp.14 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_135_22_135_63_begin] [%tmp.16 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_135_22_135_63_true] [%tmp.18 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_135_22_135_63_else_false] [%tmp.19 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_135_22_135_63_end];
+        lputv %fgColor.5 %tmp.19;
+        symbol [ fgColor %fgColor.5 135 12 19 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 136 8 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_stop" ]
+        %dimColor.6 = local;
+        symbol [ dimColor %dimColor.6 136 12 20 ];
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_136_23_136_66_begin:
+        %tmp.20 = lgetv %isDark.4;
+        symbol [ isDark %tmp.20 136 23 29 ];
+        bf %tmp.20 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_136_23_136_66_else_false;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_136_23_136_66_true:
+        symbol [ Graphics %tmp.21 136 32 40 ];
+        %tmp.21 = getm $.Toybox.Graphics;
+        symbol [ COLOR_DK_GRAY %tmp.22 136 41 54 ];
+        %tmp.22 = getv %tmp.21 :COLOR_DK_GRAY;
+        push %tmp.22;
+        goto @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_136_23_136_66_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_136_23_136_66_else_false:
+        symbol [ Graphics %tmp.23 136 57 65 ];
+        %tmp.23 = getm $.Toybox.Graphics;
+        symbol [ COLOR_LT_GRAY %tmp.24 136 66 79 ];
+        %tmp.24 = getv %tmp.23 :COLOR_LT_GRAY;
+        push %tmp.24;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_136_23_136_66_end:
+        %tmp.25 = phi [%tmp.20 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_136_23_136_66_begin] [%tmp.22 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_136_23_136_66_true] [%tmp.24 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_136_23_136_66_else_false] [%tmp.25 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_136_23_136_66_end];
+        lputv %dimColor.6 %tmp.25;
+        symbol [ dimColor %dimColor.6 136 12 20 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 138 8 ]
+        %tmp.26 = lgetv %dc;
+        symbol [ dc %tmp.26 138 8 10 ];
+        symbol [ setColor %tmp.27 138 11 19 ];
+        %tmp.27 = getv function %tmp.26 :setColor;
+        %tmp.28 = lgetv %bgColor.3;
+        symbol [ bgColor %tmp.28 138 20 27 ];
+        %tmp.29 = lgetv %bgColor.3;
+        symbol [ bgColor %tmp.29 138 29 36 ];
+        invoke %tmp.26 %tmp.27(%tmp.28, %tmp.29);
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 139 8 ]
+        %tmp.30 = lgetv %dc;
+        symbol [ dc %tmp.30 139 8 10 ];
+        symbol [ clear %tmp.31 139 11 16 ];
+        %tmp.31 = getv function %tmp.30 :clear;
+        invoke %tmp.30 %tmp.31();
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 166 8 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_stop" ]
+        %topBarY.7 = local;
+        symbol [ topBarY %topBarY.7 166 12 19 ];
+        %tmp.32 = 0;
+        lputv %topBarY.7 %tmp.32;
+        symbol [ topBarY %topBarY.7 166 12 19 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 167 8 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_stop" ]
+        %topBarH.8 = local;
+        symbol [ topBarH %topBarH.8 167 12 19 ];
+        %tmp.33 = 65;
+        lputv %topBarH.8 %tmp.33;
+        symbol [ topBarH %topBarH.8 167 12 19 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 168 8 ]
+        %tmp.34 = lgetv %dc;
+        symbol [ dc %tmp.34 168 8 10 ];
+        symbol [ setPenWidth %tmp.35 168 11 22 ];
+        %tmp.35 = getv function %tmp.34 :setPenWidth;
+        %tmp.36 = 1;
+        invoke %tmp.34 %tmp.35(%tmp.36);
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 169 8 ]
+        %tmp.37 = lgetv %dc;
+        symbol [ dc %tmp.37 169 8 10 ];
+        symbol [ setColor %tmp.38 169 11 19 ];
+        %tmp.38 = getv function %tmp.37 :setColor;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_169_20_169_40_begin:
+        %tmp.39 = lgetv %isDark.4;
+        symbol [ isDark %tmp.39 169 20 26 ];
+        bf %tmp.39 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_169_20_169_40_else_false;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_169_20_169_40_true:
+        %tmp.40 = 0x222222;
+        push %tmp.40;
+        goto @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_169_20_169_40_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_169_20_169_40_else_false:
+        %tmp.41 = 0xdddddd;
+        push %tmp.41;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_169_20_169_40_end:
+        %tmp.42 = phi [%tmp.39 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_169_20_169_40_begin] [%tmp.40 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_169_20_169_40_true] [%tmp.41 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_169_20_169_40_else_false] [%tmp.42 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_169_20_169_40_end];
+        symbol [ Graphics %tmp.43 169 50 58 ];
+        %tmp.43 = getm $.Toybox.Graphics;
+        symbol [ COLOR_TRANSPARENT %tmp.44 169 59 76 ];
+        %tmp.44 = getv %tmp.43 :COLOR_TRANSPARENT;
+        invoke %tmp.37 %tmp.38(%tmp.42, %tmp.44);
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 170 8 ]
+        %tmp.45 = lgetv %dc;
+        symbol [ dc %tmp.45 170 8 10 ];
+        symbol [ drawLine %tmp.46 170 11 19 ];
+        %tmp.46 = getv function %tmp.45 :drawLine;
+        %tmp.47 = 0;
+        %tmp.48 = lgetv %topBarY.7;
+        symbol [ topBarY %tmp.48 170 23 30 ];
+        %tmp.49 = lgetv %topBarH.8;
+        symbol [ topBarH %tmp.49 170 33 40 ];
+        %tmp.50 = add %tmp.48 %tmp.49;
+        %tmp.51 = lgetv %width.1;
+        symbol [ width %tmp.51 170 42 47 ];
+        %tmp.52 = lgetv %topBarY.7;
+        symbol [ topBarY %tmp.52 170 49 56 ];
+        %tmp.53 = lgetv %topBarH.8;
+        symbol [ topBarH %tmp.53 170 59 66 ];
+        %tmp.54 = add %tmp.52 %tmp.53;
+        invoke %tmp.45 %tmp.46(%tmp.47, %tmp.50, %tmp.51, %tmp.54);
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 172 8 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_stop" ]
+        %colW.9 = local;
+        symbol [ colW %colW.9 172 12 16 ];
+        %tmp.55 = lgetv %width.1;
+        symbol [ width %tmp.55 172 19 24 ];
+        %tmp.56 = 4.0;
+        %tmp.57 = div %tmp.55 %tmp.56;
+        lputv %colW.9 %tmp.57;
+        symbol [ colW %colW.9 172 12 16 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 173 8 ]
+        for @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_173_8_175_8_for_test @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_173_8_175_8_for_incr @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_173_8_175_8_for_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_173_8_175_8_for_init:
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_173_8_175_8_for_begin" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_173_8_175_8_for_end" ]
+        %i.10 = local;
+        symbol [ i %i.10 173 17 18 ];
+        %tmp.58 = 1;
+        lputv %i.10 %tmp.58;
+        symbol [ i %i.10 173 17 18 ];
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_173_8_175_8_for_test:
+        %tmp.59 = lgetv %i.10;
+        symbol [ i %tmp.59 173 24 25 ];
+        %tmp.60 = 4;
+        %tmp.61 = lt %tmp.59 %tmp.60;
+        bf %tmp.61 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_173_8_175_8_for_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_173_8_175_8_for_begin:
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_173_36_175_8_start:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 174 12 ]
+        %tmp.62 = lgetv %dc;
+        symbol [ dc %tmp.62 174 12 14 ];
+        symbol [ drawLine %tmp.63 174 15 23 ];
+        %tmp.63 = getv function %tmp.62 :drawLine;
+        %tmp.64 = lgetv %colW.9;
+        symbol [ colW %tmp.64 174 24 28 ];
+        %tmp.65 = lgetv %i.10;
+        symbol [ i %tmp.65 174 31 32 ];
+        %tmp.66 = mul %tmp.64 %tmp.65;
+        %tmp.67 = lgetv %topBarY.7;
+        symbol [ topBarY %tmp.67 174 34 41 ];
+        %tmp.68 = 5;
+        %tmp.69 = add %tmp.67 %tmp.68;
+        %tmp.70 = lgetv %colW.9;
+        symbol [ colW %tmp.70 174 47 51 ];
+        %tmp.71 = lgetv %i.10;
+        symbol [ i %tmp.71 174 54 55 ];
+        %tmp.72 = mul %tmp.70 %tmp.71;
+        %tmp.73 = lgetv %topBarY.7;
+        symbol [ topBarY %tmp.73 174 57 64 ];
+        %tmp.74 = lgetv %topBarH.8;
+        symbol [ topBarH %tmp.74 174 67 74 ];
+        %tmp.75 = add %tmp.73 %tmp.74;
+        invoke %tmp.62 %tmp.63(%tmp.66, %tmp.69, %tmp.72, %tmp.75);
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_173_36_175_8_stop:
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_173_8_175_8_for_incr:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 173 ]
+        %tmp.78 = lgetv %i.10;
+        symbol [ i %tmp.78 173 31 32 ];
+        %tmp.79 = add %tmp.78 1;
+        lputv %i.10 %tmp.79;
+        symbol [ i %i.10 173 31 32 ];
+        goto @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_173_8_175_8_for_test;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_173_8_175_8_for_end:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 177 8 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_stop" ]
+        %topLabels.11 = local;
+        symbol [ topLabels %topLabels.11 177 12 21 ];
+        %tmp.80 = newa 4;
+        %tmp.81 = "GRADE";
+        %tmp.82 = dup %tmp.80;
+        %tmp.83 = aputv %tmp.82 0 %tmp.81;
+        %tmp.84 = "ELEV";
+        %tmp.85 = dup %tmp.83;
+        %tmp.86 = aputv %tmp.85 1 %tmp.84;
+        %tmp.87 = "ASCENT";
+        %tmp.88 = dup %tmp.86;
+        %tmp.89 = aputv %tmp.88 2 %tmp.87;
+        %tmp.90 = "DESCENT";
+        %tmp.91 = dup %tmp.89;
+        %tmp.92 = aputv %tmp.91 3 %tmp.90;
+        lputv %topLabels.11 %tmp.92;
+        symbol [ topLabels %topLabels.11 177 12 21 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 178 8 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_stop" ]
+        %topValues.12 = local;
+        symbol [ topValues %topValues.12 178 12 21 ];
+        %tmp.93 = newa 4;
+        symbol [ mGrade %tmp.95 179 12 18 ];
+        %tmp.95 = getv ? :mGrade;
+        symbol [ format %tmp.96 179 19 25 ];
+        %tmp.96 = getv function %tmp.95 :format;
+        %tmp.97 = "%.1f";
+        %tmp.98 = invoke %tmp.95 %tmp.96(%tmp.97);
+        %tmp.99 = "%";
+        %tmp.100 = add %tmp.98 %tmp.99;
+        %tmp.101 = dup %tmp.93;
+        %tmp.102 = aputv %tmp.101 0 %tmp.100;
+        symbol [ mElevation %tmp.104 180 12 22 ];
+        %tmp.104 = getv ? :mElevation;
+        symbol [ format %tmp.105 180 23 29 ];
+        %tmp.105 = getv function %tmp.104 :format;
+        %tmp.106 = "%.0f";
+        %tmp.107 = invoke %tmp.104 %tmp.105(%tmp.106);
+        %tmp.108 = dup %tmp.102;
+        %tmp.109 = aputv %tmp.108 1 %tmp.107;
+        symbol [ mAscent %tmp.111 181 12 19 ];
+        %tmp.111 = getv ? :mAscent;
+        symbol [ format %tmp.112 181 20 26 ];
+        %tmp.112 = getv function %tmp.111 :format;
+        %tmp.113 = "%.0f";
+        %tmp.114 = invoke %tmp.111 %tmp.112(%tmp.113);
+        %tmp.115 = dup %tmp.109;
+        %tmp.116 = aputv %tmp.115 2 %tmp.114;
+        symbol [ mDescent %tmp.118 182 12 20 ];
+        %tmp.118 = getv ? :mDescent;
+        symbol [ format %tmp.119 182 21 27 ];
+        %tmp.119 = getv function %tmp.118 :format;
+        %tmp.120 = "%.0f";
+        %tmp.121 = invoke %tmp.118 %tmp.119(%tmp.120);
+        %tmp.122 = dup %tmp.116;
+        %tmp.123 = aputv %tmp.122 3 %tmp.121;
+        lputv %topValues.12 %tmp.123;
+        symbol [ topValues %topValues.12 178 12 21 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 185 8 ]
+        for @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_185_8_203_8_for_test @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_185_8_203_8_for_incr @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_185_8_203_8_for_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_185_8_203_8_for_init:
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_185_8_203_8_for_begin" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_185_8_203_8_for_end" ]
+        %i.13 = local;
+        symbol [ i %i.13 185 17 18 ];
+        %tmp.124 = 0;
+        lputv %i.13 %tmp.124;
+        symbol [ i %i.13 185 17 18 ];
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_185_8_203_8_for_test:
+        %tmp.125 = lgetv %i.13;
+        symbol [ i %tmp.125 185 24 25 ];
+        %tmp.126 = 4;
+        %tmp.127 = lt %tmp.125 %tmp.126;
+        bf %tmp.127 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_185_8_203_8_for_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_185_8_203_8_for_begin:
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_185_36_203_8_start:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 186 12 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_185_36_203_8_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_185_36_203_8_stop" ]
+        %x.14 = local;
+        symbol [ x %x.14 186 16 17 ];
+        %tmp.128 = lgetv %colW.9;
+        symbol [ colW %tmp.128 186 20 24 ];
+        %tmp.129 = lgetv %i.13;
+        symbol [ i %tmp.129 186 28 29 ];
+        %tmp.130 = 0.5;
+        %tmp.131 = add %tmp.129 %tmp.130;
+        %tmp.132 = mul %tmp.128 %tmp.131;
+        lputv %x.14 %tmp.132;
+        symbol [ x %x.14 186 16 17 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 187 12 ]
+        %tmp.133 = lgetv %dc;
+        symbol [ dc %tmp.133 187 12 14 ];
+        symbol [ setColor %tmp.134 187 15 23 ];
+        %tmp.134 = getv function %tmp.133 :setColor;
+        %tmp.135 = lgetv %dimColor.6;
+        symbol [ dimColor %tmp.135 187 24 32 ];
+        symbol [ Graphics %tmp.136 187 34 42 ];
+        %tmp.136 = getm $.Toybox.Graphics;
+        symbol [ COLOR_TRANSPARENT %tmp.137 187 43 60 ];
+        %tmp.137 = getv %tmp.136 :COLOR_TRANSPARENT;
+        invoke %tmp.133 %tmp.134(%tmp.135, %tmp.137);
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 188 12 ]
+        %tmp.138 = lgetv %dc;
+        symbol [ dc %tmp.138 188 12 14 ];
+        symbol [ drawText %tmp.139 188 15 23 ];
+        %tmp.139 = getv function %tmp.138 :drawText;
+        %tmp.140 = lgetv %x.14;
+        symbol [ x %tmp.140 189 16 17 ];
+        %tmp.141 = lgetv %topBarY.7;
+        symbol [ topBarY %tmp.141 190 16 23 ];
+        %tmp.142 = 8;
+        %tmp.143 = add %tmp.141 %tmp.142;
+        symbol [ Graphics %tmp.144 191 16 24 ];
+        %tmp.144 = getm $.Toybox.Graphics;
+        symbol [ FONT_XTINY %tmp.145 191 25 35 ];
+        %tmp.145 = getv %tmp.144 :FONT_XTINY;
+        %tmp.146 = lgetv %topLabels.11;
+        symbol [ topLabels %tmp.146 192 16 25 ];
+        %tmp.147 = lgetv %i.13;
+        symbol [ i %tmp.147 192 26 27 ];
+        %tmp.148 = agetv %tmp.146 %tmp.147;
+        symbol [ Graphics %tmp.149 193 16 24 ];
+        %tmp.149 = getm $.Toybox.Graphics;
+        symbol [ TEXT_JUSTIFY_CENTER %tmp.150 193 25 44 ];
+        %tmp.150 = getv %tmp.149 :TEXT_JUSTIFY_CENTER;
+        invoke %tmp.138 %tmp.139(%tmp.140, %tmp.143, %tmp.145, %tmp.148, %tmp.150);
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 195 12 ]
+        %tmp.151 = lgetv %dc;
+        symbol [ dc %tmp.151 195 12 14 ];
+        symbol [ setColor %tmp.152 195 15 23 ];
+        %tmp.152 = getv function %tmp.151 :setColor;
+        %tmp.153 = lgetv %fgColor.5;
+        symbol [ fgColor %tmp.153 195 24 31 ];
+        symbol [ Graphics %tmp.154 195 33 41 ];
+        %tmp.154 = getm $.Toybox.Graphics;
+        symbol [ COLOR_TRANSPARENT %tmp.155 195 42 59 ];
+        %tmp.155 = getv %tmp.154 :COLOR_TRANSPARENT;
+        invoke %tmp.151 %tmp.152(%tmp.153, %tmp.155);
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 196 12 ]
+        %tmp.156 = lgetv %dc;
+        symbol [ dc %tmp.156 196 12 14 ];
+        symbol [ drawText %tmp.157 196 15 23 ];
+        %tmp.157 = getv function %tmp.156 :drawText;
+        %tmp.158 = lgetv %x.14;
+        symbol [ x %tmp.158 197 16 17 ];
+        %tmp.159 = lgetv %topBarY.7;
+        symbol [ topBarY %tmp.159 198 16 23 ];
+        %tmp.160 = 28;
+        %tmp.161 = add %tmp.159 %tmp.160;
+        symbol [ Graphics %tmp.162 199 16 24 ];
+        %tmp.162 = getm $.Toybox.Graphics;
+        symbol [ FONT_MEDIUM %tmp.163 199 25 36 ];
+        %tmp.163 = getv %tmp.162 :FONT_MEDIUM;
+        %tmp.164 = lgetv %topValues.12;
+        symbol [ topValues %tmp.164 200 16 25 ];
+        %tmp.165 = lgetv %i.13;
+        symbol [ i %tmp.165 200 26 27 ];
+        %tmp.166 = agetv %tmp.164 %tmp.165;
+        symbol [ Graphics %tmp.167 201 16 24 ];
+        %tmp.167 = getm $.Toybox.Graphics;
+        symbol [ TEXT_JUSTIFY_CENTER %tmp.168 201 25 44 ];
+        %tmp.168 = getv %tmp.167 :TEXT_JUSTIFY_CENTER;
+        invoke %tmp.156 %tmp.157(%tmp.158, %tmp.161, %tmp.163, %tmp.166, %tmp.168);
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_185_36_203_8_stop:
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_185_8_203_8_for_incr:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 185 ]
+        %tmp.171 = lgetv %i.13;
+        symbol [ i %tmp.171 185 31 32 ];
+        %tmp.172 = add %tmp.171 1;
+        lputv %i.13 %tmp.172;
+        symbol [ i %i.13 185 31 32 ];
+        goto @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_185_8_203_8_for_test;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_185_8_203_8_for_end:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 206 8 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_stop" ]
+        %centerX.15 = local;
+        symbol [ centerX %centerX.15 206 12 19 ];
+        %tmp.173 = lgetv %width.1;
+        symbol [ width %tmp.173 206 22 27 ];
+        %tmp.174 = 2.0;
+        %tmp.175 = div %tmp.173 %tmp.174;
+        lputv %centerX.15 %tmp.175;
+        symbol [ centerX %centerX.15 206 12 19 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 207 8 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_stop" ]
+        %centerY.16 = local;
+        symbol [ centerY %centerY.16 207 12 19 ];
+        %tmp.176 = lgetv %height.2;
+        symbol [ height %tmp.176 207 22 28 ];
+        %tmp.177 = 0.48;
+        %tmp.178 = mul %tmp.176 %tmp.177;
+        lputv %centerY.16 %tmp.178;
+        symbol [ centerY %centerY.16 207 12 19 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 208 8 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_stop" ]
+        %minDim.17 = local;
+        symbol [ minDim %minDim.17 208 12 18 ];
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_208_21_208_46_begin:
+        %tmp.179 = lgetv %width.1;
+        symbol [ width %tmp.179 208 21 26 ];
+        %tmp.180 = lgetv %height.2;
+        symbol [ height %tmp.180 208 29 35 ];
+        %tmp.181 = lt %tmp.179 %tmp.180;
+        bf %tmp.181 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_208_21_208_46_else_false;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_208_21_208_46_true:
+        %tmp.182 = lgetv %width.1;
+        symbol [ width %tmp.182 208 38 43 ];
+        push %tmp.182;
+        goto @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_208_21_208_46_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_208_21_208_46_else_false:
+        %tmp.183 = lgetv %height.2;
+        symbol [ height %tmp.183 208 46 52 ];
+        push %tmp.183;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_208_21_208_46_end:
+        %tmp.184 = phi [%tmp.181 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_208_21_208_46_begin] [%tmp.182 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_208_21_208_46_true] [%tmp.183 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_208_21_208_46_else_false] [%tmp.184 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_208_21_208_46_end];
+        lputv %minDim.17 %tmp.184;
+        symbol [ minDim %minDim.17 208 12 18 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 209 8 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_stop" ]
+        %radius.18 = local;
+        symbol [ radius %radius.18 209 12 18 ];
+        %tmp.185 = lgetv %minDim.17;
+        symbol [ minDim %tmp.185 209 21 27 ];
+        %tmp.186 = 0.36;
+        %tmp.187 = mul %tmp.185 %tmp.186;
+        lputv %radius.18 %tmp.187;
+        symbol [ radius %radius.18 209 12 18 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 210 8 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_stop" ]
+        %maxVal.19 = local;
+        symbol [ maxVal %maxVal.19 210 12 18 ];
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_210_21_210_40_begin:
+        symbol [ mIsMetric %tmp.189 210 21 30 ];
+        %tmp.189 = getv ? :mIsMetric;
+        bf %tmp.189 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_210_21_210_40_else_false;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_210_21_210_40_true:
+        %tmp.190 = 60.0;
+        push %tmp.190;
+        goto @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_210_21_210_40_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_210_21_210_40_else_false:
+        %tmp.191 = 40.0;
+        push %tmp.191;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_210_21_210_40_end:
+        %tmp.192 = phi [%tmp.189 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_210_21_210_40_begin] [%tmp.190 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_210_21_210_40_true] [%tmp.191 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_210_21_210_40_else_false] [%tmp.192 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_210_21_210_40_end];
+        lputv %maxVal.19 %tmp.192;
+        symbol [ maxVal %maxVal.19 210 12 18 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 211 8 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_stop" ]
+        %gaugeStart.20 = local;
+        symbol [ gaugeStart %gaugeStart.20 211 12 22 ];
+        %tmp.193 = 210.0;
+        lputv %gaugeStart.20 %tmp.193;
+        symbol [ gaugeStart %gaugeStart.20 211 12 22 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 212 8 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_stop" ]
+        %gaugeSweep.21 = local;
+        symbol [ gaugeSweep %gaugeSweep.21 212 12 22 ];
+        %tmp.194 = 240.0;
+        lputv %gaugeSweep.21 %tmp.194;
+        symbol [ gaugeSweep %gaugeSweep.21 212 12 22 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 213 8 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_stop" ]
+        %trackWidth.22 = local;
+        symbol [ trackWidth %trackWidth.22 213 12 22 ];
+        %tmp.195 = 40;
+        lputv %trackWidth.22 %tmp.195;
+        symbol [ trackWidth %trackWidth.22 213 12 22 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 216 8 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_stop" ]
+        %arcSegCount.23 = local;
+        symbol [ arcSegCount %arcSegCount.23 216 12 23 ];
+        %tmp.196 = 24;
+        lputv %arcSegCount.23 %tmp.196;
+        symbol [ arcSegCount %arcSegCount.23 216 12 23 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 217 8 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_stop" ]
+        %segArcLen.24 = local;
+        symbol [ segArcLen %segArcLen.24 217 12 21 ];
+        %tmp.197 = lgetv %gaugeSweep.21;
+        symbol [ gaugeSweep %tmp.197 217 24 34 ];
+        %tmp.198 = lgetv %arcSegCount.23;
+        symbol [ arcSegCount %tmp.198 217 37 48 ];
+        %tmp.199 = div %tmp.197 %tmp.198;
+        lputv %segArcLen.24 %tmp.199;
+        symbol [ segArcLen %segArcLen.24 217 12 21 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 218 8 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_stop" ]
+        %segGapDeg.25 = local;
+        symbol [ segGapDeg %segGapDeg.25 218 12 21 ];
+        %tmp.200 = 2.5;
+        lputv %segGapDeg.25 %tmp.200;
+        symbol [ segGapDeg %segGapDeg.25 218 12 21 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 219 8 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_stop" ]
+        %ratio.26 = local;
+        symbol [ ratio %ratio.26 219 12 17 ];
+        symbol [ mSpeed %tmp.202 219 20 26 ];
+        %tmp.202 = getv ? :mSpeed;
+        %tmp.203 = lgetv %maxVal.19;
+        symbol [ maxVal %tmp.203 219 29 35 ];
+        %tmp.204 = div %tmp.202 %tmp.203;
+        lputv %ratio.26 %tmp.204;
+        symbol [ ratio %ratio.26 219 12 17 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 220 8 ]
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_220_8_222_8_if_stmt:
+        %tmp.205 = lgetv %ratio.26;
+        symbol [ ratio %tmp.205 220 12 17 ];
+        %tmp.206 = 1.0;
+        %tmp.207 = gt %tmp.205 %tmp.206;
+        bf %tmp.207 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_220_8_222_8_if_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_220_8_222_8_if_true:
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_220_25_222_8_start:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 221 12 ]
+        %tmp.208 = 1.0;
+        lputv %ratio.26 %tmp.208;
+        symbol [ ratio %ratio.26 221 12 17 ];
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_220_25_222_8_stop:
+        goto @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_220_8_222_8_if_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_220_8_222_8_if_end:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 223 8 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_stop" ]
+        %litArcSegs.27 = local;
+        symbol [ litArcSegs %litArcSegs.27 223 12 22 ];
+        %tmp.209 = lgetv %ratio.26;
+        symbol [ ratio %tmp.209 223 26 31 ];
+        %tmp.210 = lgetv %arcSegCount.23;
+        symbol [ arcSegCount %tmp.210 223 34 45 ];
+        %tmp.211 = mul %tmp.209 %tmp.210;
+        %tmp.212 = 0.5;
+        %tmp.213 = add %tmp.211 %tmp.212;
+        symbol [ toNumber %tmp.214 223 53 61 ];
+        %tmp.214 = getv function %tmp.213 :toNumber;
+        %tmp.215 = invoke %tmp.213 %tmp.214();
+        lputv %litArcSegs.27 %tmp.215;
+        symbol [ litArcSegs %litArcSegs.27 223 12 22 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 225 8 ]
+        %tmp.216 = lgetv %dc;
+        symbol [ dc %tmp.216 225 8 10 ];
+        symbol [ setPenWidth %tmp.217 225 11 22 ];
+        %tmp.217 = getv function %tmp.216 :setPenWidth;
+        %tmp.218 = lgetv %trackWidth.22;
+        symbol [ trackWidth %tmp.218 225 23 33 ];
+        invoke %tmp.216 %tmp.217(%tmp.218);
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 226 8 ]
+        for @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_226_8_241_8_for_test @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_226_8_241_8_for_incr @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_226_8_241_8_for_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_226_8_241_8_for_init:
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_226_8_241_8_for_begin" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_226_8_241_8_for_end" ]
+        %i.28 = local;
+        symbol [ i %i.28 226 17 18 ];
+        %tmp.219 = 0;
+        lputv %i.28 %tmp.219;
+        symbol [ i %i.28 226 17 18 ];
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_226_8_241_8_for_test:
+        %tmp.220 = lgetv %i.28;
+        symbol [ i %tmp.220 226 24 25 ];
+        %tmp.221 = lgetv %arcSegCount.23;
+        symbol [ arcSegCount %tmp.221 226 28 39 ];
+        %tmp.222 = lt %tmp.220 %tmp.221;
+        bf %tmp.222 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_226_8_241_8_for_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_226_8_241_8_for_begin:
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_226_46_241_8_start:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 227 12 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_226_46_241_8_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_226_46_241_8_stop" ]
+        %segStartDeg.29 = local;
+        symbol [ segStartDeg %segStartDeg.29 227 16 27 ];
+        %tmp.223 = lgetv %gaugeStart.20;
+        symbol [ gaugeStart %tmp.223 227 30 40 ];
+        %tmp.224 = lgetv %i.28;
+        symbol [ i %tmp.224 227 43 44 ];
+        %tmp.225 = lgetv %segArcLen.24;
+        symbol [ segArcLen %tmp.225 227 47 56 ];
+        %tmp.226 = mul %tmp.224 %tmp.225;
+        %tmp.227 = sub %tmp.223 %tmp.226;
+        lputv %segStartDeg.29 %tmp.227;
+        symbol [ segStartDeg %segStartDeg.29 227 16 27 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 228 12 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_226_46_241_8_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_226_46_241_8_stop" ]
+        %segEndDeg.30 = local;
+        symbol [ segEndDeg %segEndDeg.30 228 16 25 ];
+        %tmp.228 = lgetv %segStartDeg.29;
+        symbol [ segStartDeg %tmp.228 228 28 39 ];
+        %tmp.229 = lgetv %segArcLen.24;
+        symbol [ segArcLen %tmp.229 228 42 51 ];
+        %tmp.230 = sub %tmp.228 %tmp.229;
+        %tmp.231 = lgetv %segGapDeg.25;
+        symbol [ segGapDeg %tmp.231 228 54 63 ];
+        %tmp.232 = add %tmp.230 %tmp.231;
+        lputv %segEndDeg.30 %tmp.232;
+        symbol [ segEndDeg %segEndDeg.30 228 16 25 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 229 12 ]
+        %tmp.233 = lgetv %dc;
+        symbol [ dc %tmp.233 229 12 14 ];
+        symbol [ setColor %tmp.234 229 15 23 ];
+        %tmp.234 = getv function %tmp.233 :setColor;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_230_16_230_71_begin:
+        %tmp.235 = lgetv %i.28;
+        symbol [ i %tmp.235 230 16 17 ];
+        %tmp.236 = lgetv %litArcSegs.27;
+        symbol [ litArcSegs %tmp.236 230 20 30 ];
+        %tmp.237 = lt %tmp.235 %tmp.236;
+        bf %tmp.237 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_230_16_230_71_else_false;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_230_16_230_71_true:
+        symbol [ mGaugeColors %tmp.239 230 33 45 ];
+        %tmp.239 = getv ? :mGaugeColors;
+        %tmp.240 = lgetv %i.28;
+        symbol [ i %tmp.240 230 46 47 ];
+        %tmp.241 = agetv %tmp.239 %tmp.240;
+        push %tmp.241;
+        goto @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_230_16_230_71_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_230_16_230_71_else_false:
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_230_51_230_71_begin:
+        %tmp.242 = lgetv %isDark.4;
+        symbol [ isDark %tmp.242 230 51 57 ];
+        bf %tmp.242 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_230_51_230_71_else_false;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_230_51_230_71_true:
+        %tmp.243 = 0x222222;
+        push %tmp.243;
+        goto @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_230_51_230_71_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_230_51_230_71_else_false:
+        %tmp.244 = 0xdddddd;
+        push %tmp.244;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_230_51_230_71_end:
+        %tmp.245 = phi [%tmp.242 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_230_51_230_71_begin] [%tmp.243 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_230_51_230_71_true] [%tmp.244 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_230_51_230_71_else_false] [%tmp.245 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_230_51_230_71_end];
+        push %tmp.245;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_230_16_230_71_end:
+        %tmp.246 = phi [%tmp.237 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_230_16_230_71_begin] [%tmp.241 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_230_16_230_71_true] [%tmp.245 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_230_16_230_71_else_false] [%tmp.246 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_230_16_230_71_end];
+        symbol [ Graphics %tmp.247 231 16 24 ];
+        %tmp.247 = getm $.Toybox.Graphics;
+        symbol [ COLOR_TRANSPARENT %tmp.248 231 25 42 ];
+        %tmp.248 = getv %tmp.247 :COLOR_TRANSPARENT;
+        invoke %tmp.233 %tmp.234(%tmp.246, %tmp.248);
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 233 12 ]
+        %tmp.249 = lgetv %dc;
+        symbol [ dc %tmp.249 233 12 14 ];
+        symbol [ drawArc %tmp.250 233 15 22 ];
+        %tmp.250 = getv function %tmp.249 :drawArc;
+        %tmp.251 = lgetv %centerX.15;
+        symbol [ centerX %tmp.251 234 16 23 ];
+        %tmp.252 = lgetv %centerY.16;
+        symbol [ centerY %tmp.252 235 16 23 ];
+        %tmp.253 = lgetv %radius.18;
+        symbol [ radius %tmp.253 236 16 22 ];
+        symbol [ Graphics %tmp.254 237 16 24 ];
+        %tmp.254 = getm $.Toybox.Graphics;
+        symbol [ ARC_CLOCKWISE %tmp.255 237 25 38 ];
+        %tmp.255 = getv %tmp.254 :ARC_CLOCKWISE;
+        %tmp.256 = lgetv %segStartDeg.29;
+        symbol [ segStartDeg %tmp.256 238 16 27 ];
+        %tmp.257 = lgetv %segEndDeg.30;
+        symbol [ segEndDeg %tmp.257 239 16 25 ];
+        invoke %tmp.249 %tmp.250(%tmp.251, %tmp.252, %tmp.253, %tmp.255, %tmp.256, %tmp.257);
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_226_46_241_8_stop:
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_226_8_241_8_for_incr:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 226 ]
+        %tmp.260 = lgetv %i.28;
+        symbol [ i %tmp.260 226 41 42 ];
+        %tmp.261 = add %tmp.260 1;
+        lputv %i.28 %tmp.261;
+        symbol [ i %i.28 226 41 42 ];
+        goto @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_226_8_241_8_for_test;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_226_8_241_8_for_end:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 244 8 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_stop" ]
+        %startRad.31 = local;
+        symbol [ startRad %startRad.31 244 12 20 ];
+        symbol [ Math %tmp.263 244 23 27 ];
+        %tmp.263 = getv ? :Math;
+        symbol [ toRadians %tmp.264 244 28 37 ];
+        %tmp.264 = getv function %tmp.263 :toRadians;
+        %tmp.265 = lgetv %gaugeStart.20;
+        symbol [ gaugeStart %tmp.265 244 38 48 ];
+        %tmp.266 = invoke %tmp.263 %tmp.264(%tmp.265);
+        lputv %startRad.31 %tmp.266;
+        symbol [ startRad %startRad.31 244 12 20 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 245 8 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_stop" ]
+        %endRad.32 = local;
+        symbol [ endRad %endRad.32 245 12 18 ];
+        symbol [ Math %tmp.268 245 21 25 ];
+        %tmp.268 = getv ? :Math;
+        symbol [ toRadians %tmp.269 245 26 35 ];
+        %tmp.269 = getv function %tmp.268 :toRadians;
+        %tmp.270 = lgetv %gaugeStart.20;
+        symbol [ gaugeStart %tmp.270 245 36 46 ];
+        %tmp.271 = lgetv %gaugeSweep.21;
+        symbol [ gaugeSweep %tmp.271 245 49 59 ];
+        %tmp.272 = sub %tmp.270 %tmp.271;
+        %tmp.273 = invoke %tmp.268 %tmp.269(%tmp.272);
+        lputv %endRad.32 %tmp.273;
+        symbol [ endRad %endRad.32 245 12 18 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 246 8 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_stop" ]
+        %labelR.33 = local;
+        symbol [ labelR %labelR.33 246 12 18 ];
+        %tmp.274 = lgetv %radius.18;
+        symbol [ radius %tmp.274 246 21 27 ];
+        %tmp.275 = lgetv %trackWidth.22;
+        symbol [ trackWidth %tmp.275 246 30 40 ];
+        %tmp.276 = 2.0;
+        %tmp.277 = div %tmp.275 %tmp.276;
+        %tmp.278 = add %tmp.274 %tmp.277;
+        %tmp.279 = 16;
+        %tmp.280 = add %tmp.278 %tmp.279;
+        lputv %labelR.33 %tmp.280;
+        symbol [ labelR %labelR.33 246 12 18 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 247 8 ]
+        %tmp.281 = lgetv %dc;
+        symbol [ dc %tmp.281 247 8 10 ];
+        symbol [ setColor %tmp.282 247 11 19 ];
+        %tmp.282 = getv function %tmp.281 :setColor;
+        %tmp.283 = lgetv %dimColor.6;
+        symbol [ dimColor %tmp.283 247 20 28 ];
+        symbol [ Graphics %tmp.284 247 30 38 ];
+        %tmp.284 = getm $.Toybox.Graphics;
+        symbol [ COLOR_TRANSPARENT %tmp.285 247 39 56 ];
+        %tmp.285 = getv %tmp.284 :COLOR_TRANSPARENT;
+        invoke %tmp.281 %tmp.282(%tmp.283, %tmp.285);
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 264 8 ]
+        %tmp.286 = lgetv %dc;
+        symbol [ dc %tmp.286 264 8 10 ];
+        symbol [ setColor %tmp.287 264 11 19 ];
+        %tmp.287 = getv function %tmp.286 :setColor;
+        %tmp.288 = lgetv %dimColor.6;
+        symbol [ dimColor %tmp.288 264 20 28 ];
+        symbol [ Graphics %tmp.289 264 30 38 ];
+        %tmp.289 = getm $.Toybox.Graphics;
+        symbol [ COLOR_TRANSPARENT %tmp.290 264 39 56 ];
+        %tmp.290 = getv %tmp.289 :COLOR_TRANSPARENT;
+        invoke %tmp.286 %tmp.287(%tmp.288, %tmp.290);
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 265 8 ]
+        %tmp.291 = lgetv %dc;
+        symbol [ dc %tmp.291 265 8 10 ];
+        symbol [ drawText %tmp.292 265 11 19 ];
+        %tmp.292 = getv function %tmp.291 :drawText;
+        %tmp.293 = lgetv %centerX.15;
+        symbol [ centerX %tmp.293 266 12 19 ];
+        %tmp.294 = lgetv %radius.18;
+        symbol [ radius %tmp.294 266 22 28 ];
+        %tmp.295 = 0.35;
+        %tmp.296 = mul %tmp.294 %tmp.295;
+        %tmp.297 = sub %tmp.293 %tmp.296;
+        %tmp.298 = lgetv %centerY.16;
+        symbol [ centerY %tmp.298 267 12 19 ];
+        %tmp.299 = lgetv %radius.18;
+        symbol [ radius %tmp.299 267 22 28 ];
+        %tmp.300 = 0.65;
+        %tmp.301 = mul %tmp.299 %tmp.300;
+        %tmp.302 = sub %tmp.298 %tmp.301;
+        symbol [ Graphics %tmp.303 268 12 20 ];
+        %tmp.303 = getm $.Toybox.Graphics;
+        symbol [ FONT_XTINY %tmp.304 268 21 31 ];
+        %tmp.304 = getv %tmp.303 :FONT_XTINY;
+        %tmp.305 = "AVG";
+        symbol [ Graphics %tmp.306 270 12 20 ];
+        %tmp.306 = getm $.Toybox.Graphics;
+        symbol [ TEXT_JUSTIFY_CENTER %tmp.307 270 21 40 ];
+        %tmp.307 = getv %tmp.306 :TEXT_JUSTIFY_CENTER;
+        invoke %tmp.291 %tmp.292(%tmp.297, %tmp.302, %tmp.304, %tmp.305, %tmp.307);
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 272 8 ]
+        %tmp.308 = lgetv %dc;
+        symbol [ dc %tmp.308 272 8 10 ];
+        symbol [ drawText %tmp.309 272 11 19 ];
+        %tmp.309 = getv function %tmp.308 :drawText;
+        %tmp.310 = lgetv %centerX.15;
+        symbol [ centerX %tmp.310 273 12 19 ];
+        %tmp.311 = lgetv %radius.18;
+        symbol [ radius %tmp.311 273 22 28 ];
+        %tmp.312 = 0.35;
+        %tmp.313 = mul %tmp.311 %tmp.312;
+        %tmp.314 = add %tmp.310 %tmp.313;
+        %tmp.315 = lgetv %centerY.16;
+        symbol [ centerY %tmp.315 274 12 19 ];
+        %tmp.316 = lgetv %radius.18;
+        symbol [ radius %tmp.316 274 22 28 ];
+        %tmp.317 = 0.65;
+        %tmp.318 = mul %tmp.316 %tmp.317;
+        %tmp.319 = sub %tmp.315 %tmp.318;
+        symbol [ Graphics %tmp.320 275 12 20 ];
+        %tmp.320 = getm $.Toybox.Graphics;
+        symbol [ FONT_XTINY %tmp.321 275 21 31 ];
+        %tmp.321 = getv %tmp.320 :FONT_XTINY;
+        %tmp.322 = "MAX";
+        symbol [ Graphics %tmp.323 277 12 20 ];
+        %tmp.323 = getm $.Toybox.Graphics;
+        symbol [ TEXT_JUSTIFY_CENTER %tmp.324 277 21 40 ];
+        %tmp.324 = getv %tmp.323 :TEXT_JUSTIFY_CENTER;
+        invoke %tmp.308 %tmp.309(%tmp.314, %tmp.319, %tmp.321, %tmp.322, %tmp.324);
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 279 8 ]
+        %tmp.325 = lgetv %dc;
+        symbol [ dc %tmp.325 279 8 10 ];
+        symbol [ setColor %tmp.326 279 11 19 ];
+        %tmp.326 = getv function %tmp.325 :setColor;
+        %tmp.327 = lgetv %fgColor.5;
+        symbol [ fgColor %tmp.327 279 20 27 ];
+        symbol [ Graphics %tmp.328 279 29 37 ];
+        %tmp.328 = getm $.Toybox.Graphics;
+        symbol [ COLOR_TRANSPARENT %tmp.329 279 38 55 ];
+        %tmp.329 = getv %tmp.328 :COLOR_TRANSPARENT;
+        invoke %tmp.325 %tmp.326(%tmp.327, %tmp.329);
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 280 8 ]
+        %tmp.330 = lgetv %dc;
+        symbol [ dc %tmp.330 280 8 10 ];
+        symbol [ drawText %tmp.331 280 11 19 ];
+        %tmp.331 = getv function %tmp.330 :drawText;
+        %tmp.332 = lgetv %centerX.15;
+        symbol [ centerX %tmp.332 281 12 19 ];
+        %tmp.333 = lgetv %radius.18;
+        symbol [ radius %tmp.333 281 22 28 ];
+        %tmp.334 = 0.35;
+        %tmp.335 = mul %tmp.333 %tmp.334;
+        %tmp.336 = sub %tmp.332 %tmp.335;
+        %tmp.337 = lgetv %centerY.16;
+        symbol [ centerY %tmp.337 282 12 19 ];
+        %tmp.338 = lgetv %radius.18;
+        symbol [ radius %tmp.338 282 22 28 ];
+        %tmp.339 = 0.48;
+        %tmp.340 = mul %tmp.338 %tmp.339;
+        %tmp.341 = sub %tmp.337 %tmp.340;
+        symbol [ Graphics %tmp.342 283 12 20 ];
+        %tmp.342 = getm $.Toybox.Graphics;
+        symbol [ FONT_SMALL %tmp.343 283 21 31 ];
+        %tmp.343 = getv %tmp.342 :FONT_SMALL;
+        symbol [ mAvgSpeed %tmp.345 284 12 21 ];
+        %tmp.345 = getv ? :mAvgSpeed;
+        symbol [ format %tmp.346 284 22 28 ];
+        %tmp.346 = getv function %tmp.345 :format;
+        %tmp.347 = "%.1f";
+        %tmp.348 = invoke %tmp.345 %tmp.346(%tmp.347);
+        symbol [ Graphics %tmp.349 285 12 20 ];
+        %tmp.349 = getm $.Toybox.Graphics;
+        symbol [ TEXT_JUSTIFY_CENTER %tmp.350 285 21 40 ];
+        %tmp.350 = getv %tmp.349 :TEXT_JUSTIFY_CENTER;
+        invoke %tmp.330 %tmp.331(%tmp.336, %tmp.341, %tmp.343, %tmp.348, %tmp.350);
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 287 8 ]
+        %tmp.351 = lgetv %dc;
+        symbol [ dc %tmp.351 287 8 10 ];
+        symbol [ drawText %tmp.352 287 11 19 ];
+        %tmp.352 = getv function %tmp.351 :drawText;
+        %tmp.353 = lgetv %centerX.15;
+        symbol [ centerX %tmp.353 288 12 19 ];
+        %tmp.354 = lgetv %radius.18;
+        symbol [ radius %tmp.354 288 22 28 ];
+        %tmp.355 = 0.35;
+        %tmp.356 = mul %tmp.354 %tmp.355;
+        %tmp.357 = add %tmp.353 %tmp.356;
+        %tmp.358 = lgetv %centerY.16;
+        symbol [ centerY %tmp.358 289 12 19 ];
+        %tmp.359 = lgetv %radius.18;
+        symbol [ radius %tmp.359 289 22 28 ];
+        %tmp.360 = 0.48;
+        %tmp.361 = mul %tmp.359 %tmp.360;
+        %tmp.362 = sub %tmp.358 %tmp.361;
+        symbol [ Graphics %tmp.363 290 12 20 ];
+        %tmp.363 = getm $.Toybox.Graphics;
+        symbol [ FONT_SMALL %tmp.364 290 21 31 ];
+        %tmp.364 = getv %tmp.363 :FONT_SMALL;
+        symbol [ mMaxSpeed %tmp.366 291 12 21 ];
+        %tmp.366 = getv ? :mMaxSpeed;
+        symbol [ format %tmp.367 291 22 28 ];
+        %tmp.367 = getv function %tmp.366 :format;
+        %tmp.368 = "%.1f";
+        %tmp.369 = invoke %tmp.366 %tmp.367(%tmp.368);
+        symbol [ Graphics %tmp.370 292 12 20 ];
+        %tmp.370 = getm $.Toybox.Graphics;
+        symbol [ TEXT_JUSTIFY_CENTER %tmp.371 292 21 40 ];
+        %tmp.371 = getv %tmp.370 :TEXT_JUSTIFY_CENTER;
+        invoke %tmp.351 %tmp.352(%tmp.357, %tmp.362, %tmp.364, %tmp.369, %tmp.371);
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 296 8 ]
+        %tmp.372 = lgetv %dc;
+        symbol [ dc %tmp.372 296 8 10 ];
+        symbol [ setColor %tmp.373 296 11 19 ];
+        %tmp.373 = getv function %tmp.372 :setColor;
+        %tmp.374 = lgetv %fgColor.5;
+        symbol [ fgColor %tmp.374 296 20 27 ];
+        symbol [ Graphics %tmp.375 296 29 37 ];
+        %tmp.375 = getm $.Toybox.Graphics;
+        symbol [ COLOR_TRANSPARENT %tmp.376 296 38 55 ];
+        %tmp.376 = getv %tmp.375 :COLOR_TRANSPARENT;
+        invoke %tmp.372 %tmp.373(%tmp.374, %tmp.376);
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 297 8 ]
+        %tmp.377 = lgetv %dc;
+        symbol [ dc %tmp.377 297 8 10 ];
+        symbol [ drawText %tmp.378 297 11 19 ];
+        %tmp.378 = getv function %tmp.377 :drawText;
+        %tmp.379 = lgetv %centerX.15;
+        symbol [ centerX %tmp.379 298 12 19 ];
+        %tmp.380 = lgetv %centerY.16;
+        symbol [ centerY %tmp.380 299 12 19 ];
+        symbol [ Graphics %tmp.381 300 12 20 ];
+        %tmp.381 = getm $.Toybox.Graphics;
+        symbol [ FONT_NUMBER_THAI_HOT %tmp.382 300 21 41 ];
+        %tmp.382 = getv %tmp.381 :FONT_NUMBER_THAI_HOT;
+        symbol [ mSpeed %tmp.384 301 12 18 ];
+        %tmp.384 = getv ? :mSpeed;
+        symbol [ format %tmp.385 301 19 25 ];
+        %tmp.385 = getv function %tmp.384 :format;
+        %tmp.386 = "%.1f";
+        %tmp.387 = invoke %tmp.384 %tmp.385(%tmp.386);
+        symbol [ Graphics %tmp.388 302 12 20 ];
+        %tmp.388 = getm $.Toybox.Graphics;
+        symbol [ TEXT_JUSTIFY_CENTER %tmp.389 302 21 40 ];
+        %tmp.389 = getv %tmp.388 :TEXT_JUSTIFY_CENTER;
+        symbol [ Graphics %tmp.390 302 43 51 ];
+        %tmp.390 = getm $.Toybox.Graphics;
+        symbol [ TEXT_JUSTIFY_VCENTER %tmp.391 302 52 72 ];
+        %tmp.391 = getv %tmp.390 :TEXT_JUSTIFY_VCENTER;
+        %tmp.392 = bitor %tmp.389 %tmp.391;
+        invoke %tmp.377 %tmp.378(%tmp.379, %tmp.380, %tmp.382, %tmp.387, %tmp.392);
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 304 8 ]
+        %tmp.393 = lgetv %dc;
+        symbol [ dc %tmp.393 304 8 10 ];
+        symbol [ setColor %tmp.394 304 11 19 ];
+        %tmp.394 = getv function %tmp.393 :setColor;
+        %tmp.395 = lgetv %dimColor.6;
+        symbol [ dimColor %tmp.395 304 20 28 ];
+        symbol [ Graphics %tmp.396 304 30 38 ];
+        %tmp.396 = getm $.Toybox.Graphics;
+        symbol [ COLOR_TRANSPARENT %tmp.397 304 39 56 ];
+        %tmp.397 = getv %tmp.396 :COLOR_TRANSPARENT;
+        invoke %tmp.393 %tmp.394(%tmp.395, %tmp.397);
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 305 8 ]
+        %tmp.398 = lgetv %dc;
+        symbol [ dc %tmp.398 305 8 10 ];
+        symbol [ drawText %tmp.399 305 11 19 ];
+        %tmp.399 = getv function %tmp.398 :drawText;
+        %tmp.400 = lgetv %centerX.15;
+        symbol [ centerX %tmp.400 306 12 19 ];
+        %tmp.401 = lgetv %centerY.16;
+        symbol [ centerY %tmp.401 307 12 19 ];
+        %tmp.402 = lgetv %radius.18;
+        symbol [ radius %tmp.402 307 22 28 ];
+        %tmp.403 = 0.3;
+        %tmp.404 = mul %tmp.402 %tmp.403;
+        %tmp.405 = add %tmp.401 %tmp.404;
+        symbol [ Graphics %tmp.406 308 12 20 ];
+        %tmp.406 = getm $.Toybox.Graphics;
+        symbol [ FONT_SMALL %tmp.407 308 21 31 ];
+        %tmp.407 = getv %tmp.406 :FONT_SMALL;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_309_12_309_33_begin:
+        symbol [ mIsMetric %tmp.409 309 12 21 ];
+        %tmp.409 = getv ? :mIsMetric;
+        bf %tmp.409 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_309_12_309_33_else_false;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_309_12_309_33_true:
+        %tmp.410 = "km/h";
+        push %tmp.410;
+        goto @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_309_12_309_33_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_309_12_309_33_else_false:
+        %tmp.411 = "mph";
+        push %tmp.411;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_309_12_309_33_end:
+        %tmp.412 = phi [%tmp.409 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_309_12_309_33_begin] [%tmp.410 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_309_12_309_33_true] [%tmp.411 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_309_12_309_33_else_false] [%tmp.412 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_309_12_309_33_end];
+        symbol [ Graphics %tmp.413 310 12 20 ];
+        %tmp.413 = getm $.Toybox.Graphics;
+        symbol [ TEXT_JUSTIFY_CENTER %tmp.414 310 21 40 ];
+        %tmp.414 = getv %tmp.413 :TEXT_JUSTIFY_CENTER;
+        invoke %tmp.398 %tmp.399(%tmp.400, %tmp.405, %tmp.407, %tmp.412, %tmp.414);
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 314 8 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_stop" ]
+        %footerY.34 = local;
+        symbol [ footerY %footerY.34 314 12 19 ];
+        %tmp.415 = lgetv %height.2;
+        symbol [ height %tmp.415 314 22 28 ];
+        %tmp.416 = 65;
+        %tmp.417 = sub %tmp.415 %tmp.416;
+        lputv %footerY.34 %tmp.417;
+        symbol [ footerY %footerY.34 314 12 19 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 317 8 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_stop" ]
+        %panelTop.35 = local;
+        symbol [ panelTop %panelTop.35 317 12 20 ];
+        %tmp.418 = lgetv %centerY.16;
+        symbol [ centerY %tmp.418 317 23 30 ];
+        %tmp.419 = lgetv %radius.18;
+        symbol [ radius %tmp.419 317 33 39 ];
+        %tmp.420 = 0.55;
+        %tmp.421 = mul %tmp.419 %tmp.420;
+        %tmp.422 = add %tmp.418 %tmp.421;
+        lputv %panelTop.35 %tmp.422;
+        symbol [ panelTop %panelTop.35 317 12 20 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 318 8 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_stop" ]
+        %panelH.36 = local;
+        symbol [ panelH %panelH.36 318 12 18 ];
+        %tmp.423 = lgetv %footerY.34;
+        symbol [ footerY %tmp.423 318 21 28 ];
+        %tmp.424 = lgetv %panelTop.35;
+        symbol [ panelTop %tmp.424 318 31 39 ];
+        %tmp.425 = sub %tmp.423 %tmp.424;
+        %tmp.426 = 8;
+        %tmp.427 = sub %tmp.425 %tmp.426;
+        lputv %panelH.36 %tmp.427;
+        symbol [ panelH %panelH.36 318 12 18 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 319 8 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_stop" ]
+        %barH.37 = local;
+        symbol [ barH %barH.37 319 12 16 ];
+        %tmp.428 = lgetv %panelH.36;
+        symbol [ panelH %tmp.428 319 19 25 ];
+        %tmp.429 = 4;
+        %tmp.430 = sub %tmp.428 %tmp.429;
+        lputv %barH.37 %tmp.430;
+        symbol [ barH %barH.37 319 12 16 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 320 8 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_stop" ]
+        %segCount.38 = local;
+        symbol [ segCount %segCount.38 320 12 20 ];
+        %tmp.431 = 10;
+        lputv %segCount.38 %tmp.431;
+        symbol [ segCount %segCount.38 320 12 20 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 321 8 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_stop" ]
+        %segGap.39 = local;
+        symbol [ segGap %segGap.39 321 12 18 ];
+        %tmp.432 = 4;
+        lputv %segGap.39 %tmp.432;
+        symbol [ segGap %segGap.39 321 12 18 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 322 8 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_stop" ]
+        %lBarW.40 = local;
+        symbol [ lBarW %lBarW.40 322 12 17 ];
+        %tmp.433 = 16;
+        lputv %lBarW.40 %tmp.433;
+        symbol [ lBarW %lBarW.40 322 12 17 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 323 8 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_stop" ]
+        %rBarW.41 = local;
+        symbol [ rBarW %rBarW.41 323 12 17 ];
+        %tmp.434 = 16;
+        lputv %rBarW.41 %tmp.434;
+        symbol [ rBarW %rBarW.41 323 12 17 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 326 8 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_stop" ]
+        %lBarX.42 = local;
+        symbol [ lBarX %lBarX.42 326 12 17 ];
+        %tmp.435 = 18;
+        lputv %lBarX.42 %tmp.435;
+        symbol [ lBarX %lBarX.42 326 12 17 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 327 8 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_stop" ]
+        %lPanelCenterX.43 = local;
+        symbol [ lPanelCenterX %lPanelCenterX.43 327 12 25 ];
+        %tmp.436 = lgetv %lBarX.42;
+        symbol [ lBarX %tmp.436 327 29 34 ];
+        %tmp.437 = lgetv %lBarW.40;
+        symbol [ lBarW %tmp.437 327 37 42 ];
+        %tmp.438 = 2;
+        %tmp.439 = div %tmp.437 %tmp.438;
+        %tmp.440 = add %tmp.436 %tmp.439;
+        %tmp.441 = lgetv %width.1;
+        symbol [ width %tmp.441 327 49 54 ];
+        %tmp.442 = 2.0;
+        %tmp.443 = div %tmp.441 %tmp.442;
+        %tmp.444 = add %tmp.440 %tmp.443;
+        %tmp.445 = 2.0;
+        %tmp.446 = div %tmp.444 %tmp.445;
+        lputv %lPanelCenterX.43 %tmp.446;
+        symbol [ lPanelCenterX %lPanelCenterX.43 327 12 25 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 328 8 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_stop" ]
+        %lPanelCenterY.44 = local;
+        symbol [ lPanelCenterY %lPanelCenterY.44 328 12 25 ];
+        %tmp.447 = lgetv %panelTop.35;
+        symbol [ panelTop %tmp.447 328 28 36 ];
+        %tmp.448 = lgetv %panelH.36;
+        symbol [ panelH %tmp.448 328 39 45 ];
+        %tmp.449 = 2.0;
+        %tmp.450 = div %tmp.448 %tmp.449;
+        %tmp.451 = add %tmp.447 %tmp.450;
+        %tmp.452 = 8;
+        %tmp.453 = add %tmp.451 %tmp.452;
+        lputv %lPanelCenterY.44 %tmp.453;
+        symbol [ lPanelCenterY %lPanelCenterY.44 328 12 25 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 330 8 ]
+        %tmp.454 = lgetv %dc;
+        symbol [ dc %tmp.454 330 8 10 ];
+        symbol [ setColor %tmp.455 330 11 19 ];
+        %tmp.455 = getv function %tmp.454 :setColor;
+        %tmp.456 = lgetv %dimColor.6;
+        symbol [ dimColor %tmp.456 330 20 28 ];
+        symbol [ Graphics %tmp.457 330 30 38 ];
+        %tmp.457 = getm $.Toybox.Graphics;
+        symbol [ COLOR_TRANSPARENT %tmp.458 330 39 56 ];
+        %tmp.458 = getv %tmp.457 :COLOR_TRANSPARENT;
+        invoke %tmp.454 %tmp.455(%tmp.456, %tmp.458);
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 331 8 ]
+        %tmp.459 = lgetv %dc;
+        symbol [ dc %tmp.459 331 8 10 ];
+        symbol [ drawText %tmp.460 331 11 19 ];
+        %tmp.460 = getv function %tmp.459 :drawText;
+        %tmp.461 = lgetv %lPanelCenterX.43;
+        symbol [ lPanelCenterX %tmp.461 332 12 25 ];
+        %tmp.462 = lgetv %lPanelCenterY.44;
+        symbol [ lPanelCenterY %tmp.462 333 12 25 ];
+        %tmp.463 = 70;
+        %tmp.464 = sub %tmp.462 %tmp.463;
+        symbol [ Graphics %tmp.465 334 12 20 ];
+        %tmp.465 = getm $.Toybox.Graphics;
+        symbol [ FONT_XTINY %tmp.466 334 21 31 ];
+        %tmp.466 = getv %tmp.465 :FONT_XTINY;
+        %tmp.467 = "HR";
+        symbol [ Graphics %tmp.468 336 12 20 ];
+        %tmp.468 = getm $.Toybox.Graphics;
+        symbol [ TEXT_JUSTIFY_CENTER %tmp.469 336 21 40 ];
+        %tmp.469 = getv %tmp.468 :TEXT_JUSTIFY_CENTER;
+        invoke %tmp.459 %tmp.460(%tmp.461, %tmp.464, %tmp.466, %tmp.467, %tmp.469);
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 339 8 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_stop" ]
+        %segH.45 = local;
+        symbol [ segH %segH.45 339 12 16 ];
+        %tmp.470 = lgetv %barH.37;
+        symbol [ barH %tmp.470 339 21 25 ];
+        %tmp.471 = lgetv %segCount.38;
+        symbol [ segCount %tmp.471 339 29 37 ];
+        %tmp.472 = 1;
+        %tmp.473 = sub %tmp.471 %tmp.472;
+        %tmp.474 = lgetv %segGap.39;
+        symbol [ segGap %tmp.474 339 45 51 ];
+        %tmp.475 = mul %tmp.473 %tmp.474;
+        %tmp.476 = sub %tmp.470 %tmp.475;
+        %tmp.477 = lgetv %segCount.38;
+        symbol [ segCount %tmp.477 339 55 63 ];
+        %tmp.478 = div %tmp.476 %tmp.477;
+        symbol [ toNumber %tmp.479 339 65 73 ];
+        %tmp.479 = getv function %tmp.478 :toNumber;
+        %tmp.480 = invoke %tmp.478 %tmp.479();
+        lputv %segH.45 %tmp.480;
+        symbol [ segH %segH.45 339 12 16 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 340 8 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_stop" ]
+        %hrRatio.46 = local;
+        symbol [ hrRatio %hrRatio.46 340 12 19 ];
+        symbol [ mHeartRate %tmp.482 340 22 32 ];
+        %tmp.482 = getv ? :mHeartRate;
+        symbol [ toFloat %tmp.483 340 33 40 ];
+        %tmp.483 = getv function %tmp.482 :toFloat;
+        %tmp.484 = invoke %tmp.482 %tmp.483();
+        %tmp.485 = 200.0;
+        %tmp.486 = div %tmp.484 %tmp.485;
+        lputv %hrRatio.46 %tmp.486;
+        symbol [ hrRatio %hrRatio.46 340 12 19 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 341 8 ]
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_341_8_343_8_if_stmt:
+        %tmp.487 = lgetv %hrRatio.46;
+        symbol [ hrRatio %tmp.487 341 12 19 ];
+        %tmp.488 = 1.0;
+        %tmp.489 = gt %tmp.487 %tmp.488;
+        bf %tmp.489 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_341_8_343_8_if_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_341_8_343_8_if_true:
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_341_27_343_8_start:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 342 12 ]
+        %tmp.490 = 1.0;
+        lputv %hrRatio.46 %tmp.490;
+        symbol [ hrRatio %hrRatio.46 342 12 19 ];
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_341_27_343_8_stop:
+        goto @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_341_8_343_8_if_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_341_8_343_8_if_end:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 344 8 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_stop" ]
+        %litSegs.47 = local;
+        symbol [ litSegs %litSegs.47 344 12 19 ];
+        %tmp.491 = lgetv %hrRatio.46;
+        symbol [ hrRatio %tmp.491 344 23 30 ];
+        %tmp.492 = lgetv %segCount.38;
+        symbol [ segCount %tmp.492 344 33 41 ];
+        %tmp.493 = mul %tmp.491 %tmp.492;
+        %tmp.494 = 0.5;
+        %tmp.495 = add %tmp.493 %tmp.494;
+        symbol [ toNumber %tmp.496 344 49 57 ];
+        %tmp.496 = getv function %tmp.495 :toNumber;
+        %tmp.497 = invoke %tmp.495 %tmp.496();
+        lputv %litSegs.47 %tmp.497;
+        symbol [ litSegs %litSegs.47 344 12 19 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 346 8 ]
+        for @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_346_8_363_8_for_test @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_346_8_363_8_for_incr @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_346_8_363_8_for_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_346_8_363_8_for_init:
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_346_8_363_8_for_begin" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_346_8_363_8_for_end" ]
+        %i.48 = local;
+        symbol [ i %i.48 346 17 18 ];
+        %tmp.498 = 0;
+        lputv %i.48 %tmp.498;
+        symbol [ i %i.48 346 17 18 ];
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_346_8_363_8_for_test:
+        %tmp.499 = lgetv %i.48;
+        symbol [ i %tmp.499 346 24 25 ];
+        %tmp.500 = lgetv %segCount.38;
+        symbol [ segCount %tmp.500 346 28 36 ];
+        %tmp.501 = lt %tmp.499 %tmp.500;
+        bf %tmp.501 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_346_8_363_8_for_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_346_8_363_8_for_begin:
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_346_43_363_8_start:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 347 12 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_346_43_363_8_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_346_43_363_8_stop" ]
+        %segY.49 = local;
+        symbol [ segY %segY.49 347 16 20 ];
+        %tmp.502 = lgetv %panelTop.35;
+        symbol [ panelTop %tmp.502 347 23 31 ];
+        %tmp.503 = 2;
+        %tmp.504 = add %tmp.502 %tmp.503;
+        %tmp.505 = lgetv %barH.37;
+        symbol [ barH %tmp.505 347 38 42 ];
+        %tmp.506 = add %tmp.504 %tmp.505;
+        %tmp.507 = lgetv %i.48;
+        symbol [ i %tmp.507 347 46 47 ];
+        %tmp.508 = 1;
+        %tmp.509 = add %tmp.507 %tmp.508;
+        %tmp.510 = lgetv %segH.45;
+        symbol [ segH %tmp.510 347 56 60 ];
+        %tmp.511 = lgetv %segGap.39;
+        symbol [ segGap %tmp.511 347 63 69 ];
+        %tmp.512 = add %tmp.510 %tmp.511;
+        %tmp.513 = mul %tmp.509 %tmp.512;
+        %tmp.514 = sub %tmp.506 %tmp.513;
+        %tmp.515 = lgetv %segGap.39;
+        symbol [ segGap %tmp.515 347 73 79 ];
+        %tmp.516 = add %tmp.514 %tmp.515;
+        lputv %segY.49 %tmp.516;
+        symbol [ segY %segY.49 347 16 20 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 348 12 ]
+        %tmp.517 = lgetv %dc;
+        symbol [ dc %tmp.517 348 12 14 ];
+        symbol [ setColor %tmp.518 348 15 23 ];
+        %tmp.518 = getv function %tmp.517 :setColor;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_349_16_353_24_begin:
+        %tmp.519 = lgetv %i.48;
+        symbol [ i %tmp.519 349 16 17 ];
+        %tmp.520 = lgetv %litSegs.47;
+        symbol [ litSegs %tmp.520 349 20 27 ];
+        %tmp.521 = lt %tmp.519 %tmp.520;
+        bf %tmp.521 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_349_16_353_24_else_false;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_349_16_353_24_true:
+        symbol [ mGaugeColors %tmp.523 350 22 34 ];
+        %tmp.523 = getv ? :mGaugeColors;
+        %tmp.524 = lgetv %i.48;
+        symbol [ i %tmp.524 350 36 37 ];
+        %tmp.525 = 23;
+        %tmp.526 = mul %tmp.524 %tmp.525;
+        %tmp.527 = 9;
+        %tmp.528 = div %tmp.526 %tmp.527;
+        %tmp.529 = agetv %tmp.523 %tmp.528;
+        push %tmp.529;
+        goto @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_349_16_353_24_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_349_16_353_24_else_false:
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_351_22_353_24_begin:
+        %tmp.530 = lgetv %isDark.4;
+        symbol [ isDark %tmp.530 351 22 28 ];
+        bf %tmp.530 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_351_22_353_24_else_false;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_351_22_353_24_true:
+        %tmp.531 = 0x1a1a1a;
+        push %tmp.531;
+        goto @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_351_22_353_24_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_351_22_353_24_else_false:
+        %tmp.532 = 0xeeeeee;
+        push %tmp.532;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_351_22_353_24_end:
+        %tmp.533 = phi [%tmp.530 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_351_22_353_24_begin] [%tmp.531 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_351_22_353_24_true] [%tmp.532 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_351_22_353_24_else_false] [%tmp.533 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_351_22_353_24_end];
+        push %tmp.533;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_349_16_353_24_end:
+        %tmp.534 = phi [%tmp.521 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_349_16_353_24_begin] [%tmp.529 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_349_16_353_24_true] [%tmp.533 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_349_16_353_24_else_false] [%tmp.534 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_349_16_353_24_end];
+        symbol [ Graphics %tmp.535 354 16 24 ];
+        %tmp.535 = getm $.Toybox.Graphics;
+        symbol [ COLOR_TRANSPARENT %tmp.536 354 25 42 ];
+        %tmp.536 = getv %tmp.535 :COLOR_TRANSPARENT;
+        invoke %tmp.517 %tmp.518(%tmp.534, %tmp.536);
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 356 12 ]
+        %tmp.537 = lgetv %dc;
+        symbol [ dc %tmp.537 356 12 14 ];
+        symbol [ fillRoundedRectangle %tmp.538 356 15 35 ];
+        %tmp.538 = getv function %tmp.537 :fillRoundedRectangle;
+        %tmp.539 = lgetv %lBarX.42;
+        symbol [ lBarX %tmp.539 357 16 21 ];
+        %tmp.540 = lgetv %lBarW.40;
+        symbol [ lBarW %tmp.540 357 24 29 ];
+        %tmp.541 = 2;
+        %tmp.542 = div %tmp.540 %tmp.541;
+        %tmp.543 = sub %tmp.539 %tmp.542;
+        %tmp.544 = lgetv %segY.49;
+        symbol [ segY %tmp.544 358 16 20 ];
+        %tmp.545 = lgetv %lBarW.40;
+        symbol [ lBarW %tmp.545 359 16 21 ];
+        %tmp.546 = lgetv %segH.45;
+        symbol [ segH %tmp.546 360 16 20 ];
+        %tmp.547 = lgetv %segH.45;
+        symbol [ segH %tmp.547 361 16 20 ];
+        %tmp.548 = 2;
+        %tmp.549 = div %tmp.547 %tmp.548;
+        invoke %tmp.537 %tmp.538(%tmp.543, %tmp.544, %tmp.545, %tmp.546, %tmp.549);
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_346_43_363_8_stop:
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_346_8_363_8_for_incr:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 346 ]
+        %tmp.552 = lgetv %i.48;
+        symbol [ i %tmp.552 346 38 39 ];
+        %tmp.553 = add %tmp.552 1;
+        lputv %i.48 %tmp.553;
+        symbol [ i %i.48 346 38 39 ];
+        goto @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_346_8_363_8_for_test;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_346_8_363_8_for_end:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 365 8 ]
+        %tmp.554 = lgetv %dc;
+        symbol [ dc %tmp.554 365 8 10 ];
+        symbol [ setColor %tmp.555 365 11 19 ];
+        %tmp.555 = getv function %tmp.554 :setColor;
+        %tmp.556 = lgetv %fgColor.5;
+        symbol [ fgColor %tmp.556 365 20 27 ];
+        symbol [ Graphics %tmp.557 365 29 37 ];
+        %tmp.557 = getm $.Toybox.Graphics;
+        symbol [ COLOR_TRANSPARENT %tmp.558 365 38 55 ];
+        %tmp.558 = getv %tmp.557 :COLOR_TRANSPARENT;
+        invoke %tmp.554 %tmp.555(%tmp.556, %tmp.558);
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 366 8 ]
+        %tmp.559 = lgetv %dc;
+        symbol [ dc %tmp.559 366 8 10 ];
+        symbol [ drawText %tmp.560 366 11 19 ];
+        %tmp.560 = getv function %tmp.559 :drawText;
+        %tmp.561 = lgetv %lPanelCenterX.43;
+        symbol [ lPanelCenterX %tmp.561 367 12 25 ];
+        %tmp.562 = lgetv %lPanelCenterY.44;
+        symbol [ lPanelCenterY %tmp.562 368 12 25 ];
+        symbol [ Graphics %tmp.563 369 12 20 ];
+        %tmp.563 = getm $.Toybox.Graphics;
+        symbol [ FONT_NUMBER_HOT %tmp.564 369 21 36 ];
+        %tmp.564 = getv %tmp.563 :FONT_NUMBER_HOT;
+        symbol [ mHeartRate %tmp.566 370 12 22 ];
+        %tmp.566 = getv ? :mHeartRate;
+        symbol [ toString %tmp.567 370 23 31 ];
+        %tmp.567 = getv function %tmp.566 :toString;
+        %tmp.568 = invoke %tmp.566 %tmp.567();
+        symbol [ Graphics %tmp.569 371 12 20 ];
+        %tmp.569 = getm $.Toybox.Graphics;
+        symbol [ TEXT_JUSTIFY_CENTER %tmp.570 371 21 40 ];
+        %tmp.570 = getv %tmp.569 :TEXT_JUSTIFY_CENTER;
+        symbol [ Graphics %tmp.571 371 43 51 ];
+        %tmp.571 = getm $.Toybox.Graphics;
+        symbol [ TEXT_JUSTIFY_VCENTER %tmp.572 371 52 72 ];
+        %tmp.572 = getv %tmp.571 :TEXT_JUSTIFY_VCENTER;
+        %tmp.573 = bitor %tmp.570 %tmp.572;
+        invoke %tmp.559 %tmp.560(%tmp.561, %tmp.562, %tmp.564, %tmp.568, %tmp.573);
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 375 8 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_stop" ]
+        %rBarX.50 = local;
+        symbol [ rBarX %rBarX.50 375 12 17 ];
+        %tmp.574 = lgetv %width.1;
+        symbol [ width %tmp.574 375 20 25 ];
+        %tmp.575 = 18;
+        %tmp.576 = sub %tmp.574 %tmp.575;
+        lputv %rBarX.50 %tmp.576;
+        symbol [ rBarX %rBarX.50 375 12 17 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 376 8 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_stop" ]
+        %rPanelCenterX.51 = local;
+        symbol [ rPanelCenterX %rPanelCenterX.51 376 12 25 ];
+        %tmp.577 = lgetv %width.1;
+        symbol [ width %tmp.577 376 29 34 ];
+        %tmp.578 = 2.0;
+        %tmp.579 = div %tmp.577 %tmp.578;
+        %tmp.580 = lgetv %rBarX.50;
+        symbol [ rBarX %tmp.580 376 43 48 ];
+        %tmp.581 = add %tmp.579 %tmp.580;
+        %tmp.582 = lgetv %rBarW.41;
+        symbol [ rBarW %tmp.582 376 51 56 ];
+        %tmp.583 = 2;
+        %tmp.584 = div %tmp.582 %tmp.583;
+        %tmp.585 = sub %tmp.581 %tmp.584;
+        %tmp.586 = 2.0;
+        %tmp.587 = div %tmp.585 %tmp.586;
+        lputv %rPanelCenterX.51 %tmp.587;
+        symbol [ rPanelCenterX %rPanelCenterX.51 376 12 25 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 377 8 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_stop" ]
+        %rPanelCenterY.52 = local;
+        symbol [ rPanelCenterY %rPanelCenterY.52 377 12 25 ];
+        %tmp.588 = lgetv %panelTop.35;
+        symbol [ panelTop %tmp.588 377 28 36 ];
+        %tmp.589 = lgetv %panelH.36;
+        symbol [ panelH %tmp.589 377 39 45 ];
+        %tmp.590 = 2.0;
+        %tmp.591 = div %tmp.589 %tmp.590;
+        %tmp.592 = add %tmp.588 %tmp.591;
+        %tmp.593 = 8;
+        %tmp.594 = add %tmp.592 %tmp.593;
+        lputv %rPanelCenterY.52 %tmp.594;
+        symbol [ rPanelCenterY %rPanelCenterY.52 377 12 25 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 379 8 ]
+        %tmp.595 = lgetv %dc;
+        symbol [ dc %tmp.595 379 8 10 ];
+        symbol [ setColor %tmp.596 379 11 19 ];
+        %tmp.596 = getv function %tmp.595 :setColor;
+        %tmp.597 = lgetv %dimColor.6;
+        symbol [ dimColor %tmp.597 379 20 28 ];
+        symbol [ Graphics %tmp.598 379 30 38 ];
+        %tmp.598 = getm $.Toybox.Graphics;
+        symbol [ COLOR_TRANSPARENT %tmp.599 379 39 56 ];
+        %tmp.599 = getv %tmp.598 :COLOR_TRANSPARENT;
+        invoke %tmp.595 %tmp.596(%tmp.597, %tmp.599);
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 380 8 ]
+        %tmp.600 = lgetv %dc;
+        symbol [ dc %tmp.600 380 8 10 ];
+        symbol [ drawText %tmp.601 380 11 19 ];
+        %tmp.601 = getv function %tmp.600 :drawText;
+        %tmp.602 = lgetv %rPanelCenterX.51;
+        symbol [ rPanelCenterX %tmp.602 381 12 25 ];
+        %tmp.603 = lgetv %rPanelCenterY.52;
+        symbol [ rPanelCenterY %tmp.603 382 12 25 ];
+        %tmp.604 = 70;
+        %tmp.605 = sub %tmp.603 %tmp.604;
+        symbol [ Graphics %tmp.606 383 12 20 ];
+        %tmp.606 = getm $.Toybox.Graphics;
+        symbol [ FONT_XTINY %tmp.607 383 21 31 ];
+        %tmp.607 = getv %tmp.606 :FONT_XTINY;
+        %tmp.608 = "PWR";
+        symbol [ Graphics %tmp.609 385 12 20 ];
+        %tmp.609 = getm $.Toybox.Graphics;
+        symbol [ TEXT_JUSTIFY_CENTER %tmp.610 385 21 40 ];
+        %tmp.610 = getv %tmp.609 :TEXT_JUSTIFY_CENTER;
+        invoke %tmp.600 %tmp.601(%tmp.602, %tmp.605, %tmp.607, %tmp.608, %tmp.610);
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 388 8 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_stop" ]
+        %pwrRatio.53 = local;
+        symbol [ pwrRatio %pwrRatio.53 388 12 20 ];
+        symbol [ mPower3s %tmp.612 388 23 31 ];
+        %tmp.612 = getv ? :mPower3s;
+        symbol [ toFloat %tmp.613 388 32 39 ];
+        %tmp.613 = getv function %tmp.612 :toFloat;
+        %tmp.614 = invoke %tmp.612 %tmp.613();
+        %tmp.615 = 300.0;
+        %tmp.616 = div %tmp.614 %tmp.615;
+        lputv %pwrRatio.53 %tmp.616;
+        symbol [ pwrRatio %pwrRatio.53 388 12 20 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 389 8 ]
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_389_8_391_8_if_stmt:
+        %tmp.617 = lgetv %pwrRatio.53;
+        symbol [ pwrRatio %tmp.617 389 12 20 ];
+        %tmp.618 = 1.0;
+        %tmp.619 = gt %tmp.617 %tmp.618;
+        bf %tmp.619 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_389_8_391_8_if_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_389_8_391_8_if_true:
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_389_28_391_8_start:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 390 12 ]
+        %tmp.620 = 1.0;
+        lputv %pwrRatio.53 %tmp.620;
+        symbol [ pwrRatio %pwrRatio.53 390 12 20 ];
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_389_28_391_8_stop:
+        goto @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_389_8_391_8_if_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_389_8_391_8_if_end:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 392 8 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_stop" ]
+        %litPwrSegs.54 = local;
+        symbol [ litPwrSegs %litPwrSegs.54 392 12 22 ];
+        %tmp.621 = lgetv %pwrRatio.53;
+        symbol [ pwrRatio %tmp.621 392 26 34 ];
+        %tmp.622 = lgetv %segCount.38;
+        symbol [ segCount %tmp.622 392 37 45 ];
+        %tmp.623 = mul %tmp.621 %tmp.622;
+        %tmp.624 = 0.5;
+        %tmp.625 = add %tmp.623 %tmp.624;
+        symbol [ toNumber %tmp.626 392 53 61 ];
+        %tmp.626 = getv function %tmp.625 :toNumber;
+        %tmp.627 = invoke %tmp.625 %tmp.626();
+        lputv %litPwrSegs.54 %tmp.627;
+        symbol [ litPwrSegs %litPwrSegs.54 392 12 22 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 394 8 ]
+        for @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_394_8_411_8_for_test @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_394_8_411_8_for_incr @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_394_8_411_8_for_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_394_8_411_8_for_init:
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_394_8_411_8_for_begin" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_394_8_411_8_for_end" ]
+        %i.55 = local;
+        symbol [ i %i.55 394 17 18 ];
+        %tmp.628 = 0;
+        lputv %i.55 %tmp.628;
+        symbol [ i %i.55 394 17 18 ];
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_394_8_411_8_for_test:
+        %tmp.629 = lgetv %i.55;
+        symbol [ i %tmp.629 394 24 25 ];
+        %tmp.630 = lgetv %segCount.38;
+        symbol [ segCount %tmp.630 394 28 36 ];
+        %tmp.631 = lt %tmp.629 %tmp.630;
+        bf %tmp.631 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_394_8_411_8_for_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_394_8_411_8_for_begin:
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_394_43_411_8_start:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 395 12 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_394_43_411_8_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_394_43_411_8_stop" ]
+        %segY.56 = local;
+        symbol [ segY %segY.56 395 16 20 ];
+        %tmp.632 = lgetv %panelTop.35;
+        symbol [ panelTop %tmp.632 395 23 31 ];
+        %tmp.633 = 2;
+        %tmp.634 = add %tmp.632 %tmp.633;
+        %tmp.635 = lgetv %barH.37;
+        symbol [ barH %tmp.635 395 38 42 ];
+        %tmp.636 = add %tmp.634 %tmp.635;
+        %tmp.637 = lgetv %i.55;
+        symbol [ i %tmp.637 395 46 47 ];
+        %tmp.638 = 1;
+        %tmp.639 = add %tmp.637 %tmp.638;
+        %tmp.640 = lgetv %segH.45;
+        symbol [ segH %tmp.640 395 56 60 ];
+        %tmp.641 = lgetv %segGap.39;
+        symbol [ segGap %tmp.641 395 63 69 ];
+        %tmp.642 = add %tmp.640 %tmp.641;
+        %tmp.643 = mul %tmp.639 %tmp.642;
+        %tmp.644 = sub %tmp.636 %tmp.643;
+        %tmp.645 = lgetv %segGap.39;
+        symbol [ segGap %tmp.645 395 73 79 ];
+        %tmp.646 = add %tmp.644 %tmp.645;
+        lputv %segY.56 %tmp.646;
+        symbol [ segY %segY.56 395 16 20 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 396 12 ]
+        %tmp.647 = lgetv %dc;
+        symbol [ dc %tmp.647 396 12 14 ];
+        symbol [ setColor %tmp.648 396 15 23 ];
+        %tmp.648 = getv function %tmp.647 :setColor;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_397_16_401_24_begin:
+        %tmp.649 = lgetv %i.55;
+        symbol [ i %tmp.649 397 16 17 ];
+        %tmp.650 = lgetv %litPwrSegs.54;
+        symbol [ litPwrSegs %tmp.650 397 20 30 ];
+        %tmp.651 = lt %tmp.649 %tmp.650;
+        bf %tmp.651 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_397_16_401_24_else_false;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_397_16_401_24_true:
+        symbol [ mGaugeColors %tmp.653 398 22 34 ];
+        %tmp.653 = getv ? :mGaugeColors;
+        %tmp.654 = lgetv %i.55;
+        symbol [ i %tmp.654 398 36 37 ];
+        %tmp.655 = 23;
+        %tmp.656 = mul %tmp.654 %tmp.655;
+        %tmp.657 = 9;
+        %tmp.658 = div %tmp.656 %tmp.657;
+        %tmp.659 = agetv %tmp.653 %tmp.658;
+        push %tmp.659;
+        goto @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_397_16_401_24_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_397_16_401_24_else_false:
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_399_22_401_24_begin:
+        %tmp.660 = lgetv %isDark.4;
+        symbol [ isDark %tmp.660 399 22 28 ];
+        bf %tmp.660 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_399_22_401_24_else_false;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_399_22_401_24_true:
+        %tmp.661 = 0x1a1a1a;
+        push %tmp.661;
+        goto @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_399_22_401_24_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_399_22_401_24_else_false:
+        %tmp.662 = 0xeeeeee;
+        push %tmp.662;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_399_22_401_24_end:
+        %tmp.663 = phi [%tmp.660 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_399_22_401_24_begin] [%tmp.661 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_399_22_401_24_true] [%tmp.662 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_399_22_401_24_else_false] [%tmp.663 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_399_22_401_24_end];
+        push %tmp.663;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_397_16_401_24_end:
+        %tmp.664 = phi [%tmp.651 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_397_16_401_24_begin] [%tmp.659 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_397_16_401_24_true] [%tmp.663 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_397_16_401_24_else_false] [%tmp.664 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_397_16_401_24_end];
+        symbol [ Graphics %tmp.665 402 16 24 ];
+        %tmp.665 = getm $.Toybox.Graphics;
+        symbol [ COLOR_TRANSPARENT %tmp.666 402 25 42 ];
+        %tmp.666 = getv %tmp.665 :COLOR_TRANSPARENT;
+        invoke %tmp.647 %tmp.648(%tmp.664, %tmp.666);
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 404 12 ]
+        %tmp.667 = lgetv %dc;
+        symbol [ dc %tmp.667 404 12 14 ];
+        symbol [ fillRoundedRectangle %tmp.668 404 15 35 ];
+        %tmp.668 = getv function %tmp.667 :fillRoundedRectangle;
+        %tmp.669 = lgetv %rBarX.50;
+        symbol [ rBarX %tmp.669 405 16 21 ];
+        %tmp.670 = lgetv %rBarW.41;
+        symbol [ rBarW %tmp.670 405 24 29 ];
+        %tmp.671 = 2;
+        %tmp.672 = div %tmp.670 %tmp.671;
+        %tmp.673 = sub %tmp.669 %tmp.672;
+        %tmp.674 = lgetv %segY.56;
+        symbol [ segY %tmp.674 406 16 20 ];
+        %tmp.675 = lgetv %rBarW.41;
+        symbol [ rBarW %tmp.675 407 16 21 ];
+        %tmp.676 = lgetv %segH.45;
+        symbol [ segH %tmp.676 408 16 20 ];
+        %tmp.677 = lgetv %segH.45;
+        symbol [ segH %tmp.677 409 16 20 ];
+        %tmp.678 = 2;
+        %tmp.679 = div %tmp.677 %tmp.678;
+        invoke %tmp.667 %tmp.668(%tmp.673, %tmp.674, %tmp.675, %tmp.676, %tmp.679);
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_394_43_411_8_stop:
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_394_8_411_8_for_incr:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 394 ]
+        %tmp.682 = lgetv %i.55;
+        symbol [ i %tmp.682 394 38 39 ];
+        %tmp.683 = add %tmp.682 1;
+        lputv %i.55 %tmp.683;
+        symbol [ i %i.55 394 38 39 ];
+        goto @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_394_8_411_8_for_test;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_394_8_411_8_for_end:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 413 8 ]
+        %tmp.684 = lgetv %dc;
+        symbol [ dc %tmp.684 413 8 10 ];
+        symbol [ setColor %tmp.685 413 11 19 ];
+        %tmp.685 = getv function %tmp.684 :setColor;
+        %tmp.686 = lgetv %fgColor.5;
+        symbol [ fgColor %tmp.686 413 20 27 ];
+        symbol [ Graphics %tmp.687 413 29 37 ];
+        %tmp.687 = getm $.Toybox.Graphics;
+        symbol [ COLOR_TRANSPARENT %tmp.688 413 38 55 ];
+        %tmp.688 = getv %tmp.687 :COLOR_TRANSPARENT;
+        invoke %tmp.684 %tmp.685(%tmp.686, %tmp.688);
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 414 8 ]
+        %tmp.689 = lgetv %dc;
+        symbol [ dc %tmp.689 414 8 10 ];
+        symbol [ drawText %tmp.690 414 11 19 ];
+        %tmp.690 = getv function %tmp.689 :drawText;
+        %tmp.691 = lgetv %rPanelCenterX.51;
+        symbol [ rPanelCenterX %tmp.691 415 12 25 ];
+        %tmp.692 = lgetv %rPanelCenterY.52;
+        symbol [ rPanelCenterY %tmp.692 416 12 25 ];
+        symbol [ Graphics %tmp.693 417 12 20 ];
+        %tmp.693 = getm $.Toybox.Graphics;
+        symbol [ FONT_NUMBER_HOT %tmp.694 417 21 36 ];
+        %tmp.694 = getv %tmp.693 :FONT_NUMBER_HOT;
+        symbol [ mPower3s %tmp.696 418 12 20 ];
+        %tmp.696 = getv ? :mPower3s;
+        symbol [ toString %tmp.697 418 21 29 ];
+        %tmp.697 = getv function %tmp.696 :toString;
+        %tmp.698 = invoke %tmp.696 %tmp.697();
+        symbol [ Graphics %tmp.699 419 12 20 ];
+        %tmp.699 = getm $.Toybox.Graphics;
+        symbol [ TEXT_JUSTIFY_CENTER %tmp.700 419 21 40 ];
+        %tmp.700 = getv %tmp.699 :TEXT_JUSTIFY_CENTER;
+        symbol [ Graphics %tmp.701 419 43 51 ];
+        %tmp.701 = getm $.Toybox.Graphics;
+        symbol [ TEXT_JUSTIFY_VCENTER %tmp.702 419 52 72 ];
+        %tmp.702 = getv %tmp.701 :TEXT_JUSTIFY_VCENTER;
+        %tmp.703 = bitor %tmp.700 %tmp.702;
+        invoke %tmp.689 %tmp.690(%tmp.691, %tmp.692, %tmp.694, %tmp.698, %tmp.703);
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 423 8 ]
+        %tmp.704 = lgetv %dc;
+        symbol [ dc %tmp.704 423 8 10 ];
+        symbol [ setPenWidth %tmp.705 423 11 22 ];
+        %tmp.705 = getv function %tmp.704 :setPenWidth;
+        %tmp.706 = 1;
+        invoke %tmp.704 %tmp.705(%tmp.706);
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 424 8 ]
+        %tmp.707 = lgetv %dc;
+        symbol [ dc %tmp.707 424 8 10 ];
+        symbol [ setColor %tmp.708 424 11 19 ];
+        %tmp.708 = getv function %tmp.707 :setColor;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_424_20_424_40_begin:
+        %tmp.709 = lgetv %isDark.4;
+        symbol [ isDark %tmp.709 424 20 26 ];
+        bf %tmp.709 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_424_20_424_40_else_false;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_424_20_424_40_true:
+        %tmp.710 = 0x222222;
+        push %tmp.710;
+        goto @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_424_20_424_40_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_424_20_424_40_else_false:
+        %tmp.711 = 0xdddddd;
+        push %tmp.711;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_424_20_424_40_end:
+        %tmp.712 = phi [%tmp.709 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_424_20_424_40_begin] [%tmp.710 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_424_20_424_40_true] [%tmp.711 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_424_20_424_40_else_false] [%tmp.712 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_424_20_424_40_end];
+        symbol [ Graphics %tmp.713 424 50 58 ];
+        %tmp.713 = getm $.Toybox.Graphics;
+        symbol [ COLOR_TRANSPARENT %tmp.714 424 59 76 ];
+        %tmp.714 = getv %tmp.713 :COLOR_TRANSPARENT;
+        invoke %tmp.707 %tmp.708(%tmp.712, %tmp.714);
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 425 8 ]
+        %tmp.715 = lgetv %dc;
+        symbol [ dc %tmp.715 425 8 10 ];
+        symbol [ drawLine %tmp.716 425 11 19 ];
+        %tmp.716 = getv function %tmp.715 :drawLine;
+        %tmp.717 = 0;
+        %tmp.718 = lgetv %footerY.34;
+        symbol [ footerY %tmp.718 425 23 30 ];
+        %tmp.719 = lgetv %width.1;
+        symbol [ width %tmp.719 425 32 37 ];
+        %tmp.720 = lgetv %footerY.34;
+        symbol [ footerY %tmp.720 425 39 46 ];
+        invoke %tmp.715 %tmp.716(%tmp.717, %tmp.718, %tmp.719, %tmp.720);
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 427 8 ]
+        for @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_427_8_429_8_for_test @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_427_8_429_8_for_incr @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_427_8_429_8_for_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_427_8_429_8_for_init:
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_427_8_429_8_for_begin" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_427_8_429_8_for_end" ]
+        %i.57 = local;
+        symbol [ i %i.57 427 17 18 ];
+        %tmp.721 = 1;
+        lputv %i.57 %tmp.721;
+        symbol [ i %i.57 427 17 18 ];
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_427_8_429_8_for_test:
+        %tmp.722 = lgetv %i.57;
+        symbol [ i %tmp.722 427 24 25 ];
+        %tmp.723 = 4;
+        %tmp.724 = lt %tmp.722 %tmp.723;
+        bf %tmp.724 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_427_8_429_8_for_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_427_8_429_8_for_begin:
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_427_36_429_8_start:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 428 12 ]
+        %tmp.725 = lgetv %dc;
+        symbol [ dc %tmp.725 428 12 14 ];
+        symbol [ drawLine %tmp.726 428 15 23 ];
+        %tmp.726 = getv function %tmp.725 :drawLine;
+        %tmp.727 = lgetv %colW.9;
+        symbol [ colW %tmp.727 428 24 28 ];
+        %tmp.728 = lgetv %i.57;
+        symbol [ i %tmp.728 428 31 32 ];
+        %tmp.729 = mul %tmp.727 %tmp.728;
+        %tmp.730 = lgetv %footerY.34;
+        symbol [ footerY %tmp.730 428 34 41 ];
+        %tmp.731 = lgetv %colW.9;
+        symbol [ colW %tmp.731 428 43 47 ];
+        %tmp.732 = lgetv %i.57;
+        symbol [ i %tmp.732 428 50 51 ];
+        %tmp.733 = mul %tmp.731 %tmp.732;
+        %tmp.734 = lgetv %height.2;
+        symbol [ height %tmp.734 428 53 59 ];
+        invoke %tmp.725 %tmp.726(%tmp.729, %tmp.730, %tmp.733, %tmp.734);
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_427_36_429_8_stop:
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_427_8_429_8_for_incr:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 427 ]
+        %tmp.737 = lgetv %i.57;
+        symbol [ i %tmp.737 427 31 32 ];
+        %tmp.738 = add %tmp.737 1;
+        lputv %i.57 %tmp.738;
+        symbol [ i %i.57 427 31 32 ];
+        goto @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_427_8_429_8_for_test;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_427_8_429_8_for_end:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 431 8 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_stop" ]
+        %bottomLabels.58 = local;
+        symbol [ bottomLabels %bottomLabels.58 431 12 24 ];
+        %tmp.739 = newa 4;
+        %tmp.740 = "TIME";
+        %tmp.741 = dup %tmp.739;
+        %tmp.742 = aputv %tmp.741 0 %tmp.740;
+        %tmp.743 = "TEMP";
+        %tmp.744 = dup %tmp.742;
+        %tmp.745 = aputv %tmp.744 1 %tmp.743;
+        %tmp.746 = "DIST";
+        %tmp.747 = dup %tmp.745;
+        %tmp.748 = aputv %tmp.747 2 %tmp.746;
+        %tmp.749 = "TIMER";
+        %tmp.750 = dup %tmp.748;
+        %tmp.751 = aputv %tmp.750 3 %tmp.749;
+        lputv %bottomLabels.58 %tmp.751;
+        symbol [ bottomLabels %bottomLabels.58 431 12 24 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 432 8 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_stop" ]
+        %now.59 = local;
+        symbol [ now %now.59 432 12 15 ];
+        symbol [ System %tmp.752 432 18 24 ];
+        %tmp.752 = getm $.Toybox.System;
+        symbol [ getClockTime %tmp.753 432 25 37 ];
+        %tmp.753 = getv function %tmp.752 :getClockTime;
+        %tmp.754 = invoke %tmp.752 %tmp.753();
+        lputv %now.59 %tmp.754;
+        symbol [ now %now.59 432 12 15 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 433 8 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_stop" ]
+        %totalSecs.60 = local;
+        symbol [ totalSecs %totalSecs.60 433 12 21 ];
+        symbol [ mElapsedMs %tmp.756 433 24 34 ];
+        %tmp.756 = getv ? :mElapsedMs;
+        %tmp.757 = 1000;
+        %tmp.758 = div %tmp.756 %tmp.757;
+        lputv %totalSecs.60 %tmp.758;
+        symbol [ totalSecs %totalSecs.60 433 12 21 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 434 8 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_stop" ]
+        %bottomValues.61 = local;
+        symbol [ bottomValues %bottomValues.61 434 12 24 ];
+        %tmp.759 = newa 4;
+        symbol [ Lang %tmp.760 435 12 16 ];
+        %tmp.760 = getm $.Toybox.Lang;
+        symbol [ format %tmp.761 435 17 23 ];
+        %tmp.761 = getv function %tmp.760 :format;
+        %tmp.762 = "$1$:$2$";
+        %tmp.763 = newa 2;
+        %tmp.764 = lgetv %now.59;
+        symbol [ now %tmp.764 436 16 19 ];
+        symbol [ hour %tmp.765 436 20 24 ];
+        %tmp.765 = getv %tmp.764 :hour;
+        symbol [ format %tmp.766 436 25 31 ];
+        %tmp.766 = getv function %tmp.765 :format;
+        %tmp.767 = "%02d";
+        %tmp.768 = invoke %tmp.765 %tmp.766(%tmp.767);
+        %tmp.769 = dup %tmp.763;
+        %tmp.770 = aputv %tmp.769 0 %tmp.768;
+        %tmp.771 = lgetv %now.59;
+        symbol [ now %tmp.771 437 16 19 ];
+        symbol [ min %tmp.772 437 20 23 ];
+        %tmp.772 = getv %tmp.771 :min;
+        symbol [ format %tmp.773 437 24 30 ];
+        %tmp.773 = getv function %tmp.772 :format;
+        %tmp.774 = "%02d";
+        %tmp.775 = invoke %tmp.772 %tmp.773(%tmp.774);
+        %tmp.776 = dup %tmp.770;
+        %tmp.777 = aputv %tmp.776 1 %tmp.775;
+        %tmp.778 = invoke %tmp.760 %tmp.761(%tmp.762, %tmp.777);
+        %tmp.779 = dup %tmp.759;
+        %tmp.780 = aputv %tmp.779 0 %tmp.778;
+        symbol [ mTemp %tmp.782 439 12 17 ];
+        %tmp.782 = getv ? :mTemp;
+        symbol [ format %tmp.783 439 18 24 ];
+        %tmp.783 = getv function %tmp.782 :format;
+        %tmp.784 = "%d";
+        %tmp.785 = invoke %tmp.782 %tmp.783(%tmp.784);
+        %tmp.786 = "°";
+        %tmp.787 = add %tmp.785 %tmp.786;
+        symbol [ mTempUnit %tmp.789 439 39 48 ];
+        %tmp.789 = getv ? :mTempUnit;
+        %tmp.790 = add %tmp.787 %tmp.789;
+        %tmp.791 = dup %tmp.780;
+        %tmp.792 = aputv %tmp.791 1 %tmp.790;
+        symbol [ mDistance %tmp.794 440 12 21 ];
+        %tmp.794 = getv ? :mDistance;
+        symbol [ format %tmp.795 440 22 28 ];
+        %tmp.795 = getv function %tmp.794 :format;
+        %tmp.796 = "%.1f";
+        %tmp.797 = invoke %tmp.794 %tmp.795(%tmp.796);
+        %tmp.798 = dup %tmp.792;
+        %tmp.799 = aputv %tmp.798 2 %tmp.797;
+        symbol [ Lang %tmp.800 441 12 16 ];
+        %tmp.800 = getm $.Toybox.Lang;
+        symbol [ format %tmp.801 441 17 23 ];
+        %tmp.801 = getv function %tmp.800 :format;
+        %tmp.802 = "$1$:$2$:$3$";
+        %tmp.803 = newa 3;
+        %tmp.804 = lgetv %totalSecs.60;
+        symbol [ totalSecs %tmp.804 442 17 26 ];
+        %tmp.805 = 3600;
+        %tmp.806 = div %tmp.804 %tmp.805;
+        symbol [ format %tmp.807 442 35 41 ];
+        %tmp.807 = getv function %tmp.806 :format;
+        %tmp.808 = "%d";
+        %tmp.809 = invoke %tmp.806 %tmp.807(%tmp.808);
+        %tmp.810 = dup %tmp.803;
+        %tmp.811 = aputv %tmp.810 0 %tmp.809;
+        %tmp.812 = lgetv %totalSecs.60;
+        symbol [ totalSecs %tmp.812 443 18 27 ];
+        %tmp.813 = 3600;
+        %tmp.814 = mod %tmp.812 %tmp.813;
+        %tmp.815 = 60;
+        %tmp.816 = div %tmp.814 %tmp.815;
+        symbol [ format %tmp.817 443 42 48 ];
+        %tmp.817 = getv function %tmp.816 :format;
+        %tmp.818 = "%02d";
+        %tmp.819 = invoke %tmp.816 %tmp.817(%tmp.818);
+        %tmp.820 = dup %tmp.811;
+        %tmp.821 = aputv %tmp.820 1 %tmp.819;
+        %tmp.822 = lgetv %totalSecs.60;
+        symbol [ totalSecs %tmp.822 444 17 26 ];
+        %tmp.823 = 60;
+        %tmp.824 = mod %tmp.822 %tmp.823;
+        symbol [ format %tmp.825 444 33 39 ];
+        %tmp.825 = getv function %tmp.824 :format;
+        %tmp.826 = "%02d";
+        %tmp.827 = invoke %tmp.824 %tmp.825(%tmp.826);
+        %tmp.828 = dup %tmp.821;
+        %tmp.829 = aputv %tmp.828 2 %tmp.827;
+        %tmp.830 = invoke %tmp.800 %tmp.801(%tmp.802, %tmp.829);
+        %tmp.831 = dup %tmp.799;
+        %tmp.832 = aputv %tmp.831 3 %tmp.830;
+        lputv %bottomValues.61 %tmp.832;
+        symbol [ bottomValues %bottomValues.61 434 12 24 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 448 8 ]
+        for @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_448_8_466_8_for_test @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_448_8_466_8_for_incr @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_448_8_466_8_for_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_448_8_466_8_for_init:
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_448_8_466_8_for_begin" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_448_8_466_8_for_end" ]
+        %i.62 = local;
+        symbol [ i %i.62 448 17 18 ];
+        %tmp.833 = 0;
+        lputv %i.62 %tmp.833;
+        symbol [ i %i.62 448 17 18 ];
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_448_8_466_8_for_test:
+        %tmp.834 = lgetv %i.62;
+        symbol [ i %tmp.834 448 24 25 ];
+        %tmp.835 = 4;
+        %tmp.836 = lt %tmp.834 %tmp.835;
+        bf %tmp.836 @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_448_8_466_8_for_end;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_448_8_466_8_for_begin:
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_448_36_466_8_start:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 449 12 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_448_36_466_8_start" "D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_448_36_466_8_stop" ]
+        %x.63 = local;
+        symbol [ x %x.63 449 16 17 ];
+        %tmp.837 = lgetv %colW.9;
+        symbol [ colW %tmp.837 449 20 24 ];
+        %tmp.838 = lgetv %i.62;
+        symbol [ i %tmp.838 449 28 29 ];
+        %tmp.839 = 0.5;
+        %tmp.840 = add %tmp.838 %tmp.839;
+        %tmp.841 = mul %tmp.837 %tmp.840;
+        lputv %x.63 %tmp.841;
+        symbol [ x %x.63 449 16 17 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 450 12 ]
+        %tmp.842 = lgetv %dc;
+        symbol [ dc %tmp.842 450 12 14 ];
+        symbol [ setColor %tmp.843 450 15 23 ];
+        %tmp.843 = getv function %tmp.842 :setColor;
+        %tmp.844 = lgetv %dimColor.6;
+        symbol [ dimColor %tmp.844 450 24 32 ];
+        symbol [ Graphics %tmp.845 450 34 42 ];
+        %tmp.845 = getm $.Toybox.Graphics;
+        symbol [ COLOR_TRANSPARENT %tmp.846 450 43 60 ];
+        %tmp.846 = getv %tmp.845 :COLOR_TRANSPARENT;
+        invoke %tmp.842 %tmp.843(%tmp.844, %tmp.846);
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 451 12 ]
+        %tmp.847 = lgetv %dc;
+        symbol [ dc %tmp.847 451 12 14 ];
+        symbol [ drawText %tmp.848 451 15 23 ];
+        %tmp.848 = getv function %tmp.847 :drawText;
+        %tmp.849 = lgetv %x.63;
+        symbol [ x %tmp.849 452 16 17 ];
+        %tmp.850 = lgetv %footerY.34;
+        symbol [ footerY %tmp.850 453 16 23 ];
+        %tmp.851 = 8;
+        %tmp.852 = add %tmp.850 %tmp.851;
+        symbol [ Graphics %tmp.853 454 16 24 ];
+        %tmp.853 = getm $.Toybox.Graphics;
+        symbol [ FONT_XTINY %tmp.854 454 25 35 ];
+        %tmp.854 = getv %tmp.853 :FONT_XTINY;
+        %tmp.855 = lgetv %bottomLabels.58;
+        symbol [ bottomLabels %tmp.855 455 16 28 ];
+        %tmp.856 = lgetv %i.62;
+        symbol [ i %tmp.856 455 29 30 ];
+        %tmp.857 = agetv %tmp.855 %tmp.856;
+        symbol [ Graphics %tmp.858 456 16 24 ];
+        %tmp.858 = getm $.Toybox.Graphics;
+        symbol [ TEXT_JUSTIFY_CENTER %tmp.859 456 25 44 ];
+        %tmp.859 = getv %tmp.858 :TEXT_JUSTIFY_CENTER;
+        invoke %tmp.847 %tmp.848(%tmp.849, %tmp.852, %tmp.854, %tmp.857, %tmp.859);
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 458 12 ]
+        %tmp.860 = lgetv %dc;
+        symbol [ dc %tmp.860 458 12 14 ];
+        symbol [ setColor %tmp.861 458 15 23 ];
+        %tmp.861 = getv function %tmp.860 :setColor;
+        %tmp.862 = lgetv %fgColor.5;
+        symbol [ fgColor %tmp.862 458 24 31 ];
+        symbol [ Graphics %tmp.863 458 33 41 ];
+        %tmp.863 = getm $.Toybox.Graphics;
+        symbol [ COLOR_TRANSPARENT %tmp.864 458 42 59 ];
+        %tmp.864 = getv %tmp.863 :COLOR_TRANSPARENT;
+        invoke %tmp.860 %tmp.861(%tmp.862, %tmp.864);
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 459 12 ]
+        %tmp.865 = lgetv %dc;
+        symbol [ dc %tmp.865 459 12 14 ];
+        symbol [ drawText %tmp.866 459 15 23 ];
+        %tmp.866 = getv function %tmp.865 :drawText;
+        %tmp.867 = lgetv %x.63;
+        symbol [ x %tmp.867 460 16 17 ];
+        %tmp.868 = lgetv %footerY.34;
+        symbol [ footerY %tmp.868 461 16 23 ];
+        %tmp.869 = 28;
+        %tmp.870 = add %tmp.868 %tmp.869;
+        symbol [ Graphics %tmp.871 462 16 24 ];
+        %tmp.871 = getm $.Toybox.Graphics;
+        symbol [ FONT_MEDIUM %tmp.872 462 25 36 ];
+        %tmp.872 = getv %tmp.871 :FONT_MEDIUM;
+        %tmp.873 = lgetv %bottomValues.61;
+        symbol [ bottomValues %tmp.873 463 16 28 ];
+        %tmp.874 = lgetv %i.62;
+        symbol [ i %tmp.874 463 29 30 ];
+        %tmp.875 = agetv %tmp.873 %tmp.874;
+        symbol [ Graphics %tmp.876 464 16 24 ];
+        %tmp.876 = getm $.Toybox.Graphics;
+        symbol [ TEXT_JUSTIFY_CENTER %tmp.877 464 25 44 ];
+        %tmp.877 = getv %tmp.876 :TEXT_JUSTIFY_CENTER;
+        invoke %tmp.865 %tmp.866(%tmp.867, %tmp.870, %tmp.872, %tmp.875, %tmp.877);
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_448_36_466_8_stop:
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_448_8_466_8_for_incr:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc" 448 ]
+        %tmp.880 = lgetv %i.62;
+        symbol [ i %tmp.880 448 31 32 ];
+        %tmp.881 = add %tmp.880 1;
+        lputv %i.62 %tmp.881;
+        symbol [ i %i.62 448 31 32 ];
+        goto @D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_448_8_466_8_for_test;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_448_8_466_8_for_end:
+D__Workspace_sandbox_garmin_dash_Dash_source_DashView_mc_130_49_467_4_stop:
+    }
+}
+[ @file = "D:\Workspace\sandbox\garmin\dash\Dash\source\DashView.mc"; @line = 1; ]
+<init> {
+}

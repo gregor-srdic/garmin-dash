@@ -1,0 +1,64 @@
+[ @file = "D:\Workspace\sandbox\garmin\dash\Dash\source\DashApp.mc"; @line = 1; @symbol_importdef<0> = [Toybox,1,7,13]; @symbol_importdef<1> = [Application,1,14,25]; ]
+import Toybox.Application;
+[ @file = "D:\Workspace\sandbox\garmin\dash\Dash\source\DashApp.mc"; @line = 2; @symbol_importdef<0> = [Toybox,2,7,13]; @symbol_importdef<1> = [Lang,2,14,18]; ]
+import Toybox.Lang;
+[ @file = "D:\Workspace\sandbox\garmin\dash\Dash\source\DashApp.mc"; @line = 3; @symbol_importdef<0> = [Toybox,3,7,13]; @symbol_importdef<1> = [WatchUi,3,14,21]; ]
+import Toybox.WatchUi;
+[ @file = "D:\Workspace\sandbox\garmin\dash\Dash\source\DashApp.mc"; @line = 5; @symbol_classdef = [DashApp,5,6,13]; @symbol_extends<0> = [Application,5,22,33]; @symbol_extends<1> = [AppBase,5,34,41]; ]
+class DashApp extends Application.AppBase {
+    [ @file = "D:\Workspace\sandbox\garmin\dash\Dash\source\DashApp.mc"; @line = 5; ]
+    <init> {
+    }
+    [ @file = "D:\Workspace\sandbox\garmin\dash\Dash\source\DashApp.mc"; @line = 5; ]
+    static
+    <init> {
+    }
+    [ @file = "D:\Workspace\sandbox\garmin\dash\Dash\source\DashApp.mc"; @line = 7; @symbol_functiondef = [initialize,7,13,23]; ]
+    function initialize() as Void {
+D__Workspace_sandbox_garmin_dash_Dash_source_DashApp_mc_7_26_9_4_start:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashApp.mc" 8 8 ]
+        symbol [ AppBase %tmp.2 8 8 15 ];
+        %tmp.2 = getv ? :AppBase;
+        symbol [ initialize %tmp.3 8 16 26 ];
+        %tmp.3 = getv function %tmp.2 :initialize;
+        invoke %tmp.2 %tmp.3();
+D__Workspace_sandbox_garmin_dash_Dash_source_DashApp_mc_7_26_9_4_stop:
+    }
+    [ @file = "D:\Workspace\sandbox\garmin\dash\Dash\source\DashApp.mc"; @line = 12; @symbol_functiondef = [onStart,12,13,20]; @symbol_param<0> = [state,12,21,26]; @symbol_param<0>_type<0> = [Dictionary,12,30,40]; ]
+    function onStart(state as Dictionary or Null) as Void {
+    }
+    [ @file = "D:\Workspace\sandbox\garmin\dash\Dash\source\DashApp.mc"; @line = 16; @symbol_functiondef = [onStop,16,13,19]; @symbol_param<0> = [state,16,20,25]; @symbol_param<0>_type<0> = [Dictionary,16,29,39]; ]
+    function onStop(state as Dictionary or Null) as Void {
+    }
+    //! Return the initial view of your application here
+    [ @file = "D:\Workspace\sandbox\garmin\dash\Dash\source\DashApp.mc"; @line = 20; @symbol_functiondef = [getInitialView,20,13,27]; @symbol_return<0> = [Views,20,34,39]; @symbol_return<1> = [Views,20,45,50]; @symbol_return<2> = [InputDelegates,20,52,66]; ]
+    function getInitialView() as [Views] or [Views, InputDelegates] {
+D__Workspace_sandbox_garmin_dash_Dash_source_DashApp_mc_20_68_22_4_start:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashApp.mc" 21 8 ]
+        %tmp.1 = newa 1;
+        symbol [ DashView %tmp.5 21 21 29 ];
+        %tmp.5 = getv ? :DashView;
+        %tmp.2 = newc %tmp.5 ();
+        %tmp.6 = dup %tmp.1;
+        %tmp.7 = aputv %tmp.6 0 %tmp.2;
+        ret %tmp.7;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashApp_mc_20_68_22_4_stop:
+    }
+}
+[ @file = "D:\Workspace\sandbox\garmin\dash\Dash\source\DashApp.mc"; @line = 26; @symbol_functiondef = [getApp,26,9,15]; @symbol_return<0> = [DashApp,26,21,28]; ]
+function getApp() as DashApp {
+D__Workspace_sandbox_garmin_dash_Dash_source_DashApp_mc_26_29_28_0_start:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\DashApp.mc" 27 4 ]
+    symbol [ Application %tmp.1 27 11 22 ];
+    %tmp.1 = getm $.Toybox.Application;
+    symbol [ getApp %tmp.2 27 23 29 ];
+    %tmp.2 = getv function %tmp.1 :getApp;
+    %tmp.3 = invoke %tmp.1 %tmp.2();
+    %tmp.4 = as %tmp.3 DashApp;
+    symbol [ DashApp %tmp.4 27 35 42 ];
+    ret %tmp.4;
+D__Workspace_sandbox_garmin_dash_Dash_source_DashApp_mc_26_29_28_0_stop:
+}
+[ @file = "D:\Workspace\sandbox\garmin\dash\Dash\source\DashApp.mc"; @line = 1; ]
+<init> {
+}
