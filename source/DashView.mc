@@ -21,17 +21,16 @@ class DashView extends WatchUi.DataField {
     private var mCalories = 0;
     private var mAvgHeartRate = 0;
     private var mAvgPower = 0;
+    private var mMaxPower = 0;
 
     // Header Fields
     private var mGrade = 0.0;
     private var mElevation = 0.0;
     private var mAscent = 0.0;
-    private var mDescent = 0.0;
     private var mGearInfo = "--";
 
     private var mIsMetric = true;
     private var mIsElevationMetric = true;
-    private var mTempUnit = "C";
     private var mGaugeColors = [
         0x29ff00, 0x45ff00, 0x60ff00, 0x7cff00, 0x97ff00, 0xb3ff00, 0xceff00,
         0xeaff00, 0xfaff00, 0xfff500, 0xffeb00, 0xffe000, 0xffd600, 0xffcb00,
@@ -104,15 +103,23 @@ class DashView extends WatchUi.DataField {
         // Shifting
         mGearInfo = "--";
         var rear =
-            actInfo != null && actInfo has :rearGear ? actInfo.rearGear : null;
+            actInfo != null && actInfo has :rearDerailleurIndex
+                ? actInfo.rearDerailleurIndex
+                : null;
         var front =
-            actInfo != null && actInfo has :frontGear
-                ? actInfo.frontGear
+            actInfo != null && actInfo has :frontDerailleurIndex
+                ? actInfo.frontDerailleurIndex
                 : null;
         if (rear) {
+            if (rear > 13 || rear < 1) {
+                rear = 1;
+            }
             mGearInfo = rear.format("%d");
             if (front) {
-                mGearInfo = front.format("%d") + " - " + mGearInfo;
+                if (front > 3 || front < 1) {
+                    front = 1;
+                }
+                mGearInfo = front.format("%d") + ":" + mGearInfo;
             }
         }
 
@@ -124,8 +131,15 @@ class DashView extends WatchUi.DataField {
                 mPower3s = actInfo.currentPower;
             }
         }
+
+        // Average Power
         if (info.averagePower != null) {
             mAvgPower = info.averagePower;
+        }
+
+        // Max Power
+        if (info.maxPower != null) {
+            mMaxPower = info.maxPower;
         }
 
         // Cadence
@@ -163,10 +177,8 @@ class DashView extends WatchUi.DataField {
         if (rawTemp != null) {
             if (settings.temperatureUnits == System.UNIT_STATUTE) {
                 mTemp = (rawTemp * 9.0) / 5.0 + 32.0;
-                mTempUnit = "F";
             } else {
                 mTemp = rawTemp.toFloat();
-                mTempUnit = "C";
             }
         }
 
@@ -178,9 +190,9 @@ class DashView extends WatchUi.DataField {
         if (info.totalAscent != null) {
             mAscent = info.totalAscent * altMult;
         }
-        if (info.totalDescent != null) {
-            mDescent = info.totalDescent * altMult;
-        }
+        // if (info.totalDescent != null) {
+        //     mDescent = info.totalDescent * altMult;
+        // }
         calculateGrade();
     }
 
@@ -195,54 +207,23 @@ class DashView extends WatchUi.DataField {
         dc.setColor(bgColor, bgColor);
         dc.clear();
 
-        // --- STATUS BAR ---
-        // dc.setColor(dimColor, Graphics.COLOR_TRANSPARENT);
-        // dc.drawText(
-        //     15,
-        //     5,
-        //     Graphics.FONT_XTINY,
-        //     "GPS 3D",
-        //     Graphics.TEXT_JUSTIFY_LEFT
-        // );
-
-        // var clockTime = System.getClockTime();
-        // var timeStr = Lang.format("$1$:$2$", [
-        //     clockTime.hour.format("%02d"),
-        //     clockTime.min.format("%02d"),
-        // ]);
-        // var battery = System.getSystemStats().battery.toNumber();
-        // dc.drawText(
-        //     width - 15,
-        //     5,
-        //     Graphics.FONT_XTINY,
-        //     battery.toString() + "%  " + timeStr,
-        //     Graphics.TEXT_JUSTIFY_RIGHT
-        // );
-
-        // --- TOP STATS BAR (4 columns) ---
+        // --- TOP STATS BAR (3 columns) ---
         var topBarY = 0;
         var topBarH = 65;
         dc.setPenWidth(1);
         dc.setColor(isDark ? 0x222222 : 0xdddddd, Graphics.COLOR_TRANSPARENT);
 
-        // dc.drawLine(0, topBarY + topBarH, width, topBarY + topBarH); // Divider
-
         var colW = width / 3.0;
-        // for (var i = 1; i < 3; i++) {
-        //     dc.drawLine(colW * i, topBarY + 5, colW * i, topBarY + topBarH);
-        // }
-
-        // var topLabels = ["CADENCE", "GRADE", "ELEV"];
 
         var now = System.getClockTime();
 
         var topValues = [
+            mTemp.format("%.1f") + "°",
             Lang.format("$1$:$2$", [
                 now.hour.format("%02d"),
                 now.min.format("%02d"),
             ]),
-            mTemp.format("%d") + "°" + mTempUnit,
-            mGearInfo,
+            mElevation.format("%.0f"),
         ];
 
         for (var i = 0; i < 3; i++) {
@@ -302,26 +283,6 @@ class DashView extends WatchUi.DataField {
                 segEndDeg
             );
         }
-
-        // --- SCALE ENDPOINTS ---
-        // var startRad = Math.toRadians(gaugeStart);
-        // var endRad = Math.toRadians(gaugeStart - gaugeSweep);
-        // var labelR = radius + trackWidth / 2.0 + 16;
-        // dc.setColor(dimColor, Graphics.COLOR_TRANSPARENT);
-        // dc.drawText(
-        //     centerX + labelR * Math.cos(startRad),
-        //     centerY - labelR * Math.sin(startRad),
-        //     Graphics.FONT_XTINY,
-        //     "0",
-        //     Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
-        // );
-        // dc.drawText(
-        //     centerX + labelR * Math.cos(endRad),
-        //     centerY - labelR * Math.sin(endRad),
-        //     Graphics.FONT_XTINY,
-        //     maxVal.toNumber().toString(),
-        //     Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
-        // );
 
         // --- AVG / MAX ABOVE SPEED ---
         dc.setColor(dimColor, Graphics.COLOR_TRANSPARENT);
@@ -401,21 +362,18 @@ class DashView extends WatchUi.DataField {
             mCadence.format("%.0f"),
             Graphics.TEXT_JUSTIFY_CENTER
         );
-
-        dc.setColor(fgColor, Graphics.COLOR_TRANSPARENT);
         dc.drawText(
             width * 0.5,
             2 * radius + topBarH * 1.5,
             Graphics.FONT_LARGE,
-            (mDistance / 1000).format("%.1f"),
+            mGearInfo,
             Graphics.TEXT_JUSTIFY_CENTER
         );
-
         dc.drawText(
             width * 0.85,
             2 * radius + topBarH * 1.5,
             Graphics.FONT_LARGE,
-            mGrade.format("%.1f") + "%",
+            mGrade.format("%.1f"),
             Graphics.TEXT_JUSTIFY_CENTER
         );
 
@@ -425,140 +383,157 @@ class DashView extends WatchUi.DataField {
         // --- HR & POWER PANELS ---
         var panelTop = centerY + radius * 0.5 + topBarH * 2;
         var panelH = footerY - panelTop - 8;
-        var barH = panelH - 4;
-        var segCount = 10;
-        var segGap = 4;
-        var lBarW = 40;
-        var rBarW = 40;
+        var barW = 30;
 
         // ---- LEFT PANEL: Heart Rate ----
-        var lBarX = 30;
-        var lPanelCenterX = (lBarX + lBarW / 2 + width / 2.0) / 2.0;
-        var lPanelCenterY = panelTop + panelH / 2.0 + 8;
+        var lBarX = 10;
+        var sideRadius = centerX - lBarX - barW / 2.0;
+        var sideCenterY = panelTop + panelH / 2.0 + 8;
+        var capAngleDeg = (barW / 2.0 / sideRadius) * (180.0 / Math.PI);
+
+        var arcSweepDeg = 60.0;
+        var segCount = 10;
+        var gapDeg = 2.0; // The physical gap between segments
+
+        // Calculate how many degrees each individual block gets
+        var totalGapSweep = gapDeg * (segCount - 1);
+        var segSweepDeg = (arcSweepDeg - totalGapSweep) / segCount;
+
+        var bgTrackColor = isDark ? 0x1a1a1a : 0xeeeeee;
+
+        // ---- LEFT PANEL: Heart Rate ----
+        var lPanelCenterX = (lBarX + barW / 2 + centerX) / 2.0;
+        // Start at bottom-left (e.g., 210 deg)
+        var hrStartAngle = 180.0 + arcSweepDeg / 2.0;
 
         dc.setColor(dimColor, Graphics.COLOR_TRANSPARENT);
         dc.drawText(
             lPanelCenterX,
-            lPanelCenterY - 70,
+            sideCenterY - 70,
             Graphics.FONT_XTINY,
             "HR",
             Graphics.TEXT_JUSTIFY_CENTER
         );
 
-        var segH = ((barH - (segCount - 1) * segGap) / segCount).toNumber();
         var hrRatio = mHeartRate.toFloat() / 200.0;
         if (hrRatio > 1.0) {
             hrRatio = 1.0;
         }
+        if (hrRatio < 0.0) {
+            hrRatio = 0.0;
+        }
         var litSegs = (hrRatio * segCount + 0.5).toNumber();
 
+        dc.setPenWidth(barW);
+
         for (var i = 0; i < segCount; i++) {
-            var segY = panelTop + 2 + barH - (i + 1) * (segH + segGap) + segGap;
+            // Clockwise goes down in angle
+            var segStart = hrStartAngle - i * (segSweepDeg + gapDeg);
+            var segEnd = segStart - segSweepDeg;
+
+            // Set lit color or dark background color
             dc.setColor(
-                i < litSegs
-                    ? mGaugeColors[(i * 23) / 9]
-                    : isDark
-                      ? 0x1a1a1a
-                      : 0xeeeeee,
+                i < litSegs ? mGaugeColors[(i * 23) / 9] : bgTrackColor,
                 Graphics.COLOR_TRANSPARENT
             );
-            dc.fillRoundedRectangle(
-                lBarX - lBarW / 2,
-                segY,
-                lBarW,
-                segH,
-                segH / 2
+
+            // Draw the segment block
+            dc.drawArc(
+                centerX,
+                sideCenterY,
+                sideRadius,
+                Graphics.ARC_CLOCKWISE,
+                segStart,
+                segEnd
             );
         }
 
         dc.setColor(fgColor, Graphics.COLOR_TRANSPARENT);
         dc.drawText(
             lPanelCenterX,
-            lPanelCenterY,
+            sideCenterY,
             Graphics.FONT_NUMBER_HOT,
             mHeartRate.toString(),
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
         );
-
         dc.drawText(
             lPanelCenterX,
-            lPanelCenterY + 60,
+            sideCenterY + 70,
             Graphics.FONT_MEDIUM,
             mAvgHeartRate.format("%.0f"),
             Graphics.TEXT_JUSTIFY_CENTER
         );
 
         // ---- RIGHT PANEL: 3s Power ----
-        var rBarX = width - 30;
-        var rPanelCenterX = (width / 2.0 + rBarX - rBarW / 2) / 2.0;
-        var rPanelCenterY = panelTop + panelH / 2.0 + 8;
+        var rBarX = width - 18;
+        var rPanelCenterX = (centerX + rBarX - barW / 2) / 2.0;
+        // Start at bottom-right (e.g., 330 deg)
+        var pwrStartAngle = 360.0 - arcSweepDeg / 2.0;
 
         dc.setColor(dimColor, Graphics.COLOR_TRANSPARENT);
         dc.drawText(
             rPanelCenterX,
-            rPanelCenterY - 70,
+            sideCenterY - 70,
             Graphics.FONT_XTINY,
             "PWR",
             Graphics.TEXT_JUSTIFY_CENTER
         );
 
-        var pwrRatio = mPower3s.toFloat() / 300.0;
+        var powerScaleMax = 400.0;
+        if (mMaxPower > powerScaleMax) {
+            powerScaleMax = mMaxPower.toFloat();
+        }
+        System.println("Max Power: " + powerScaleMax);
+        var pwrRatio = mPower3s.toFloat() / powerScaleMax;
         if (pwrRatio > 1.0) {
             pwrRatio = 1.0;
         }
+        if (pwrRatio < 0.0) {
+            pwrRatio = 0.0;
+        }
         var litPwrSegs = (pwrRatio * segCount + 0.5).toNumber();
 
+        dc.setPenWidth(barW);
+
         for (var i = 0; i < segCount; i++) {
-            var segY = panelTop + 2 + barH - (i + 1) * (segH + segGap) + segGap;
+            // Right side goes Counter-Clockwise (increases in angle)
+            var pwrSegStart = pwrStartAngle + i * (segSweepDeg + gapDeg);
+            var pwrSegEnd = pwrSegStart + segSweepDeg;
+
             dc.setColor(
-                i < litPwrSegs
-                    ? mGaugeColors[(i * 23) / 9]
-                    : isDark
-                      ? 0x1a1a1a
-                      : 0xeeeeee,
+                i < litPwrSegs ? mGaugeColors[(i * 23) / 9] : bgTrackColor,
                 Graphics.COLOR_TRANSPARENT
             );
-            dc.fillRoundedRectangle(
-                rBarX - rBarW / 2,
-                segY,
-                rBarW,
-                segH,
-                segH / 2
+
+            dc.drawArc(
+                centerX,
+                sideCenterY,
+                sideRadius,
+                Graphics.ARC_COUNTER_CLOCKWISE,
+                pwrSegStart,
+                pwrSegEnd
             );
         }
 
         dc.setColor(fgColor, Graphics.COLOR_TRANSPARENT);
         dc.drawText(
             rPanelCenterX,
-            rPanelCenterY,
+            sideCenterY,
             Graphics.FONT_NUMBER_HOT,
             mPower3s.toString(),
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
         );
-
         dc.drawText(
             rPanelCenterX,
-            rPanelCenterY + 60,
+            sideCenterY + 70,
             Graphics.FONT_MEDIUM,
             mAvgPower.format("%.0f"),
             Graphics.TEXT_JUSTIFY_CENTER
         );
 
-        // --- STATS BAR (BOTTOM) ---
-        // dc.setPenWidth(1);
-        // dc.setColor(isDark ? 0x222222 : 0xdddddd, Graphics.COLOR_TRANSPARENT);
-
-        // dc.drawLine(0, footerY, width, footerY);
-
-        // for (var i = 1; i < 4; i++) {
-        //     dc.drawLine(colW * i, footerY, colW * i, height);
-        // }
-
-        // var bottomLabels = ["TIME", "TEMP", "DIST", "TIMER"];
-
         var bottomValues = [
             mAscent.format("%.0f"),
-            mElevation.format("%.0f"),
+            (mDistance / 1000).format("%.1f"),
             mCalories.format("%.0f"),
         ];
 
@@ -585,12 +560,6 @@ class DashView extends WatchUi.DataField {
 
     private function calculateGrade() as Void {
         // --- NEW GRADE CALCULATION ---
-        System.println(
-            "Calculating grade with altitude: " +
-                mElevation +
-                " and distance: " +
-                mDistance
-        );
         if (mElevation != null && mDistance != null) {
             // Initialize the tracking variables on the first valid reading
             if (mLastAlt == null || mLastDist == null) {
@@ -626,7 +595,5 @@ class DashView extends WatchUi.DataField {
         if (mSpeed == null || mSpeed < 1.0) {
             mGrade = 0.0;
         }
-
-        System.println("Calculated grade: " + mGrade);
     }
 }
