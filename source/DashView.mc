@@ -5,6 +5,8 @@ import Toybox.Activity;
 import Toybox.Lang;
 import Toybox.Time;
 import Toybox.Time.Gregorian;
+import Toybox.Sensor;
+import Toybox.Application;
 
 class DashView extends WatchUi.DataField {
     private var mSpeed = 0.0;
@@ -25,6 +27,7 @@ class DashView extends WatchUi.DataField {
     private var mElevation = 0.0;
     private var mAscent = 0.0;
     private var mDescent = 0.0;
+    private var mGearInfo = "--";
 
     private var mIsMetric = true;
     private var mIsElevationMetric = true;
@@ -36,6 +39,10 @@ class DashView extends WatchUi.DataField {
         0xff4800, 0xff2d00, 0xff0000,
     ];
 
+    // grade calculation
+    private var mLastAlt = null;
+    private var mLastDist = null;
+
     function initialize() {
         DataField.initialize();
         var settings = System.getDeviceSettings();
@@ -45,6 +52,7 @@ class DashView extends WatchUi.DataField {
 
     function compute(info as Activity.Info) as Void {
         var settings = System.getDeviceSettings();
+        var actInfo = Activity.getActivityInfo();
 
         // Current Speed
         if (info.currentSpeed != null) {
@@ -85,7 +93,6 @@ class DashView extends WatchUi.DataField {
         if (info.currentHeartRate != null) {
             mHeartRate = info.currentHeartRate;
         } else {
-            var actInfo = Activity.getActivityInfo();
             if (actInfo != null && actInfo.currentHeartRate != null) {
                 mHeartRate = actInfo.currentHeartRate;
             }
@@ -94,11 +101,25 @@ class DashView extends WatchUi.DataField {
             mAvgHeartRate = info.averageHeartRate;
         }
 
+        // Shifting
+        mGearInfo = "--";
+        var rear =
+            actInfo != null && actInfo has :rearGear ? actInfo.rearGear : null;
+        var front =
+            actInfo != null && actInfo has :frontGear
+                ? actInfo.frontGear
+                : null;
+        if (rear) {
+            mGearInfo = rear.format("%d");
+            if (front) {
+                mGearInfo = front.format("%d") + " - " + mGearInfo;
+            }
+        }
+
         // 3s Power
         if (info.currentPower != null) {
             mPower3s = info.currentPower;
         } else {
-            var actInfo = Activity.getActivityInfo();
             if (actInfo != null && actInfo.currentPower != null) {
                 mPower3s = actInfo.currentPower;
             }
@@ -110,6 +131,9 @@ class DashView extends WatchUi.DataField {
         // Cadence
         if (info.currentCadence != null) {
             mCadence = info.currentCadence;
+            if (mCadence > 150) {
+                mCadence = mCadence / 2;
+            }
         }
 
         // Calories
@@ -117,17 +141,32 @@ class DashView extends WatchUi.DataField {
             mCalories = info.calories;
         }
 
-        // Temperature
-        if (info has :ambientTemperature) {
-            var rawTemp = info.ambientTemperature;
-            if (rawTemp != null) {
-                if (settings.temperatureUnits == System.UNIT_STATUTE) {
-                    mTemp = (rawTemp * 9.0) / 5.0 + 32.0;
-                    mTempUnit = "F";
-                } else {
-                    mTemp = rawTemp.toFloat();
-                    mTempUnit = "C";
-                }
+        // --- TEMPERATURE RESOLUTION ---
+        var rawTemp = Storage.getValue("sensorTemperature");
+
+        // Priority 2: Activity.Info (Standard way)
+        if (info has :ambientTemperature && info.ambientTemperature != null) {
+            rawTemp = info.ambientTemperature;
+        }
+
+        // Priority 3: Activity.getActivityInfo (Final fallback)
+        if (rawTemp == null) {
+            if (
+                actInfo != null &&
+                actInfo has :ambientTemperature &&
+                actInfo.ambientTemperature != null
+            ) {
+                rawTemp = actInfo.ambientTemperature;
+            }
+        }
+
+        if (rawTemp != null) {
+            if (settings.temperatureUnits == System.UNIT_STATUTE) {
+                mTemp = (rawTemp * 9.0) / 5.0 + 32.0;
+                mTempUnit = "F";
+            } else {
+                mTemp = rawTemp.toFloat();
+                mTempUnit = "C";
             }
         }
 
@@ -142,12 +181,11 @@ class DashView extends WatchUi.DataField {
         if (info.totalDescent != null) {
             mDescent = info.totalDescent * altMult;
         }
-        if (info has :grade && info.grade != null) {
-            mGrade = info.grade;
-        }
+        calculateGrade(info);
     }
 
     function onUpdate(dc as Graphics.Dc) as Void {
+        System.println("Hello from the Gauge Update!");
         var width = dc.getWidth();
         var height = dc.getHeight();
         var bgColor = getBackgroundColor();
@@ -196,10 +234,16 @@ class DashView extends WatchUi.DataField {
         // }
 
         // var topLabels = ["CADENCE", "GRADE", "ELEV"];
+
+        var now = System.getClockTime();
+
         var topValues = [
-            mCadence.format("%.0f"),
-            mGrade.format("%.0f") + "%",
-            mElevation.format("%.0f"),
+            Lang.format("$1$:$2$", [
+                now.hour.format("%02d"),
+                now.min.format("%02d"),
+            ]),
+            mTemp.format("%d") + "°" + mTempUnit,
+            mGearInfo,
         ];
 
         for (var i = 0; i < 3; i++) {
@@ -261,10 +305,10 @@ class DashView extends WatchUi.DataField {
         }
 
         // --- SCALE ENDPOINTS ---
-        var startRad = Math.toRadians(gaugeStart);
-        var endRad = Math.toRadians(gaugeStart - gaugeSweep);
-        var labelR = radius + trackWidth / 2.0 + 16;
-        dc.setColor(dimColor, Graphics.COLOR_TRANSPARENT);
+        // var startRad = Math.toRadians(gaugeStart);
+        // var endRad = Math.toRadians(gaugeStart - gaugeSweep);
+        // var labelR = radius + trackWidth / 2.0 + 16;
+        // dc.setColor(dimColor, Graphics.COLOR_TRANSPARENT);
         // dc.drawText(
         //     centerX + labelR * Math.cos(startRad),
         //     centerY - labelR * Math.sin(startRad),
@@ -348,20 +392,48 @@ class DashView extends WatchUi.DataField {
             Graphics.TEXT_JUSTIFY_CENTER
         );
 
+        // --- CADENCE AND GRADIENT ---
+
+        dc.setColor(fgColor, Graphics.COLOR_TRANSPARENT);
+        dc.drawText(
+            width * 0.15,
+            2 * radius + topBarH * 1.5,
+            Graphics.FONT_LARGE,
+            mCadence.format("%.0f"),
+            Graphics.TEXT_JUSTIFY_CENTER
+        );
+
+        dc.setColor(fgColor, Graphics.COLOR_TRANSPARENT);
+        dc.drawText(
+            width * 0.5,
+            2 * radius + topBarH * 1.5,
+            Graphics.FONT_LARGE,
+            mDistance.format("%.1f"),
+            Graphics.TEXT_JUSTIFY_CENTER
+        );
+
+        dc.drawText(
+            width * 0.85,
+            2 * radius + topBarH * 1.5,
+            Graphics.FONT_LARGE,
+            mGrade.format("%.1f") + "%",
+            Graphics.TEXT_JUSTIFY_CENTER
+        );
+
         // Footer Y needed by panels
         var footerY = height - topBarH;
 
         // --- HR & POWER PANELS ---
-        var panelTop = centerY + radius * 0.5 + topBarH;
+        var panelTop = centerY + radius * 0.5 + topBarH * 2;
         var panelH = footerY - panelTop - 8;
         var barH = panelH - 4;
         var segCount = 10;
         var segGap = 4;
-        var lBarW = 16;
-        var rBarW = 16;
+        var lBarW = 40;
+        var rBarW = 40;
 
         // ---- LEFT PANEL: Heart Rate ----
-        var lBarX = 18;
+        var lBarX = 30;
         var lPanelCenterX = (lBarX + lBarW / 2 + width / 2.0) / 2.0;
         var lPanelCenterY = panelTop + panelH / 2.0 + 8;
 
@@ -411,14 +483,14 @@ class DashView extends WatchUi.DataField {
 
         dc.drawText(
             lPanelCenterX,
-            lPanelCenterY + 70,
+            lPanelCenterY + 60,
             Graphics.FONT_MEDIUM,
             mAvgHeartRate.format("%.0f"),
             Graphics.TEXT_JUSTIFY_CENTER
         );
 
         // ---- RIGHT PANEL: 3s Power ----
-        var rBarX = width - 18;
+        var rBarX = width - 30;
         var rPanelCenterX = (width / 2.0 + rBarX - rBarW / 2) / 2.0;
         var rPanelCenterY = panelTop + panelH / 2.0 + 8;
 
@@ -467,15 +539,15 @@ class DashView extends WatchUi.DataField {
 
         dc.drawText(
             rPanelCenterX,
-            rPanelCenterY + 70,
+            rPanelCenterY + 60,
             Graphics.FONT_MEDIUM,
             mAvgPower.format("%.0f"),
             Graphics.TEXT_JUSTIFY_CENTER
         );
 
         // --- STATS BAR (BOTTOM) ---
-        dc.setPenWidth(1);
-        dc.setColor(isDark ? 0x222222 : 0xdddddd, Graphics.COLOR_TRANSPARENT);
+        // dc.setPenWidth(1);
+        // dc.setColor(isDark ? 0x222222 : 0xdddddd, Graphics.COLOR_TRANSPARENT);
 
         // dc.drawLine(0, footerY, width, footerY);
 
@@ -484,14 +556,11 @@ class DashView extends WatchUi.DataField {
         // }
 
         // var bottomLabels = ["TIME", "TEMP", "DIST", "TIMER"];
-        var now = System.getClockTime();
+
         var bottomValues = [
-            Lang.format("$1$:$2$", [
-                now.hour.format("%02d"),
-                now.min.format("%02d"),
-            ]),
-            mTemp.format("%d") + "°" + mTempUnit,
-            mDistance.format("%.1f"),
+            mAscent.format("%.0f"),
+            mElevation.format("%.0f"),
+            mCalories.format("%.0f"),
         ];
 
         for (var i = 0; i < 3; i++) {
@@ -512,6 +581,45 @@ class DashView extends WatchUi.DataField {
                 bottomValues[i],
                 Graphics.TEXT_JUSTIFY_CENTER
             );
+        }
+    }
+
+    private function calculateGrade(info as Activity.Info) as Void {
+        // --- NEW GRADE CALCULATION ---
+        if (info.altitude != null && info.elapsedDistance != null) {
+            // Initialize the tracking variables on the first valid reading
+            if (mLastAlt == null || mLastDist == null) {
+                mLastAlt = info.altitude;
+                mLastDist = info.elapsedDistance;
+            } else {
+                var distDiff = info.elapsedDistance - mLastDist;
+
+                // Wait until we've covered at least 15 meters to recalculate.
+                // This smooths out the sensor drift so the grade isn't jumpy.
+                if (distDiff > 15.0) {
+                    var altDiff = info.altitude - mLastAlt;
+
+                    // Grade is (Rise / Run) * 100
+                    mGrade = (altDiff / distDiff) * 100.0;
+
+                    // Cap the grade to realistic cycling limits (-30% to +30%)
+                    if (mGrade > 30.0) {
+                        mGrade = 30.0;
+                    }
+                    if (mGrade < -30.0) {
+                        mGrade = -30.0;
+                    }
+
+                    // Update the markers for the next interval
+                    mLastAlt = info.altitude;
+                    mLastDist = info.elapsedDistance;
+                }
+            }
+        }
+
+        // Reset grade to 0% if the rider comes to a stop
+        if (info.currentSpeed == null || info.currentSpeed < 1.0) {
+            mGrade = 0.0;
         }
     }
 }

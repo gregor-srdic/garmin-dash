@@ -1,0 +1,64 @@
+[ @file = "D:\Workspace\sandbox\garmin\dash\Dash\source\GlobalBackgroundService.mc"; @line = 1; @symbol_usingdef<0> = [Toybox,1,6,12]; @symbol_usingdef<1> = [System,1,13,19]; ]
+using Toybox.System;
+[ @file = "D:\Workspace\sandbox\garmin\dash\Dash\source\GlobalBackgroundService.mc"; @line = 2; @symbol_usingdef<0> = [Toybox,2,6,12]; @symbol_usingdef<1> = [Sensor,2,13,19]; ]
+using Toybox.Sensor;
+[ @file = "D:\Workspace\sandbox\garmin\dash\Dash\source\GlobalBackgroundService.mc"; @line = 3; @symbol_usingdef<0> = [Toybox,3,6,12]; @symbol_usingdef<1> = [Background,3,13,23]; ]
+using Toybox.Background;
+[ @file = "D:\Workspace\sandbox\garmin\dash\Dash\source\GlobalBackgroundService.mc"; @line = 7; background = true; @symbol_classdef = [GlobalBackgroundService,7,6,29]; @symbol_extends<0> = [System,7,38,44]; @symbol_extends<1> = [ServiceDelegate,7,45,60]; ]
+class GlobalBackgroundService extends System.ServiceDelegate {
+    [ @file = "D:\Workspace\sandbox\garmin\dash\Dash\source\GlobalBackgroundService.mc"; @line = 7; ]
+    <init> {
+    }
+    [ @file = "D:\Workspace\sandbox\garmin\dash\Dash\source\GlobalBackgroundService.mc"; @line = 7; ]
+    static
+    <init> {
+    }
+    [ @file = "D:\Workspace\sandbox\garmin\dash\Dash\source\GlobalBackgroundService.mc"; @line = 8; @symbol_functiondef = [initialize,8,13,23]; ]
+    function initialize() as Void {
+D__Workspace_sandbox_garmin_dash_Dash_source_GlobalBackgroundService_mc_8_26_10_4_start:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\GlobalBackgroundService.mc" 9 8 ]
+        symbol [ ServiceDelegate %tmp.2 9 8 23 ];
+        %tmp.2 = getv ? :ServiceDelegate;
+        symbol [ initialize %tmp.3 9 24 34 ];
+        %tmp.3 = getv function %tmp.2 :initialize;
+        invoke %tmp.2 %tmp.3();
+D__Workspace_sandbox_garmin_dash_Dash_source_GlobalBackgroundService_mc_8_26_10_4_stop:
+    }
+    [ @file = "D:\Workspace\sandbox\garmin\dash\Dash\source\GlobalBackgroundService.mc"; @line = 13; @symbol_functiondef = [onTemporalEvent,13,13,28]; ]
+    function onTemporalEvent() {
+D__Workspace_sandbox_garmin_dash_Dash_source_GlobalBackgroundService_mc_13_31_17_4_start:
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\GlobalBackgroundService.mc" 14 8 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_GlobalBackgroundService_mc_13_31_17_4_start" "D__Workspace_sandbox_garmin_dash_Dash_source_GlobalBackgroundService_mc_13_31_17_4_stop" ]
+        %sensorInfo.1 = local;
+        symbol [ sensorInfo %sensorInfo.1 14 12 22 ];
+        symbol [ Sensor %tmp.1 14 25 31 ];
+        %tmp.1 = getm $.Toybox.Sensor;
+        symbol [ getInfo %tmp.2 14 32 39 ];
+        %tmp.2 = getv function %tmp.1 :getInfo;
+        %tmp.3 = invoke %tmp.1 %tmp.2();
+        lputv %sensorInfo.1 %tmp.3;
+        symbol [ sensorInfo %sensorInfo.1 14 12 22 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\GlobalBackgroundService.mc" 15 8 ]
+        [ "D__Workspace_sandbox_garmin_dash_Dash_source_GlobalBackgroundService_mc_13_31_17_4_start" "D__Workspace_sandbox_garmin_dash_Dash_source_GlobalBackgroundService_mc_13_31_17_4_stop" ]
+        %temperature.2 = local;
+        symbol [ temperature %temperature.2 15 12 23 ];
+        %tmp.4 = lgetv %sensorInfo.1;
+        symbol [ sensorInfo %tmp.4 15 26 36 ];
+        symbol [ temperature %tmp.5 15 37 48 ];
+        %tmp.5 = getv %tmp.4 :temperature;
+        lputv %temperature.2 %tmp.5;
+        symbol [ temperature %temperature.2 15 12 23 ];
+[ "D:\Workspace\sandbox\garmin\dash\Dash\source\GlobalBackgroundService.mc" 16 8 ]
+        symbol [ Background %tmp.6 16 8 18 ];
+        %tmp.6 = getm $.Toybox.Background;
+        symbol [ exit %tmp.7 16 19 23 ];
+        %tmp.7 = getv function %tmp.6 :exit;
+        %tmp.8 = lgetv %temperature.2;
+        symbol [ temperature %tmp.8 16 24 35 ];
+        invoke %tmp.6 %tmp.7(%tmp.8);
+D__Workspace_sandbox_garmin_dash_Dash_source_GlobalBackgroundService_mc_13_31_17_4_stop:
+    }
+}
+[ @file = "D:\Workspace\sandbox\garmin\dash\Dash\source\GlobalBackgroundService.mc"; @line = 1; ]
+<init> {
+}

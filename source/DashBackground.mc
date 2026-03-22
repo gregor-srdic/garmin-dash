@@ -1,14 +1,14 @@
 import Toybox.Application;
 import Toybox.Graphics;
 import Toybox.WatchUi;
+using Toybox.Background;
 
 class Background extends WatchUi.Drawable {
-
     hidden var mColor as ColorValue;
 
     function initialize() {
         var dictionary = {
-            :identifier => "Background"
+            :identifier => "Background",
         };
 
         Drawable.initialize(dictionary);
@@ -25,4 +25,12 @@ class Background extends WatchUi.Drawable {
         dc.clear();
     }
 
+    // function onTemporalEvent() {
+    //     var info = Sensor.getInfo();
+    //     var temp = info != null ? info.temperature : null;
+    //     System.println("Hello from the Gauge!");
+
+    //     // Send the temperature back to the main process
+    //     Background.exit(temp);
+    // }
 }

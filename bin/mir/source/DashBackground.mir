@@ -4,12 +4,14 @@ import Toybox.Application;
 import Toybox.Graphics;
 [ @file = "D:\Workspace\sandbox\garmin\dash\Dash\source\DashBackground.mc"; @line = 3; @symbol_importdef<0> = [Toybox,3,7,13]; @symbol_importdef<1> = [WatchUi,3,14,21]; ]
 import Toybox.WatchUi;
-[ @file = "D:\Workspace\sandbox\garmin\dash\Dash\source\DashBackground.mc"; @line = 5; @symbol_classdef = [Background,5,6,16]; @symbol_extends<0> = [WatchUi,5,25,32]; @symbol_extends<1> = [Drawable,5,33,41]; ]
+[ @file = "D:\Workspace\sandbox\garmin\dash\Dash\source\DashBackground.mc"; @line = 4; @symbol_usingdef<0> = [Toybox,4,6,12]; @symbol_usingdef<1> = [Background,4,13,23]; ]
+using Toybox.Background;
+[ @file = "D:\Workspace\sandbox\garmin\dash\Dash\source\DashBackground.mc"; @line = 6; @symbol_classdef = [Background,6,6,16]; @symbol_extends<0> = [WatchUi,6,25,32]; @symbol_extends<1> = [Drawable,6,33,41]; ]
 class Background extends WatchUi.Drawable {
-    [ @file = "D:\Workspace\sandbox\garmin\dash\Dash\source\DashBackground.mc"; @line = 5; ]
+    [ @file = "D:\Workspace\sandbox\garmin\dash\Dash\source\DashBackground.mc"; @line = 6; ]
     <init> {
     }
-    [ @file = "D:\Workspace\sandbox\garmin\dash\Dash\source\DashBackground.mc"; @line = 5; ]
+    [ @file = "D:\Workspace\sandbox\garmin\dash\Dash\source\DashBackground.mc"; @line = 6; ]
     static
     <init> {
     }
