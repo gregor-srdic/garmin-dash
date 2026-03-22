@@ -38,222 +38,223 @@
         <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashBackground.mc" id="17" lineNum="23" parent="globals/Background" pc="268435841" symbol="draw"/>
         <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashBackground.mc" id="17" lineNum="24" parent="globals/Background" pc="268435843" symbol="draw"/>
         <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashBackground.mc" id="17" lineNum="25" parent="globals/Background" pc="268435860" symbol="draw"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="18" lineNum="587" parent="globals/DashView" pc="268435869" symbol="&lt;globals/DashView/&lt;&gt;calculateGrade&gt;"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="18" lineNum="589" parent="globals/DashView" pc="268435872" symbol="&lt;globals/DashView/&lt;&gt;calculateGrade&gt;"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="18" lineNum="591" parent="globals/DashView" pc="268435892" symbol="&lt;globals/DashView/&lt;&gt;calculateGrade&gt;"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="18" lineNum="592" parent="globals/DashView" pc="268435910" symbol="&lt;globals/DashView/&lt;&gt;calculateGrade&gt;"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="18" lineNum="593" parent="globals/DashView" pc="268435923" symbol="&lt;globals/DashView/&lt;&gt;calculateGrade&gt;"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="18" lineNum="595" parent="globals/DashView" pc="268435939" symbol="&lt;globals/DashView/&lt;&gt;calculateGrade&gt;"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="18" lineNum="599" parent="globals/DashView" pc="268435953" symbol="&lt;globals/DashView/&lt;&gt;calculateGrade&gt;"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="18" lineNum="600" parent="globals/DashView" pc="268435964" symbol="&lt;globals/DashView/&lt;&gt;calculateGrade&gt;"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="18" lineNum="603" parent="globals/DashView" pc="268435978" symbol="&lt;globals/DashView/&lt;&gt;calculateGrade&gt;"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="18" lineNum="606" parent="globals/DashView" pc="268435996" symbol="&lt;globals/DashView/&lt;&gt;calculateGrade&gt;"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="18" lineNum="607" parent="globals/DashView" pc="268436010" symbol="&lt;globals/DashView/&lt;&gt;calculateGrade&gt;"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="18" lineNum="609" parent="globals/DashView" pc="268436025" symbol="&lt;globals/DashView/&lt;&gt;calculateGrade&gt;"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="18" lineNum="610" parent="globals/DashView" pc="268436039" symbol="&lt;globals/DashView/&lt;&gt;calculateGrade&gt;"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="18" lineNum="614" parent="globals/DashView" pc="268436054" symbol="&lt;globals/DashView/&lt;&gt;calculateGrade&gt;"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="18" lineNum="615" parent="globals/DashView" pc="268436067" symbol="&lt;globals/DashView/&lt;&gt;calculateGrade&gt;"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="18" lineNum="621" parent="globals/DashView" pc="268436086" symbol="&lt;globals/DashView/&lt;&gt;calculateGrade&gt;"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="18" lineNum="622" parent="globals/DashView" pc="268436111" symbol="&lt;globals/DashView/&lt;&gt;calculateGrade&gt;"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="53" parent="globals/DashView" pc="268436123" symbol="compute"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="54" parent="globals/DashView" pc="268436126" symbol="compute"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="55" parent="globals/DashView" pc="268436138" symbol="compute"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="58" parent="globals/DashView" pc="268436150" symbol="compute"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="59" parent="globals/DashView" pc="268436160" symbol="compute"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="63" parent="globals/DashView" pc="268436205" symbol="compute"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="67" parent="globals/DashView" pc="268436213" symbol="compute"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="68" parent="globals/DashView" pc="268436223" symbol="compute"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="74" parent="globals/DashView" pc="268436268" symbol="compute"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="75" parent="globals/DashView" pc="268436278" symbol="compute"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="81" parent="globals/DashView" pc="268436323" symbol="compute"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="82" parent="globals/DashView" pc="268436333" symbol="compute"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="88" parent="globals/DashView" pc="268436378" symbol="compute"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="89" parent="globals/DashView" pc="268436388" symbol="compute"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="93" parent="globals/DashView" pc="268436404" symbol="compute"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="94" parent="globals/DashView" pc="268436414" symbol="compute"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="96" parent="globals/DashView" pc="268436430" symbol="compute"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="97" parent="globals/DashView" pc="268436447" symbol="compute"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="100" parent="globals/DashView" pc="268436464" symbol="compute"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="101" parent="globals/DashView" pc="268436474" symbol="compute"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="105" parent="globals/DashView" pc="268436490" symbol="compute"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="106" parent="globals/DashView" pc="268436502" symbol="compute"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="108" parent="globals/DashView" pc="268436532" symbol="compute"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="112" parent="globals/DashView" pc="268436562" symbol="compute"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="113" parent="globals/DashView" pc="268436567" symbol="compute"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="114" parent="globals/DashView" pc="268436588" symbol="compute"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="115" parent="globals/DashView" pc="268436593" symbol="compute"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="120" parent="globals/DashView" pc="268436632" symbol="compute"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="121" parent="globals/DashView" pc="268436642" symbol="compute"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="123" parent="globals/DashView" pc="268436658" symbol="compute"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="124" parent="globals/DashView" pc="268436675" symbol="compute"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="127" parent="globals/DashView" pc="268436692" symbol="compute"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="128" parent="globals/DashView" pc="268436702" symbol="compute"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="132" parent="globals/DashView" pc="268436718" symbol="compute"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="133" parent="globals/DashView" pc="268436728" symbol="compute"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="134" parent="globals/DashView" pc="268436741" symbol="compute"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="135" parent="globals/DashView" pc="268436753" symbol="compute"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="140" parent="globals/DashView" pc="268436774" symbol="compute"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="141" parent="globals/DashView" pc="268436784" symbol="compute"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="145" parent="globals/DashView" pc="268436800" symbol="compute"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="148" parent="globals/DashView" pc="268436819" symbol="compute"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="149" parent="globals/DashView" pc="268436841" symbol="compute"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="153" parent="globals/DashView" pc="268436853" symbol="compute"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="154" parent="globals/DashView" pc="268436859" symbol="compute"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="159" parent="globals/DashView" pc="268436887" symbol="compute"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="163" parent="globals/DashView" pc="268436902" symbol="compute"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="164" parent="globals/DashView" pc="268436908" symbol="compute"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="165" parent="globals/DashView" pc="268436920" symbol="compute"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="166" parent="globals/DashView" pc="268436947" symbol="compute"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="168" parent="globals/DashView" pc="268436962" symbol="compute"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="169" parent="globals/DashView" pc="268436977" symbol="compute"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="174" parent="globals/DashView" pc="268436992" symbol="compute"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="175" parent="globals/DashView" pc="268437015" symbol="compute"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="176" parent="globals/DashView" pc="268437025" symbol="compute"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="178" parent="globals/DashView" pc="268437044" symbol="compute"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="179" parent="globals/DashView" pc="268437054" symbol="compute"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="181" parent="globals/DashView" pc="268437073" symbol="compute"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="182" parent="globals/DashView" pc="268437083" symbol="compute"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="184" parent="globals/DashView" pc="268437102" symbol="compute"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="20" lineNum="46" parent="globals/DashView" pc="268437114" symbol="initialize"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="20" lineNum="47" parent="globals/DashView" pc="268437117" symbol="initialize"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="20" lineNum="48" parent="globals/DashView" pc="268437129" symbol="initialize"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="20" lineNum="49" parent="globals/DashView" pc="268437141" symbol="initialize"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="20" lineNum="50" parent="globals/DashView" pc="268437156" symbol="initialize"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="187" parent="globals/DashView" pc="268437172" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="188" parent="globals/DashView" pc="268437175" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="189" parent="globals/DashView" pc="268437193" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="190" parent="globals/DashView" pc="268437202" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="191" parent="globals/DashView" pc="268437211" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="192" parent="globals/DashView" pc="268437219" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="193" parent="globals/DashView" pc="268437225" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="194" parent="globals/DashView" pc="268437241" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="196" parent="globals/DashView" pc="268437260" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="197" parent="globals/DashView" pc="268437274" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="224" parent="globals/DashView" pc="268437282" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="225" parent="globals/DashView" pc="268437285" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="226" parent="globals/DashView" pc="268437289" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="227" parent="globals/DashView" pc="268437301" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="231" parent="globals/DashView" pc="268437330" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="238" parent="globals/DashView" pc="268437340" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="240" parent="globals/DashView" pc="268437352" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="249" parent="globals/DashView" pc="268437467" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="250" parent="globals/DashView" pc="268437478" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="259" parent="globals/DashView" pc="268437491" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="260" parent="globals/DashView" pc="268437505" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="270" parent="globals/DashView" pc="268437541" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="271" parent="globals/DashView" pc="268437558" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="272" parent="globals/DashView" pc="268437562" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="273" parent="globals/DashView" pc="268437572" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="274" parent="globals/DashView" pc="268437582" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="275" parent="globals/DashView" pc="268437592" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="276" parent="globals/DashView" pc="268437615" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="277" parent="globals/DashView" pc="268437622" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="280" parent="globals/DashView" pc="268437629" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="281" parent="globals/DashView" pc="268437633" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="282" parent="globals/DashView" pc="268437640" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="283" parent="globals/DashView" pc="268437647" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="284" parent="globals/DashView" pc="268437657" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="285" parent="globals/DashView" pc="268437668" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="287" parent="globals/DashView" pc="268437678" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="289" parent="globals/DashView" pc="268437697" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="290" parent="globals/DashView" pc="268437709" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="291" parent="globals/DashView" pc="268437720" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="292" parent="globals/DashView" pc="268437730" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="293" parent="globals/DashView" pc="268437740" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="297" parent="globals/DashView" pc="268437788" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="328" parent="globals/DashView" pc="268437820" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="329" parent="globals/DashView" pc="268437834" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="336" parent="globals/DashView" pc="268437874" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="343" parent="globals/DashView" pc="268437914" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="344" parent="globals/DashView" pc="268437928" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="351" parent="globals/DashView" pc="268437982" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="360" parent="globals/DashView" pc="268438036" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="361" parent="globals/DashView" pc="268438050" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="368" parent="globals/DashView" pc="268438086" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="369" parent="globals/DashView" pc="268438100" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="379" parent="globals/DashView" pc="268438148" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="380" parent="globals/DashView" pc="268438159" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="386" parent="globals/DashView" pc="268438250" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="387" parent="globals/DashView" pc="268438264" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="397" parent="globals/DashView" pc="268438293" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="398" parent="globals/DashView" pc="268438307" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="406" parent="globals/DashView" pc="268438361" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="407" parent="globals/DashView" pc="268438375" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="415" parent="globals/DashView" pc="268438429" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="424" parent="globals/DashView" pc="268438489" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="427" parent="globals/DashView" pc="268438496" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="428" parent="globals/DashView" pc="268438515" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="429" parent="globals/DashView" pc="268438525" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="430" parent="globals/DashView" pc="268438532" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="431" parent="globals/DashView" pc="268438536" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="432" parent="globals/DashView" pc="268438540" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="433" parent="globals/DashView" pc="268438544" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="436" parent="globals/DashView" pc="268438548" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="437" parent="globals/DashView" pc="268438552" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="438" parent="globals/DashView" pc="268438577" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="440" parent="globals/DashView" pc="268438593" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="441" parent="globals/DashView" pc="268438607" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="449" parent="globals/DashView" pc="268438632" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="450" parent="globals/DashView" pc="268438654" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="451" parent="globals/DashView" pc="268438673" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="452" parent="globals/DashView" pc="268438684" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="454" parent="globals/DashView" pc="268438694" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="456" parent="globals/DashView" pc="268438713" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="457" parent="globals/DashView" pc="268438724" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="458" parent="globals/DashView" pc="268438749" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="466" parent="globals/DashView" pc="268438803" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="475" parent="globals/DashView" pc="268438842" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="476" parent="globals/DashView" pc="268438856" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="484" parent="globals/DashView" pc="268438885" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="493" parent="globals/DashView" pc="268438924" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="494" parent="globals/DashView" pc="268438931" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="495" parent="globals/DashView" pc="268438956" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="497" parent="globals/DashView" pc="268438972" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="498" parent="globals/DashView" pc="268438986" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="506" parent="globals/DashView" pc="268439011" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="507" parent="globals/DashView" pc="268439030" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="508" parent="globals/DashView" pc="268439041" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="510" parent="globals/DashView" pc="268439051" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="512" parent="globals/DashView" pc="268439070" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="513" parent="globals/DashView" pc="268439081" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="514" parent="globals/DashView" pc="268439106" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="522" parent="globals/DashView" pc="268439160" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="531" parent="globals/DashView" pc="268439199" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="532" parent="globals/DashView" pc="268439213" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="540" parent="globals/DashView" pc="268439242" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="560" parent="globals/DashView" pc="268439281" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="566" parent="globals/DashView" pc="268439350" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="567" parent="globals/DashView" pc="268439361" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="568" parent="globals/DashView" pc="268439374" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="576" parent="globals/DashView" pc="268439388" symbol="onUpdate"/>
-        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="577" parent="globals/DashView" pc="268439402" symbol="onUpdate"/>
-        <entry filename="d:\\Workspace\\sandbox\\garmin\\dash\\Dash\\bin\\gen\\006-B4440-00\\source\\Rez.mcgen" id="22" lineNum="57" parent="globals/Rez/Layouts" pc="268439439" symbol="BottomRightLayout"/>
-        <entry filename="d:\\Workspace\\sandbox\\garmin\\dash\\Dash\\bin\\gen\\006-B4440-00\\source\\Rez.mcgen" id="22" lineNum="58" parent="globals/Rez/Layouts" pc="268439450" symbol="BottomRightLayout"/>
-        <entry filename="d:\\Workspace\\sandbox\\garmin\\dash\\Dash\\bin\\gen\\006-B4440-00\\source\\Rez.mcgen" id="22" lineNum="60" parent="globals/Rez/Layouts" pc="268439474" symbol="BottomRightLayout"/>
-        <entry filename="d:\\Workspace\\sandbox\\garmin\\dash\\Dash\\bin\\gen\\006-B4440-00\\source\\Rez.mcgen" id="22" lineNum="62" parent="globals/Rez/Layouts" pc="268439557" symbol="BottomRightLayout"/>
-        <entry filename="d:\\Workspace\\sandbox\\garmin\\dash\\Dash\\bin\\gen\\006-B4440-00\\source\\Rez.mcgen" id="22" lineNum="64" parent="globals/Rez/Layouts" pc="268439640" symbol="BottomRightLayout"/>
-        <entry filename="d:\\Workspace\\sandbox\\garmin\\dash\\Dash\\bin\\gen\\006-B4440-00\\source\\Rez.mcgen" id="23" lineNum="37" parent="globals/Rez/Layouts" pc="268439660" symbol="TopRightLayout"/>
-        <entry filename="d:\\Workspace\\sandbox\\garmin\\dash\\Dash\\bin\\gen\\006-B4440-00\\source\\Rez.mcgen" id="23" lineNum="38" parent="globals/Rez/Layouts" pc="268439671" symbol="TopRightLayout"/>
-        <entry filename="d:\\Workspace\\sandbox\\garmin\\dash\\Dash\\bin\\gen\\006-B4440-00\\source\\Rez.mcgen" id="23" lineNum="40" parent="globals/Rez/Layouts" pc="268439695" symbol="TopRightLayout"/>
-        <entry filename="d:\\Workspace\\sandbox\\garmin\\dash\\Dash\\bin\\gen\\006-B4440-00\\source\\Rez.mcgen" id="23" lineNum="42" parent="globals/Rez/Layouts" pc="268439778" symbol="TopRightLayout"/>
-        <entry filename="d:\\Workspace\\sandbox\\garmin\\dash\\Dash\\bin\\gen\\006-B4440-00\\source\\Rez.mcgen" id="23" lineNum="44" parent="globals/Rez/Layouts" pc="268439861" symbol="TopRightLayout"/>
-        <entry filename="d:\\Workspace\\sandbox\\garmin\\dash\\Dash\\bin\\gen\\006-B4440-00\\source\\Rez.mcgen" id="24" lineNum="47" parent="globals/Rez/Layouts" pc="268439881" symbol="BottomLeftLayout"/>
-        <entry filename="d:\\Workspace\\sandbox\\garmin\\dash\\Dash\\bin\\gen\\006-B4440-00\\source\\Rez.mcgen" id="24" lineNum="48" parent="globals/Rez/Layouts" pc="268439892" symbol="BottomLeftLayout"/>
-        <entry filename="d:\\Workspace\\sandbox\\garmin\\dash\\Dash\\bin\\gen\\006-B4440-00\\source\\Rez.mcgen" id="24" lineNum="50" parent="globals/Rez/Layouts" pc="268439916" symbol="BottomLeftLayout"/>
-        <entry filename="d:\\Workspace\\sandbox\\garmin\\dash\\Dash\\bin\\gen\\006-B4440-00\\source\\Rez.mcgen" id="24" lineNum="52" parent="globals/Rez/Layouts" pc="268439998" symbol="BottomLeftLayout"/>
-        <entry filename="d:\\Workspace\\sandbox\\garmin\\dash\\Dash\\bin\\gen\\006-B4440-00\\source\\Rez.mcgen" id="24" lineNum="54" parent="globals/Rez/Layouts" pc="268440080" symbol="BottomLeftLayout"/>
-        <entry filename="d:\\Workspace\\sandbox\\garmin\\dash\\Dash\\bin\\gen\\006-B4440-00\\source\\Rez.mcgen" id="25" lineNum="27" parent="globals/Rez/Layouts" pc="268440100" symbol="TopLeftLayout"/>
-        <entry filename="d:\\Workspace\\sandbox\\garmin\\dash\\Dash\\bin\\gen\\006-B4440-00\\source\\Rez.mcgen" id="25" lineNum="28" parent="globals/Rez/Layouts" pc="268440111" symbol="TopLeftLayout"/>
-        <entry filename="d:\\Workspace\\sandbox\\garmin\\dash\\Dash\\bin\\gen\\006-B4440-00\\source\\Rez.mcgen" id="25" lineNum="30" parent="globals/Rez/Layouts" pc="268440135" symbol="TopLeftLayout"/>
-        <entry filename="d:\\Workspace\\sandbox\\garmin\\dash\\Dash\\bin\\gen\\006-B4440-00\\source\\Rez.mcgen" id="25" lineNum="32" parent="globals/Rez/Layouts" pc="268440217" symbol="TopLeftLayout"/>
-        <entry filename="d:\\Workspace\\sandbox\\garmin\\dash\\Dash\\bin\\gen\\006-B4440-00\\source\\Rez.mcgen" id="25" lineNum="34" parent="globals/Rez/Layouts" pc="268440299" symbol="TopLeftLayout"/>
-        <entry filename="d:\\Workspace\\sandbox\\garmin\\dash\\Dash\\bin\\gen\\006-B4440-00\\source\\Rez.mcgen" id="26" lineNum="13" parent="globals/Rez/Layouts" pc="268440319" symbol="MainLayout"/>
-        <entry filename="d:\\Workspace\\sandbox\\garmin\\dash\\Dash\\bin\\gen\\006-B4440-00\\source\\Rez.mcgen" id="26" lineNum="14" parent="globals/Rez/Layouts" pc="268440330" symbol="MainLayout"/>
-        <entry filename="d:\\Workspace\\sandbox\\garmin\\dash\\Dash\\bin\\gen\\006-B4440-00\\source\\Rez.mcgen" id="26" lineNum="16" parent="globals/Rez/Layouts" pc="268440339" symbol="MainLayout"/>
-        <entry filename="d:\\Workspace\\sandbox\\garmin\\dash\\Dash\\bin\\gen\\006-B4440-00\\source\\Rez.mcgen" id="26" lineNum="18" parent="globals/Rez/Layouts" pc="268440348" symbol="MainLayout"/>
-        <entry filename="d:\\Workspace\\sandbox\\garmin\\dash\\Dash\\bin\\gen\\006-B4440-00\\source\\Rez.mcgen" id="26" lineNum="20" parent="globals/Rez/Layouts" pc="268440372" symbol="MainLayout"/>
-        <entry filename="d:\\Workspace\\sandbox\\garmin\\dash\\Dash\\bin\\gen\\006-B4440-00\\source\\Rez.mcgen" id="26" lineNum="22" parent="globals/Rez/Layouts" pc="268440479" symbol="MainLayout"/>
-        <entry filename="d:\\Workspace\\sandbox\\garmin\\dash\\Dash\\bin\\gen\\006-B4440-00\\source\\Rez.mcgen" id="26" lineNum="24" parent="globals/Rez/Layouts" pc="268440586" symbol="MainLayout"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="18" lineNum="586" parent="globals/DashView" pc="268435869" symbol="&lt;globals/DashView/&lt;&gt;calculateGrade&gt;"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="18" lineNum="588" parent="globals/DashView" pc="268435872" symbol="&lt;globals/DashView/&lt;&gt;calculateGrade&gt;"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="18" lineNum="594" parent="globals/DashView" pc="268435908" symbol="&lt;globals/DashView/&lt;&gt;calculateGrade&gt;"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="18" lineNum="596" parent="globals/DashView" pc="268435926" symbol="&lt;globals/DashView/&lt;&gt;calculateGrade&gt;"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="18" lineNum="597" parent="globals/DashView" pc="268435944" symbol="&lt;globals/DashView/&lt;&gt;calculateGrade&gt;"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="18" lineNum="598" parent="globals/DashView" pc="268435956" symbol="&lt;globals/DashView/&lt;&gt;calculateGrade&gt;"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="18" lineNum="600" parent="globals/DashView" pc="268435971" symbol="&lt;globals/DashView/&lt;&gt;calculateGrade&gt;"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="18" lineNum="604" parent="globals/DashView" pc="268435984" symbol="&lt;globals/DashView/&lt;&gt;calculateGrade&gt;"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="18" lineNum="605" parent="globals/DashView" pc="268435995" symbol="&lt;globals/DashView/&lt;&gt;calculateGrade&gt;"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="18" lineNum="608" parent="globals/DashView" pc="268436008" symbol="&lt;globals/DashView/&lt;&gt;calculateGrade&gt;"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="18" lineNum="611" parent="globals/DashView" pc="268436026" symbol="&lt;globals/DashView/&lt;&gt;calculateGrade&gt;"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="18" lineNum="612" parent="globals/DashView" pc="268436040" symbol="&lt;globals/DashView/&lt;&gt;calculateGrade&gt;"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="18" lineNum="614" parent="globals/DashView" pc="268436055" symbol="&lt;globals/DashView/&lt;&gt;calculateGrade&gt;"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="18" lineNum="615" parent="globals/DashView" pc="268436069" symbol="&lt;globals/DashView/&lt;&gt;calculateGrade&gt;"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="18" lineNum="619" parent="globals/DashView" pc="268436084" symbol="&lt;globals/DashView/&lt;&gt;calculateGrade&gt;"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="18" lineNum="620" parent="globals/DashView" pc="268436096" symbol="&lt;globals/DashView/&lt;&gt;calculateGrade&gt;"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="18" lineNum="626" parent="globals/DashView" pc="268436114" symbol="&lt;globals/DashView/&lt;&gt;calculateGrade&gt;"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="18" lineNum="627" parent="globals/DashView" pc="268436137" symbol="&lt;globals/DashView/&lt;&gt;calculateGrade&gt;"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="18" lineNum="630" parent="globals/DashView" pc="268436148" symbol="&lt;globals/DashView/&lt;&gt;calculateGrade&gt;"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="53" parent="globals/DashView" pc="268436173" symbol="compute"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="54" parent="globals/DashView" pc="268436176" symbol="compute"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="55" parent="globals/DashView" pc="268436188" symbol="compute"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="58" parent="globals/DashView" pc="268436200" symbol="compute"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="59" parent="globals/DashView" pc="268436210" symbol="compute"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="63" parent="globals/DashView" pc="268436255" symbol="compute"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="67" parent="globals/DashView" pc="268436263" symbol="compute"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="68" parent="globals/DashView" pc="268436273" symbol="compute"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="74" parent="globals/DashView" pc="268436318" symbol="compute"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="75" parent="globals/DashView" pc="268436328" symbol="compute"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="81" parent="globals/DashView" pc="268436373" symbol="compute"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="82" parent="globals/DashView" pc="268436383" symbol="compute"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="88" parent="globals/DashView" pc="268436422" symbol="compute"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="89" parent="globals/DashView" pc="268436432" symbol="compute"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="93" parent="globals/DashView" pc="268436448" symbol="compute"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="94" parent="globals/DashView" pc="268436458" symbol="compute"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="96" parent="globals/DashView" pc="268436474" symbol="compute"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="97" parent="globals/DashView" pc="268436491" symbol="compute"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="100" parent="globals/DashView" pc="268436508" symbol="compute"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="101" parent="globals/DashView" pc="268436518" symbol="compute"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="105" parent="globals/DashView" pc="268436534" symbol="compute"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="106" parent="globals/DashView" pc="268436546" symbol="compute"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="108" parent="globals/DashView" pc="268436576" symbol="compute"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="112" parent="globals/DashView" pc="268436606" symbol="compute"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="113" parent="globals/DashView" pc="268436611" symbol="compute"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="114" parent="globals/DashView" pc="268436632" symbol="compute"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="115" parent="globals/DashView" pc="268436637" symbol="compute"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="120" parent="globals/DashView" pc="268436676" symbol="compute"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="121" parent="globals/DashView" pc="268436686" symbol="compute"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="123" parent="globals/DashView" pc="268436702" symbol="compute"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="124" parent="globals/DashView" pc="268436719" symbol="compute"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="127" parent="globals/DashView" pc="268436736" symbol="compute"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="128" parent="globals/DashView" pc="268436746" symbol="compute"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="132" parent="globals/DashView" pc="268436762" symbol="compute"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="133" parent="globals/DashView" pc="268436772" symbol="compute"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="134" parent="globals/DashView" pc="268436785" symbol="compute"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="135" parent="globals/DashView" pc="268436797" symbol="compute"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="140" parent="globals/DashView" pc="268436818" symbol="compute"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="141" parent="globals/DashView" pc="268436828" symbol="compute"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="145" parent="globals/DashView" pc="268436844" symbol="compute"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="148" parent="globals/DashView" pc="268436863" symbol="compute"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="149" parent="globals/DashView" pc="268436885" symbol="compute"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="153" parent="globals/DashView" pc="268436897" symbol="compute"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="154" parent="globals/DashView" pc="268436903" symbol="compute"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="159" parent="globals/DashView" pc="268436931" symbol="compute"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="163" parent="globals/DashView" pc="268436946" symbol="compute"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="164" parent="globals/DashView" pc="268436952" symbol="compute"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="165" parent="globals/DashView" pc="268436964" symbol="compute"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="166" parent="globals/DashView" pc="268436991" symbol="compute"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="168" parent="globals/DashView" pc="268437006" symbol="compute"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="169" parent="globals/DashView" pc="268437021" symbol="compute"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="174" parent="globals/DashView" pc="268437036" symbol="compute"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="175" parent="globals/DashView" pc="268437059" symbol="compute"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="176" parent="globals/DashView" pc="268437069" symbol="compute"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="178" parent="globals/DashView" pc="268437088" symbol="compute"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="179" parent="globals/DashView" pc="268437098" symbol="compute"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="181" parent="globals/DashView" pc="268437117" symbol="compute"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="182" parent="globals/DashView" pc="268437127" symbol="compute"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="19" lineNum="184" parent="globals/DashView" pc="268437146" symbol="compute"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="20" lineNum="46" parent="globals/DashView" pc="268437154" symbol="initialize"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="20" lineNum="47" parent="globals/DashView" pc="268437157" symbol="initialize"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="20" lineNum="48" parent="globals/DashView" pc="268437169" symbol="initialize"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="20" lineNum="49" parent="globals/DashView" pc="268437181" symbol="initialize"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="20" lineNum="50" parent="globals/DashView" pc="268437196" symbol="initialize"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="187" parent="globals/DashView" pc="268437212" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="188" parent="globals/DashView" pc="268437215" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="189" parent="globals/DashView" pc="268437224" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="190" parent="globals/DashView" pc="268437233" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="191" parent="globals/DashView" pc="268437241" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="192" parent="globals/DashView" pc="268437247" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="193" parent="globals/DashView" pc="268437263" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="195" parent="globals/DashView" pc="268437282" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="196" parent="globals/DashView" pc="268437296" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="223" parent="globals/DashView" pc="268437304" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="224" parent="globals/DashView" pc="268437307" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="225" parent="globals/DashView" pc="268437311" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="226" parent="globals/DashView" pc="268437323" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="230" parent="globals/DashView" pc="268437352" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="237" parent="globals/DashView" pc="268437362" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="239" parent="globals/DashView" pc="268437374" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="248" parent="globals/DashView" pc="268437489" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="249" parent="globals/DashView" pc="268437500" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="258" parent="globals/DashView" pc="268437513" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="259" parent="globals/DashView" pc="268437527" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="269" parent="globals/DashView" pc="268437563" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="270" parent="globals/DashView" pc="268437580" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="271" parent="globals/DashView" pc="268437584" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="272" parent="globals/DashView" pc="268437594" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="273" parent="globals/DashView" pc="268437604" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="274" parent="globals/DashView" pc="268437614" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="275" parent="globals/DashView" pc="268437637" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="276" parent="globals/DashView" pc="268437644" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="279" parent="globals/DashView" pc="268437651" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="280" parent="globals/DashView" pc="268437655" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="281" parent="globals/DashView" pc="268437662" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="282" parent="globals/DashView" pc="268437669" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="283" parent="globals/DashView" pc="268437679" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="284" parent="globals/DashView" pc="268437690" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="286" parent="globals/DashView" pc="268437700" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="288" parent="globals/DashView" pc="268437719" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="289" parent="globals/DashView" pc="268437731" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="290" parent="globals/DashView" pc="268437742" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="291" parent="globals/DashView" pc="268437752" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="292" parent="globals/DashView" pc="268437762" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="296" parent="globals/DashView" pc="268437810" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="327" parent="globals/DashView" pc="268437842" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="328" parent="globals/DashView" pc="268437856" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="335" parent="globals/DashView" pc="268437896" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="342" parent="globals/DashView" pc="268437936" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="343" parent="globals/DashView" pc="268437950" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="350" parent="globals/DashView" pc="268438004" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="359" parent="globals/DashView" pc="268438058" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="360" parent="globals/DashView" pc="268438072" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="367" parent="globals/DashView" pc="268438108" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="368" parent="globals/DashView" pc="268438122" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="378" parent="globals/DashView" pc="268438170" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="379" parent="globals/DashView" pc="268438181" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="385" parent="globals/DashView" pc="268438272" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="386" parent="globals/DashView" pc="268438286" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="396" parent="globals/DashView" pc="268438315" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="397" parent="globals/DashView" pc="268438329" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="405" parent="globals/DashView" pc="268438383" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="406" parent="globals/DashView" pc="268438397" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="414" parent="globals/DashView" pc="268438455" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="423" parent="globals/DashView" pc="268438515" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="426" parent="globals/DashView" pc="268438522" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="427" parent="globals/DashView" pc="268438541" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="428" parent="globals/DashView" pc="268438551" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="429" parent="globals/DashView" pc="268438558" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="430" parent="globals/DashView" pc="268438562" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="431" parent="globals/DashView" pc="268438566" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="432" parent="globals/DashView" pc="268438570" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="435" parent="globals/DashView" pc="268438574" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="436" parent="globals/DashView" pc="268438578" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="437" parent="globals/DashView" pc="268438603" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="439" parent="globals/DashView" pc="268438619" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="440" parent="globals/DashView" pc="268438633" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="448" parent="globals/DashView" pc="268438658" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="449" parent="globals/DashView" pc="268438680" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="450" parent="globals/DashView" pc="268438699" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="451" parent="globals/DashView" pc="268438710" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="453" parent="globals/DashView" pc="268438720" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="455" parent="globals/DashView" pc="268438739" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="456" parent="globals/DashView" pc="268438750" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="457" parent="globals/DashView" pc="268438775" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="465" parent="globals/DashView" pc="268438829" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="474" parent="globals/DashView" pc="268438868" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="475" parent="globals/DashView" pc="268438882" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="483" parent="globals/DashView" pc="268438911" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="492" parent="globals/DashView" pc="268438950" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="493" parent="globals/DashView" pc="268438957" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="494" parent="globals/DashView" pc="268438982" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="496" parent="globals/DashView" pc="268438998" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="497" parent="globals/DashView" pc="268439012" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="505" parent="globals/DashView" pc="268439037" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="506" parent="globals/DashView" pc="268439056" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="507" parent="globals/DashView" pc="268439067" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="509" parent="globals/DashView" pc="268439077" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="511" parent="globals/DashView" pc="268439096" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="512" parent="globals/DashView" pc="268439107" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="513" parent="globals/DashView" pc="268439132" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="521" parent="globals/DashView" pc="268439186" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="530" parent="globals/DashView" pc="268439225" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="531" parent="globals/DashView" pc="268439239" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="539" parent="globals/DashView" pc="268439268" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="559" parent="globals/DashView" pc="268439307" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="565" parent="globals/DashView" pc="268439376" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="566" parent="globals/DashView" pc="268439387" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="567" parent="globals/DashView" pc="268439400" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="575" parent="globals/DashView" pc="268439414" symbol="onUpdate"/>
+        <entry filename="D:\\Workspace\\sandbox\\garmin\\dash\\Dash\\source\\DashView.mc" id="21" lineNum="576" parent="globals/DashView" pc="268439428" symbol="onUpdate"/>
+        <entry filename="d:\\Workspace\\sandbox\\garmin\\dash\\Dash\\bin\\gen\\006-B4440-00\\source\\Rez.mcgen" id="22" lineNum="57" parent="globals/Rez/Layouts" pc="268439465" symbol="BottomRightLayout"/>
+        <entry filename="d:\\Workspace\\sandbox\\garmin\\dash\\Dash\\bin\\gen\\006-B4440-00\\source\\Rez.mcgen" id="22" lineNum="58" parent="globals/Rez/Layouts" pc="268439476" symbol="BottomRightLayout"/>
+        <entry filename="d:\\Workspace\\sandbox\\garmin\\dash\\Dash\\bin\\gen\\006-B4440-00\\source\\Rez.mcgen" id="22" lineNum="60" parent="globals/Rez/Layouts" pc="268439500" symbol="BottomRightLayout"/>
+        <entry filename="d:\\Workspace\\sandbox\\garmin\\dash\\Dash\\bin\\gen\\006-B4440-00\\source\\Rez.mcgen" id="22" lineNum="62" parent="globals/Rez/Layouts" pc="268439583" symbol="BottomRightLayout"/>
+        <entry filename="d:\\Workspace\\sandbox\\garmin\\dash\\Dash\\bin\\gen\\006-B4440-00\\source\\Rez.mcgen" id="22" lineNum="64" parent="globals/Rez/Layouts" pc="268439666" symbol="BottomRightLayout"/>
+        <entry filename="d:\\Workspace\\sandbox\\garmin\\dash\\Dash\\bin\\gen\\006-B4440-00\\source\\Rez.mcgen" id="23" lineNum="37" parent="globals/Rez/Layouts" pc="268439686" symbol="TopRightLayout"/>
+        <entry filename="d:\\Workspace\\sandbox\\garmin\\dash\\Dash\\bin\\gen\\006-B4440-00\\source\\Rez.mcgen" id="23" lineNum="38" parent="globals/Rez/Layouts" pc="268439697" symbol="TopRightLayout"/>
+        <entry filename="d:\\Workspace\\sandbox\\garmin\\dash\\Dash\\bin\\gen\\006-B4440-00\\source\\Rez.mcgen" id="23" lineNum="40" parent="globals/Rez/Layouts" pc="268439721" symbol="TopRightLayout"/>
+        <entry filename="d:\\Workspace\\sandbox\\garmin\\dash\\Dash\\bin\\gen\\006-B4440-00\\source\\Rez.mcgen" id="23" lineNum="42" parent="globals/Rez/Layouts" pc="268439804" symbol="TopRightLayout"/>
+        <entry filename="d:\\Workspace\\sandbox\\garmin\\dash\\Dash\\bin\\gen\\006-B4440-00\\source\\Rez.mcgen" id="23" lineNum="44" parent="globals/Rez/Layouts" pc="268439887" symbol="TopRightLayout"/>
+        <entry filename="d:\\Workspace\\sandbox\\garmin\\dash\\Dash\\bin\\gen\\006-B4440-00\\source\\Rez.mcgen" id="24" lineNum="47" parent="globals/Rez/Layouts" pc="268439907" symbol="BottomLeftLayout"/>
+        <entry filename="d:\\Workspace\\sandbox\\garmin\\dash\\Dash\\bin\\gen\\006-B4440-00\\source\\Rez.mcgen" id="24" lineNum="48" parent="globals/Rez/Layouts" pc="268439918" symbol="BottomLeftLayout"/>
+        <entry filename="d:\\Workspace\\sandbox\\garmin\\dash\\Dash\\bin\\gen\\006-B4440-00\\source\\Rez.mcgen" id="24" lineNum="50" parent="globals/Rez/Layouts" pc="268439942" symbol="BottomLeftLayout"/>
+        <entry filename="d:\\Workspace\\sandbox\\garmin\\dash\\Dash\\bin\\gen\\006-B4440-00\\source\\Rez.mcgen" id="24" lineNum="52" parent="globals/Rez/Layouts" pc="268440024" symbol="BottomLeftLayout"/>
+        <entry filename="d:\\Workspace\\sandbox\\garmin\\dash\\Dash\\bin\\gen\\006-B4440-00\\source\\Rez.mcgen" id="24" lineNum="54" parent="globals/Rez/Layouts" pc="268440106" symbol="BottomLeftLayout"/>
+        <entry filename="d:\\Workspace\\sandbox\\garmin\\dash\\Dash\\bin\\gen\\006-B4440-00\\source\\Rez.mcgen" id="25" lineNum="27" parent="globals/Rez/Layouts" pc="268440126" symbol="TopLeftLayout"/>
+        <entry filename="d:\\Workspace\\sandbox\\garmin\\dash\\Dash\\bin\\gen\\006-B4440-00\\source\\Rez.mcgen" id="25" lineNum="28" parent="globals/Rez/Layouts" pc="268440137" symbol="TopLeftLayout"/>
+        <entry filename="d:\\Workspace\\sandbox\\garmin\\dash\\Dash\\bin\\gen\\006-B4440-00\\source\\Rez.mcgen" id="25" lineNum="30" parent="globals/Rez/Layouts" pc="268440161" symbol="TopLeftLayout"/>
+        <entry filename="d:\\Workspace\\sandbox\\garmin\\dash\\Dash\\bin\\gen\\006-B4440-00\\source\\Rez.mcgen" id="25" lineNum="32" parent="globals/Rez/Layouts" pc="268440243" symbol="TopLeftLayout"/>
+        <entry filename="d:\\Workspace\\sandbox\\garmin\\dash\\Dash\\bin\\gen\\006-B4440-00\\source\\Rez.mcgen" id="25" lineNum="34" parent="globals/Rez/Layouts" pc="268440325" symbol="TopLeftLayout"/>
+        <entry filename="d:\\Workspace\\sandbox\\garmin\\dash\\Dash\\bin\\gen\\006-B4440-00\\source\\Rez.mcgen" id="26" lineNum="13" parent="globals/Rez/Layouts" pc="268440345" symbol="MainLayout"/>
+        <entry filename="d:\\Workspace\\sandbox\\garmin\\dash\\Dash\\bin\\gen\\006-B4440-00\\source\\Rez.mcgen" id="26" lineNum="14" parent="globals/Rez/Layouts" pc="268440356" symbol="MainLayout"/>
+        <entry filename="d:\\Workspace\\sandbox\\garmin\\dash\\Dash\\bin\\gen\\006-B4440-00\\source\\Rez.mcgen" id="26" lineNum="16" parent="globals/Rez/Layouts" pc="268440365" symbol="MainLayout"/>
+        <entry filename="d:\\Workspace\\sandbox\\garmin\\dash\\Dash\\bin\\gen\\006-B4440-00\\source\\Rez.mcgen" id="26" lineNum="18" parent="globals/Rez/Layouts" pc="268440374" symbol="MainLayout"/>
+        <entry filename="d:\\Workspace\\sandbox\\garmin\\dash\\Dash\\bin\\gen\\006-B4440-00\\source\\Rez.mcgen" id="26" lineNum="20" parent="globals/Rez/Layouts" pc="268440398" symbol="MainLayout"/>
+        <entry filename="d:\\Workspace\\sandbox\\garmin\\dash\\Dash\\bin\\gen\\006-B4440-00\\source\\Rez.mcgen" id="26" lineNum="22" parent="globals/Rez/Layouts" pc="268440505" symbol="MainLayout"/>
+        <entry filename="d:\\Workspace\\sandbox\\garmin\\dash\\Dash\\bin\\gen\\006-B4440-00\\source\\Rez.mcgen" id="26" lineNum="24" parent="globals/Rez/Layouts" pc="268440612" symbol="MainLayout"/>
     </pcToLineNum>
     <symbolTable>
         <entry id="8388639" module="true" symbol="Graphics"/>
@@ -344,97 +345,96 @@
         <entry arg="true" endPc="268435790" name="color" stackId="1" startPc="268435779"/>
         <entry endPc="268435839" name="dictionary" stackId="1" startPc="268435794"/>
         <entry arg="true" endPc="268435868" name="dc" stackId="1" startPc="268435841"/>
-        <entry arg="true" endPc="268436122" name="info" stackId="1" startPc="268435869"/>
-        <entry endPc="268436082" name="distDiff" stackId="2" startPc="268435939"/>
-        <entry endPc="268436079" name="altDiff" stackId="3" startPc="268435964"/>
-        <entry arg="true" endPc="268437113" name="info" stackId="1" startPc="268436123"/>
-        <entry endPc="268437112" name="settings" stackId="2" startPc="268436126"/>
-        <entry endPc="268437112" name="actInfo" stackId="3" startPc="268436126"/>
-        <entry endPc="268437112" name="rear" stackId="4" startPc="268436126"/>
-        <entry endPc="268437112" name="front" stackId="5" startPc="268436126"/>
-        <entry endPc="268437112" name="rawTemp" stackId="6" startPc="268436126"/>
-        <entry endPc="268437112" name="altMult" stackId="7" startPc="268436126"/>
-        <entry endPc="268437170" name="settings" stackId="1" startPc="268437117"/>
-        <entry arg="true" endPc="268439438" name="dc" stackId="1" startPc="268437172"/>
-        <entry endPc="268439437" name="width" stackId="2" startPc="268437175"/>
-        <entry endPc="268439437" name="height" stackId="3" startPc="268437175"/>
-        <entry endPc="268439437" name="bgColor" stackId="4" startPc="268437175"/>
-        <entry endPc="268439437" name="isDark" stackId="5" startPc="268437175"/>
-        <entry endPc="268439437" name="fgColor" stackId="6" startPc="268437175"/>
-        <entry endPc="268439437" name="dimColor" stackId="7" startPc="268437175"/>
-        <entry endPc="268439437" name="topBarY" stackId="8" startPc="268437175"/>
-        <entry endPc="268439437" name="topBarH" stackId="9" startPc="268437175"/>
-        <entry endPc="268439437" name="colW" stackId="10" startPc="268437175"/>
-        <entry endPc="268439437" name="now" stackId="11" startPc="268437175"/>
-        <entry endPc="268439437" name="topValues" stackId="12" startPc="268437175"/>
-        <entry endPc="268437540" name="i" stackId="13" startPc="268437478"/>
-        <entry endPc="268437530" name="x" stackId="14" startPc="268437478"/>
-        <entry endPc="268439437" name="minDim" stackId="15" startPc="268437175"/>
-        <entry endPc="268439437" name="trackWidth" stackId="16" startPc="268437175"/>
-        <entry endPc="268439437" name="radius" stackId="17" startPc="268437175"/>
-        <entry endPc="268439437" name="centerX" stackId="18" startPc="268437175"/>
-        <entry endPc="268439437" name="centerY" stackId="19" startPc="268437175"/>
-        <entry endPc="268439437" name="maxVal" stackId="20" startPc="268437175"/>
-        <entry endPc="268439437" name="gaugeStart" stackId="21" startPc="268437175"/>
-        <entry endPc="268439437" name="gaugeSweep" stackId="22" startPc="268437175"/>
-        <entry endPc="268439437" name="arcSegCount" stackId="23" startPc="268437175"/>
-        <entry endPc="268439437" name="segArcLen" stackId="24" startPc="268437175"/>
-        <entry endPc="268439437" name="segGapDeg" stackId="25" startPc="268437175"/>
-        <entry endPc="268439437" name="ratio" stackId="26" startPc="268437175"/>
-        <entry endPc="268439437" name="litArcSegs" stackId="27" startPc="268437175"/>
-        <entry endPc="268437819" name="i" stackId="28" startPc="268437720"/>
-        <entry endPc="268437809" name="segStartDeg" stackId="29" startPc="268437720"/>
-        <entry endPc="268437809" name="segEndDeg" stackId="30" startPc="268437720"/>
-        <entry endPc="268439437" name="totalSecs" stackId="31" startPc="268437175"/>
-        <entry endPc="268439437" name="elapsedStr" stackId="32" startPc="268437175"/>
-        <entry endPc="268439437" name="footerY" stackId="33" startPc="268437175"/>
-        <entry endPc="268439437" name="panelTop" stackId="34" startPc="268437175"/>
-        <entry endPc="268439437" name="panelH" stackId="35" startPc="268437175"/>
-        <entry endPc="268439437" name="barH" stackId="36" startPc="268437175"/>
-        <entry endPc="268439437" name="segCount" stackId="37" startPc="268437175"/>
-        <entry endPc="268439437" name="segGap" stackId="38" startPc="268437175"/>
-        <entry endPc="268439437" name="lBarW" stackId="39" startPc="268437175"/>
-        <entry endPc="268439437" name="rBarW" stackId="40" startPc="268437175"/>
-        <entry endPc="268439437" name="lBarX" stackId="41" startPc="268437175"/>
-        <entry endPc="268439437" name="lPanelCenterX" stackId="42" startPc="268437175"/>
-        <entry endPc="268439437" name="lPanelCenterY" stackId="43" startPc="268437175"/>
-        <entry endPc="268439437" name="segH" stackId="44" startPc="268437175"/>
-        <entry endPc="268439437" name="hrRatio" stackId="45" startPc="268437175"/>
-        <entry endPc="268439437" name="litSegs" stackId="46" startPc="268437175"/>
-        <entry endPc="268438841" name="i" stackId="47" startPc="268438724"/>
-        <entry endPc="268438831" name="segY" stackId="48" startPc="268438724"/>
-        <entry endPc="268439437" name="rBarX" stackId="49" startPc="268437175"/>
-        <entry endPc="268439437" name="rPanelCenterX" stackId="50" startPc="268437175"/>
-        <entry endPc="268439437" name="rPanelCenterY" stackId="51" startPc="268437175"/>
-        <entry endPc="268439437" name="pwrRatio" stackId="52" startPc="268437175"/>
-        <entry endPc="268439437" name="litPwrSegs" stackId="53" startPc="268437175"/>
-        <entry endPc="268439198" name="i" stackId="54" startPc="268439081"/>
-        <entry endPc="268439188" name="segY" stackId="55" startPc="268439081"/>
-        <entry endPc="268439437" name="bottomValues" stackId="56" startPc="268437175"/>
-        <entry endPc="268439437" name="i" stackId="57" startPc="268439361"/>
-        <entry endPc="268439427" name="x" stackId="58" startPc="268439361"/>
-        <entry arg="true" endPc="268439659" name="dc" stackId="1" startPc="268439439"/>
-        <entry endPc="268439659" name="rez_cmp_local_custom_drawable_16187860511068497434" stackId="2" startPc="268439450"/>
-        <entry endPc="268439659" name="rez_cmp_local_text_label" stackId="3" startPc="268439450"/>
-        <entry endPc="268439659" name="rez_cmp_local_text_value" stackId="4" startPc="268439450"/>
-        <entry arg="true" endPc="268439880" name="dc" stackId="1" startPc="268439660"/>
-        <entry endPc="268439880" name="rez_cmp_local_custom_drawable_11824933295158922413" stackId="2" startPc="268439671"/>
-        <entry endPc="268439880" name="rez_cmp_local_text_label" stackId="3" startPc="268439671"/>
-        <entry endPc="268439880" name="rez_cmp_local_text_value" stackId="4" startPc="268439671"/>
-        <entry arg="true" endPc="268440099" name="dc" stackId="1" startPc="268439881"/>
-        <entry endPc="268440099" name="rez_cmp_local_custom_drawable_16380678501279751870" stackId="2" startPc="268439892"/>
-        <entry endPc="268440099" name="rez_cmp_local_text_label" stackId="3" startPc="268439892"/>
-        <entry endPc="268440099" name="rez_cmp_local_text_value" stackId="4" startPc="268439892"/>
-        <entry arg="true" endPc="268440318" name="dc" stackId="1" startPc="268440100"/>
-        <entry endPc="268440318" name="rez_cmp_local_custom_drawable_83741574912206153191" stackId="2" startPc="268440111"/>
-        <entry endPc="268440318" name="rez_cmp_local_text_label" stackId="3" startPc="268440111"/>
-        <entry endPc="268440318" name="rez_cmp_local_text_value" stackId="4" startPc="268440111"/>
-        <entry arg="true" endPc="268440605" name="dc" stackId="1" startPc="268440319"/>
-        <entry endPc="268440605" name="rez_cmp_local_var_dc_getHeight" stackId="2" startPc="268440330"/>
-        <entry endPc="268440605" name="rez_cmp_local_var_dc_getWidth" stackId="3" startPc="268440330"/>
-        <entry endPc="268440605" name="rez_cmp_local_custom_drawable_11939594661139614796" stackId="4" startPc="268440330"/>
-        <entry endPc="268440605" name="rez_cmp_local_text_label" stackId="5" startPc="268440330"/>
-        <entry endPc="268440605" name="rez_cmp_local_text_value" stackId="6" startPc="268440330"/>
+        <entry endPc="268436110" name="distDiff" stackId="1" startPc="268435971"/>
+        <entry endPc="268436107" name="altDiff" stackId="2" startPc="268435995"/>
+        <entry arg="true" endPc="268437153" name="info" stackId="1" startPc="268436173"/>
+        <entry endPc="268437152" name="settings" stackId="2" startPc="268436176"/>
+        <entry endPc="268437152" name="actInfo" stackId="3" startPc="268436176"/>
+        <entry endPc="268437152" name="rear" stackId="4" startPc="268436176"/>
+        <entry endPc="268437152" name="front" stackId="5" startPc="268436176"/>
+        <entry endPc="268437152" name="rawTemp" stackId="6" startPc="268436176"/>
+        <entry endPc="268437152" name="altMult" stackId="7" startPc="268436176"/>
+        <entry endPc="268437210" name="settings" stackId="1" startPc="268437157"/>
+        <entry arg="true" endPc="268439464" name="dc" stackId="1" startPc="268437212"/>
+        <entry endPc="268439463" name="width" stackId="2" startPc="268437215"/>
+        <entry endPc="268439463" name="height" stackId="3" startPc="268437215"/>
+        <entry endPc="268439463" name="bgColor" stackId="4" startPc="268437215"/>
+        <entry endPc="268439463" name="isDark" stackId="5" startPc="268437215"/>
+        <entry endPc="268439463" name="fgColor" stackId="6" startPc="268437215"/>
+        <entry endPc="268439463" name="dimColor" stackId="7" startPc="268437215"/>
+        <entry endPc="268439463" name="topBarY" stackId="8" startPc="268437215"/>
+        <entry endPc="268439463" name="topBarH" stackId="9" startPc="268437215"/>
+        <entry endPc="268439463" name="colW" stackId="10" startPc="268437215"/>
+        <entry endPc="268439463" name="now" stackId="11" startPc="268437215"/>
+        <entry endPc="268439463" name="topValues" stackId="12" startPc="268437215"/>
+        <entry endPc="268437562" name="i" stackId="13" startPc="268437500"/>
+        <entry endPc="268437552" name="x" stackId="14" startPc="268437500"/>
+        <entry endPc="268439463" name="minDim" stackId="15" startPc="268437215"/>
+        <entry endPc="268439463" name="trackWidth" stackId="16" startPc="268437215"/>
+        <entry endPc="268439463" name="radius" stackId="17" startPc="268437215"/>
+        <entry endPc="268439463" name="centerX" stackId="18" startPc="268437215"/>
+        <entry endPc="268439463" name="centerY" stackId="19" startPc="268437215"/>
+        <entry endPc="268439463" name="maxVal" stackId="20" startPc="268437215"/>
+        <entry endPc="268439463" name="gaugeStart" stackId="21" startPc="268437215"/>
+        <entry endPc="268439463" name="gaugeSweep" stackId="22" startPc="268437215"/>
+        <entry endPc="268439463" name="arcSegCount" stackId="23" startPc="268437215"/>
+        <entry endPc="268439463" name="segArcLen" stackId="24" startPc="268437215"/>
+        <entry endPc="268439463" name="segGapDeg" stackId="25" startPc="268437215"/>
+        <entry endPc="268439463" name="ratio" stackId="26" startPc="268437215"/>
+        <entry endPc="268439463" name="litArcSegs" stackId="27" startPc="268437215"/>
+        <entry endPc="268437841" name="i" stackId="28" startPc="268437742"/>
+        <entry endPc="268437831" name="segStartDeg" stackId="29" startPc="268437742"/>
+        <entry endPc="268437831" name="segEndDeg" stackId="30" startPc="268437742"/>
+        <entry endPc="268439463" name="totalSecs" stackId="31" startPc="268437215"/>
+        <entry endPc="268439463" name="elapsedStr" stackId="32" startPc="268437215"/>
+        <entry endPc="268439463" name="footerY" stackId="33" startPc="268437215"/>
+        <entry endPc="268439463" name="panelTop" stackId="34" startPc="268437215"/>
+        <entry endPc="268439463" name="panelH" stackId="35" startPc="268437215"/>
+        <entry endPc="268439463" name="barH" stackId="36" startPc="268437215"/>
+        <entry endPc="268439463" name="segCount" stackId="37" startPc="268437215"/>
+        <entry endPc="268439463" name="segGap" stackId="38" startPc="268437215"/>
+        <entry endPc="268439463" name="lBarW" stackId="39" startPc="268437215"/>
+        <entry endPc="268439463" name="rBarW" stackId="40" startPc="268437215"/>
+        <entry endPc="268439463" name="lBarX" stackId="41" startPc="268437215"/>
+        <entry endPc="268439463" name="lPanelCenterX" stackId="42" startPc="268437215"/>
+        <entry endPc="268439463" name="lPanelCenterY" stackId="43" startPc="268437215"/>
+        <entry endPc="268439463" name="segH" stackId="44" startPc="268437215"/>
+        <entry endPc="268439463" name="hrRatio" stackId="45" startPc="268437215"/>
+        <entry endPc="268439463" name="litSegs" stackId="46" startPc="268437215"/>
+        <entry endPc="268438867" name="i" stackId="47" startPc="268438750"/>
+        <entry endPc="268438857" name="segY" stackId="48" startPc="268438750"/>
+        <entry endPc="268439463" name="rBarX" stackId="49" startPc="268437215"/>
+        <entry endPc="268439463" name="rPanelCenterX" stackId="50" startPc="268437215"/>
+        <entry endPc="268439463" name="rPanelCenterY" stackId="51" startPc="268437215"/>
+        <entry endPc="268439463" name="pwrRatio" stackId="52" startPc="268437215"/>
+        <entry endPc="268439463" name="litPwrSegs" stackId="53" startPc="268437215"/>
+        <entry endPc="268439224" name="i" stackId="54" startPc="268439107"/>
+        <entry endPc="268439214" name="segY" stackId="55" startPc="268439107"/>
+        <entry endPc="268439463" name="bottomValues" stackId="56" startPc="268437215"/>
+        <entry endPc="268439463" name="i" stackId="57" startPc="268439387"/>
+        <entry endPc="268439453" name="x" stackId="58" startPc="268439387"/>
+        <entry arg="true" endPc="268439685" name="dc" stackId="1" startPc="268439465"/>
+        <entry endPc="268439685" name="rez_cmp_local_custom_drawable_16187860511068497434" stackId="2" startPc="268439476"/>
+        <entry endPc="268439685" name="rez_cmp_local_text_label" stackId="3" startPc="268439476"/>
+        <entry endPc="268439685" name="rez_cmp_local_text_value" stackId="4" startPc="268439476"/>
+        <entry arg="true" endPc="268439906" name="dc" stackId="1" startPc="268439686"/>
+        <entry endPc="268439906" name="rez_cmp_local_custom_drawable_11824933295158922413" stackId="2" startPc="268439697"/>
+        <entry endPc="268439906" name="rez_cmp_local_text_label" stackId="3" startPc="268439697"/>
+        <entry endPc="268439906" name="rez_cmp_local_text_value" stackId="4" startPc="268439697"/>
+        <entry arg="true" endPc="268440125" name="dc" stackId="1" startPc="268439907"/>
+        <entry endPc="268440125" name="rez_cmp_local_custom_drawable_16380678501279751870" stackId="2" startPc="268439918"/>
+        <entry endPc="268440125" name="rez_cmp_local_text_label" stackId="3" startPc="268439918"/>
+        <entry endPc="268440125" name="rez_cmp_local_text_value" stackId="4" startPc="268439918"/>
+        <entry arg="true" endPc="268440344" name="dc" stackId="1" startPc="268440126"/>
+        <entry endPc="268440344" name="rez_cmp_local_custom_drawable_83741574912206153191" stackId="2" startPc="268440137"/>
+        <entry endPc="268440344" name="rez_cmp_local_text_label" stackId="3" startPc="268440137"/>
+        <entry endPc="268440344" name="rez_cmp_local_text_value" stackId="4" startPc="268440137"/>
+        <entry arg="true" endPc="268440631" name="dc" stackId="1" startPc="268440345"/>
+        <entry endPc="268440631" name="rez_cmp_local_var_dc_getHeight" stackId="2" startPc="268440356"/>
+        <entry endPc="268440631" name="rez_cmp_local_var_dc_getWidth" stackId="3" startPc="268440356"/>
+        <entry endPc="268440631" name="rez_cmp_local_custom_drawable_11939594661139614796" stackId="4" startPc="268440356"/>
+        <entry endPc="268440631" name="rez_cmp_local_text_label" stackId="5" startPc="268440356"/>
+        <entry endPc="268440631" name="rez_cmp_local_text_value" stackId="6" startPc="268440356"/>
     </localVars>
     <deviceInfo deviceVersion="64e9a617e9472a32c43687e18cd12264b67a820e" partNumber="006-B4440-00"/>
     <annotations>
@@ -527,38 +527,37 @@
         <functionEntry accessMode="public" name="&lt;init&gt;" parent="Strings">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="private" endPc="268436122" name="&lt;globals/DashView/&lt;&gt;calculateGrade&gt;" parent="DashView" startPc="268435869">
+        <functionEntry accessMode="private" endPc="268436172" name="&lt;globals/DashView/&lt;&gt;calculateGrade&gt;" parent="DashView" startPc="268435869">
+            <documentation/>
+        </functionEntry>
+        <functionEntry accessMode="public" endPc="268437153" name="compute" parent="DashView" startPc="268436173">
             <param id="info"/>
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268437113" name="compute" parent="DashView" startPc="268436123">
-            <param id="info"/>
+        <functionEntry accessMode="public" endPc="268437211" name="initialize" parent="DashView" startPc="268437154">
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268437171" name="initialize" parent="DashView" startPc="268437114">
-            <documentation/>
-        </functionEntry>
-        <functionEntry accessMode="public" endPc="268439438" name="onUpdate" parent="DashView" startPc="268437172">
+        <functionEntry accessMode="public" endPc="268439464" name="onUpdate" parent="DashView" startPc="268437212">
             <param id="dc"/>
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268439659" name="BottomRightLayout" parent="Layouts" startPc="268439439">
+        <functionEntry accessMode="public" endPc="268439685" name="BottomRightLayout" parent="Layouts" startPc="268439465">
             <param id="dc"/>
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268439880" name="TopRightLayout" parent="Layouts" startPc="268439660">
+        <functionEntry accessMode="public" endPc="268439906" name="TopRightLayout" parent="Layouts" startPc="268439686">
             <param id="dc"/>
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268440099" name="BottomLeftLayout" parent="Layouts" startPc="268439881">
+        <functionEntry accessMode="public" endPc="268440125" name="BottomLeftLayout" parent="Layouts" startPc="268439907">
             <param id="dc"/>
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268440318" name="TopLeftLayout" parent="Layouts" startPc="268440100">
+        <functionEntry accessMode="public" endPc="268440344" name="TopLeftLayout" parent="Layouts" startPc="268440126">
             <param id="dc"/>
             <documentation/>
         </functionEntry>
-        <functionEntry accessMode="public" endPc="268440605" name="MainLayout" parent="Layouts" startPc="268440319">
+        <functionEntry accessMode="public" endPc="268440631" name="MainLayout" parent="Layouts" startPc="268440345">
             <param id="dc"/>
             <documentation/>
         </functionEntry>

@@ -80,8 +80,8 @@ class DashView extends WatchUi.DataField {
         // Distance
         if (info.elapsedDistance != null) {
             mDistance = mIsMetric
-                ? info.elapsedDistance / 1000.0
-                : info.elapsedDistance * 0.000621371;
+                ? info.elapsedDistance
+                : info.elapsedDistance * 0.621371;
         }
 
         // Elapsed Time
@@ -181,11 +181,10 @@ class DashView extends WatchUi.DataField {
         if (info.totalDescent != null) {
             mDescent = info.totalDescent * altMult;
         }
-        calculateGrade(info);
+        calculateGrade();
     }
 
     function onUpdate(dc as Graphics.Dc) as Void {
-        System.println("Hello from the Gauge Update!");
         var width = dc.getWidth();
         var height = dc.getHeight();
         var bgColor = getBackgroundColor();
@@ -408,7 +407,7 @@ class DashView extends WatchUi.DataField {
             width * 0.5,
             2 * radius + topBarH * 1.5,
             Graphics.FONT_LARGE,
-            mDistance.format("%.1f"),
+            (mDistance / 1000).format("%.1f"),
             Graphics.TEXT_JUSTIFY_CENTER
         );
 
@@ -584,20 +583,26 @@ class DashView extends WatchUi.DataField {
         }
     }
 
-    private function calculateGrade(info as Activity.Info) as Void {
+    private function calculateGrade() as Void {
         // --- NEW GRADE CALCULATION ---
-        if (info.altitude != null && info.elapsedDistance != null) {
+        System.println(
+            "Calculating grade with altitude: " +
+                mElevation +
+                " and distance: " +
+                mDistance
+        );
+        if (mElevation != null && mDistance != null) {
             // Initialize the tracking variables on the first valid reading
             if (mLastAlt == null || mLastDist == null) {
-                mLastAlt = info.altitude;
-                mLastDist = info.elapsedDistance;
+                mLastAlt = mElevation;
+                mLastDist = mDistance;
             } else {
-                var distDiff = info.elapsedDistance - mLastDist;
+                var distDiff = mDistance - mLastDist;
 
                 // Wait until we've covered at least 15 meters to recalculate.
                 // This smooths out the sensor drift so the grade isn't jumpy.
                 if (distDiff > 15.0) {
-                    var altDiff = info.altitude - mLastAlt;
+                    var altDiff = mElevation - mLastAlt;
 
                     // Grade is (Rise / Run) * 100
                     mGrade = (altDiff / distDiff) * 100.0;
@@ -611,15 +616,17 @@ class DashView extends WatchUi.DataField {
                     }
 
                     // Update the markers for the next interval
-                    mLastAlt = info.altitude;
-                    mLastDist = info.elapsedDistance;
+                    mLastAlt = mElevation;
+                    mLastDist = mDistance;
                 }
             }
         }
 
         // Reset grade to 0% if the rider comes to a stop
-        if (info.currentSpeed == null || info.currentSpeed < 1.0) {
+        if (mSpeed == null || mSpeed < 1.0) {
             mGrade = 0.0;
         }
+
+        System.println("Calculated grade: " + mGrade);
     }
 }
