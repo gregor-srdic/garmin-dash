@@ -4,6 +4,37 @@
 
 Dash is a custom data field for Garmin Edge 1050, built using Garmin's Connect IQ platform. It provides advanced cycling metrics and background services to enhance your ride experience.
 
+## Data fields:
+1. Top row:
+    - Ambient Temperature (left)
+    - Current time (center)
+    - Current elevation (right)
+
+2. Speed gauge:
+    - Average speed (top left)
+    - Max speed (top right)
+    - Current speed (center)
+
+3. Middle row:
+    - Elapsed time (top)
+    - Cadence (bottom left)
+    - Di2 current gears (bottom center)
+    - Grade (bottom right)
+
+4. Heart rate & Power gauge:
+    - Current heart rate between 0 and 200 bpm (left gauge)
+    - Current heart rate (center left)
+    - Average heart rate (bottom left)
+    - Current 3s power (center right)
+    - Average 3s power (bottom right)
+    - Current power between 0 and larger of 400W and max power (right gauge)
+
+4. Bottom row:
+    - Total ascent (left)
+    - Total distance (center)
+    - Total calories (right)
+
+
 ## Installation
 
 Because you aren't downloading this from the Connect IQ Store yet, you will need to manually copy the file onto the device's hard drive. Here are the simple, step-by-step instructions you can follow:
