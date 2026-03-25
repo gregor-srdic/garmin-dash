@@ -5,6 +5,9 @@
 Dash is a custom data field for Garmin Edge 1050, built using Garmin's Connect IQ platform. It provides advanced cycling metrics and background services to enhance your ride experience.
 
 ## Data fields:
+
+![Annotated properties](assets/annotated.png)
+
 1. Top row:
     - Ambient Temperature (left)
     - Current time (center)
