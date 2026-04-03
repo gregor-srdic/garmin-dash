@@ -204,12 +204,22 @@ class DashView extends WatchUi.DataField {
         var fgColor = isDark ? Graphics.COLOR_WHITE : Graphics.COLOR_BLACK;
         var dimColor = isDark ? Graphics.COLOR_DK_GRAY : Graphics.COLOR_LT_GRAY;
 
+        // Responsive font choices based on screen width
+        var speedFont =
+            width >= 400
+                ? Graphics.FONT_NUMBER_THAI_HOT
+                : Graphics.FONT_NUMBER_HOT;
+        var panelValueFont =
+            width >= 400
+                ? Graphics.FONT_NUMBER_HOT
+                : Graphics.FONT_NUMBER_MEDIUM;
+
         dc.setColor(bgColor, bgColor);
         dc.clear();
 
         // --- TOP STATS BAR (3 columns) ---
         var topBarY = 0;
-        var topBarH = 65;
+        var topBarH = (height * 0.081).toNumber();
         dc.setPenWidth(1);
         dc.setColor(isDark ? 0x222222 : 0xdddddd, Graphics.COLOR_TRANSPARENT);
 
@@ -248,7 +258,7 @@ class DashView extends WatchUi.DataField {
 
         // --- GAUGE LAYOUT (Adjusted height) ---
         var minDim = width < height ? width : height;
-        var trackWidth = 40;
+        var trackWidth = (width * 0.083).toNumber();
         var radius = minDim * 0.36;
         var centerX = width / 2.0;
         var centerY = radius + topBarH + trackWidth;
@@ -321,7 +331,7 @@ class DashView extends WatchUi.DataField {
         dc.drawText(
             centerX,
             centerY,
-            Graphics.FONT_NUMBER_THAI_HOT,
+            speedFont,
             mSpeed.format("%.1f"),
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
         );
@@ -382,13 +392,13 @@ class DashView extends WatchUi.DataField {
 
         // --- HR & POWER PANELS ---
         var panelTop = centerY + radius * 0.5 + topBarH * 2;
-        var panelH = footerY - panelTop - 8;
-        var barW = 30;
+        var panelH = footerY - panelTop - (height * 0.01).toNumber();
+        var barW = (width * 0.063).toNumber();
 
         // ---- LEFT PANEL: Heart Rate ----
-        var lBarX = 10;
+        var lBarX = (width * 0.021).toNumber();
         var sideRadius = centerX - lBarX - barW / 2.0;
-        var sideCenterY = panelTop + panelH / 2.0 + 8;
+        var sideCenterY = panelTop + panelH / 2.0 + (height * 0.01).toNumber();
         var capAngleDeg = (barW / 2.0 / sideRadius) * (180.0 / Math.PI);
 
         var arcSweepDeg = 60.0;
@@ -405,11 +415,12 @@ class DashView extends WatchUi.DataField {
         var lPanelCenterX = (lBarX + barW / 2 + centerX) / 2.0;
         // Start at bottom-left (e.g., 210 deg)
         var hrStartAngle = 180.0 + arcSweepDeg / 2.0;
+        var panelLabelOffset = (height * 0.088).toNumber();
 
         dc.setColor(dimColor, Graphics.COLOR_TRANSPARENT);
         dc.drawText(
             lPanelCenterX,
-            sideCenterY - 70,
+            sideCenterY - panelLabelOffset,
             Graphics.FONT_XTINY,
             "HR",
             Graphics.TEXT_JUSTIFY_CENTER
@@ -452,20 +463,20 @@ class DashView extends WatchUi.DataField {
         dc.drawText(
             lPanelCenterX,
             sideCenterY,
-            Graphics.FONT_NUMBER_HOT,
+            panelValueFont,
             mHeartRate.toString(),
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
         );
         dc.drawText(
             lPanelCenterX,
-            sideCenterY + 70,
+            sideCenterY + panelLabelOffset,
             Graphics.FONT_MEDIUM,
             mAvgHeartRate.format("%.0f"),
             Graphics.TEXT_JUSTIFY_CENTER
         );
 
         // ---- RIGHT PANEL: 3s Power ----
-        var rBarX = width - 18;
+        var rBarX = width - (width * 0.038).toNumber();
         var rPanelCenterX = (centerX + rBarX - barW / 2) / 2.0;
         // Start at bottom-right (e.g., 330 deg)
         var pwrStartAngle = 360.0 - arcSweepDeg / 2.0;
@@ -473,7 +484,7 @@ class DashView extends WatchUi.DataField {
         dc.setColor(dimColor, Graphics.COLOR_TRANSPARENT);
         dc.drawText(
             rPanelCenterX,
-            sideCenterY - 70,
+            sideCenterY - panelLabelOffset,
             Graphics.FONT_XTINY,
             "PWR",
             Graphics.TEXT_JUSTIFY_CENTER
@@ -519,13 +530,13 @@ class DashView extends WatchUi.DataField {
         dc.drawText(
             rPanelCenterX,
             sideCenterY,
-            Graphics.FONT_NUMBER_HOT,
+            panelValueFont,
             mPower3s.toString(),
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
         );
         dc.drawText(
             rPanelCenterX,
-            sideCenterY + 70,
+            sideCenterY + panelLabelOffset,
             Graphics.FONT_MEDIUM,
             mAvgPower.format("%.0f"),
             Graphics.TEXT_JUSTIFY_CENTER
