@@ -1,0 +1,21 @@
+# --- Monkey C / Connect IQ Specific ---
+bin/
+gen/
+*.prg
+*.iq
+*.debug.xml
+
+# --- Security (CRITICAL) ---
+*.der
+*.key
+developer_key
+
+# --- IDE Specific ---
+.vscode/
+.project
+.classpath
+.settings/
+
+# --- OS Specific ---
+.DS_Store
+Thumbs.db
