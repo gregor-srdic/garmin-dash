@@ -1,8 +1,8 @@
-# Dash Data Field for Garmin Edge 1050
+# Dash Data Field for Garmin Edge 1050, 1040 and 1030
 
 ![Dash Data Field](assets/image.png)
 
-Dash is a custom data field for Garmin Edge 1050, built using Garmin's Connect IQ platform. It provides advanced cycling metrics and background services to enhance your ride experience.
+Dash is a custom data field for Garmin Edge 1050, 1040 and 1030, built using Garmin's Connect IQ platform. It provides advanced cycling metrics and background services to enhance your ride experience.
 
 ## Data fields:
 
@@ -44,12 +44,12 @@ Because you aren't downloading this from the Connect IQ Store yet, you will need
 
 ### Phase 1: Transferring the File to Your Edge
 1. Build the project using the Monkey C SDK and Connect IQ tools or download the pre-built PRG file from the releases section of this repository.
-2. Plug your Garmin Edge 1050 into your PC or Mac using a USB cable.
+2. Plug your Garmin Edge into your PC or Mac using a USB cable.
 3. Open the Garmin Drive: Wait a moment for the computer to recognize the device. Open your file explorer (Windows) or Finder (Mac) and open the drive named GARMIN.
 4. Navigate to the Apps Folder: Double-click the folder named Garmin, and then open the folder named Apps (GARMIN/Garmin/Apps/).
 5. Copy the File: Drag and drop your compiled Dash.prg file directly into this Apps folder.
 6. Safely Disconnect: Safely eject the Garmin drive from your computer and unplug the USB cable. The Edge will power on (or reboot) and automatically install your new data field.
-2. Deploy the generated PRG file to your Garmin Edge 1050 device.
+2. Deploy the generated PRG file to your Garmin Edge device.
 3. Add the Dash data field to your activity profile on the device.
 
 ### Phase 2: Adding the Data Field to Your Screen
