@@ -42,11 +42,18 @@ class DashView extends WatchUi.DataField {
     private var mLastAlt = null;
     private var mLastDist = null;
 
+    // adjustment
+    private var heightOffset = 0;
+
     function initialize() {
         DataField.initialize();
         var settings = System.getDeviceSettings();
         mIsMetric = settings.paceUnits == System.UNIT_METRIC;
         mIsElevationMetric = settings.elevationUnits == System.UNIT_METRIC;
+        if (settings.screenHeight < 500) {
+            heightOffset = 5;
+        }
+        System.println("heightOffset: " + heightOffset);
     }
 
     function compute(info as Activity.Info) as Void {
@@ -174,6 +181,25 @@ class DashView extends WatchUi.DataField {
             }
         }
 
+        // Priority 4: SensorHistory fallback (for older CIQ devices like Edge 1030)
+        if (rawTemp == null) {
+            if (
+                Toybox has :SensorHistory &&
+                SensorHistory has :getTemperatureHistory
+            ) {
+                var iter = SensorHistory.getTemperatureHistory({
+                    :period => 1,
+                    :order => SensorHistory.ORDER_NEWEST_FIRST,
+                });
+                if (iter != null) {
+                    var sample = iter.next();
+                    if (sample != null && sample.data != null) {
+                        rawTemp = sample.data;
+                    }
+                }
+            }
+        }
+
         if (rawTemp != null) {
             if (settings.temperatureUnits == System.UNIT_STATUTE) {
                 mTemp = (rawTemp * 9.0) / 5.0 + 32.0;
@@ -259,9 +285,9 @@ class DashView extends WatchUi.DataField {
         // --- GAUGE LAYOUT (Adjusted height) ---
         var minDim = width < height ? width : height;
         var trackWidth = (width * 0.083).toNumber();
-        var radius = minDim * 0.36;
+        var radius = minDim * 0.33;
         var centerX = width / 2.0;
-        var centerY = radius + topBarH + trackWidth;
+        var centerY = minDim * 0.33 + topBarH + trackWidth + heightOffset;
         var maxVal = mIsMetric ? 60.0 : 40.0;
         var gaugeStart = 210.0;
         var gaugeSweep = 240.0;
@@ -330,7 +356,7 @@ class DashView extends WatchUi.DataField {
         dc.setColor(fgColor, Graphics.COLOR_TRANSPARENT);
         dc.drawText(
             centerX,
-            centerY,
+            centerY + heightOffset,
             speedFont,
             mSpeed.format("%.1f"),
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
@@ -364,31 +390,32 @@ class DashView extends WatchUi.DataField {
 
         // --- CADENCE AND GRADIENT ---
 
+        var cadenceAndGradientLineY = 2 * radius + topBarH * 1.5 - heightOffset;
         dc.setColor(fgColor, Graphics.COLOR_TRANSPARENT);
         dc.drawText(
             width * 0.15,
-            2 * radius + topBarH * 1.5,
+            cadenceAndGradientLineY,
             Graphics.FONT_LARGE,
             mCadence.format("%.0f"),
             Graphics.TEXT_JUSTIFY_CENTER
         );
         dc.drawText(
             width * 0.5,
-            2 * radius + topBarH * 1.5,
+            cadenceAndGradientLineY,
             Graphics.FONT_LARGE,
             mGearInfo,
             Graphics.TEXT_JUSTIFY_CENTER
         );
         dc.drawText(
             width * 0.85,
-            2 * radius + topBarH * 1.5,
+            cadenceAndGradientLineY,
             Graphics.FONT_LARGE,
             mGrade.format("%.1f"),
             Graphics.TEXT_JUSTIFY_CENTER
         );
 
         // Footer Y needed by panels
-        var footerY = height - topBarH;
+        var footerY = height - dc.getFontHeight(Graphics.FONT_LARGE) - 4;
 
         // --- HR & POWER PANELS ---
         var panelTop = centerY + radius * 0.5 + topBarH * 2;
@@ -403,7 +430,7 @@ class DashView extends WatchUi.DataField {
 
         var arcSweepDeg = 60.0;
         var segCount = 10;
-        var gapDeg = 2.0; // The physical gap between segments
+        var gapDeg = 1.0; // The physical gap between segments
 
         // Calculate how many degrees each individual block gets
         var totalGapSweep = gapDeg * (segCount - 1);
@@ -561,7 +588,7 @@ class DashView extends WatchUi.DataField {
             dc.setColor(fgColor, Graphics.COLOR_TRANSPARENT);
             dc.drawText(
                 x,
-                footerY + 8,
+                footerY + 2,
                 Graphics.FONT_LARGE,
                 bottomValues[i],
                 Graphics.TEXT_JUSTIFY_CENTER
