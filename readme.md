@@ -1,4 +1,4 @@
-# Dash - peak performance data field
+# Dash - Peak Performance Data Field
 
 ![Dash Data Field](assets/image.png)
 
@@ -42,7 +42,7 @@ Available in [Garmin Connect IQ Store](https://apps.garmin.com/apps/897a8b5e-e07
 
 ## Installation
 
-Because you aren't downloading this from the Connect IQ Store yet, you will need to manually copy the file onto the device's hard drive. Here are the simple, step-by-step instructions you can follow:
+If you are downloading this from the Connect IQ Store, installation is automatic. You can also manually copy the file onto the device's hard drive. Here are the simple, step-by-step instructions you can follow:
 
 ### Phase 1: Transferring the File to Your Edge
 1. Build the project using the Monkey C SDK and Connect IQ tools or download the pre-built PRG file from the releases section of this repository.
@@ -51,8 +51,7 @@ Because you aren't downloading this from the Connect IQ Store yet, you will need
 4. Navigate to the Apps Folder: Double-click the folder named Garmin, and then open the folder named Apps (GARMIN/Garmin/Apps/).
 5. Copy the File: Drag and drop your compiled Dash.prg file directly into this Apps folder.
 6. Safely Disconnect: Safely eject the Garmin drive from your computer and unplug the USB cable. The Edge will power on (or reboot) and automatically install your new data field.
-2. Deploy the generated PRG file to your Garmin Edge device.
-3. Add the Dash data field to your activity profile on the device.
+7. Add the Dash data field to your activity profile on the device.
 
 ### Phase 2: Adding the Data Field to Your Screen
 
