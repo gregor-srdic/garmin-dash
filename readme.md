@@ -1,6 +1,6 @@
 # Dash - Peak Performance Data Field
 
-![Dash Data Field](assets/image.png)
+![Dash Data Field](assets/image.jpg)
 
 Dash is a custom data field for Garmin Edge 1050, 1040 and 1030, built using Garmin's Connect IQ platform. It provides advanced cycling metrics and background services to enhance your ride experience.
 
@@ -8,7 +8,7 @@ Available in [Garmin Connect IQ Store](https://apps.garmin.com/apps/897a8b5e-e07
 
 ## Data fields:
 
-![Annotated properties](assets/annotated.png)
+![Annotated properties](assets/annotated.jpg)
 
 1. Top row:
     - Ambient Temperature (left)
@@ -39,6 +39,9 @@ Available in [Garmin Connect IQ Store](https://apps.garmin.com/apps/897a8b5e-e07
     - Total distance (center)
     - Total calories (right)
 
+### No power data?
+
+If you don't have a power meter, the right gauge will display current cadence between 0 and 150 rpm along with current and average cadence.
 
 ## Installation
 

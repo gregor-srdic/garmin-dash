@@ -20,8 +20,10 @@ class DashView extends WatchUi.DataField {
     private var mCadence = 0;
     private var mCalories = 0;
     private var mAvgHeartRate = 0;
+    private var mAvgCadence = 0;
     private var mAvgPower = 0;
     private var mMaxPower = 0;
+    private var mHasPowerData = false;
 
     // Header Fields
     private var mGrade = 0.0;
@@ -131,22 +133,27 @@ class DashView extends WatchUi.DataField {
         }
 
         // 3s Power
+        mHasPowerData = false;
         if (info.currentPower != null) {
             mPower3s = info.currentPower;
+            mHasPowerData = true;
         } else {
             if (actInfo != null && actInfo.currentPower != null) {
                 mPower3s = actInfo.currentPower;
+                mHasPowerData = true;
             }
         }
 
         // Average Power
         if (info.averagePower != null) {
             mAvgPower = info.averagePower;
+            mHasPowerData = true;
         }
 
         // Max Power
         if (info.maxPower != null) {
             mMaxPower = info.maxPower;
+            mHasPowerData = true;
         }
 
         // Cadence
@@ -154,6 +161,12 @@ class DashView extends WatchUi.DataField {
             mCadence = info.currentCadence;
             if (mCadence > 150) {
                 mCadence = mCadence / 2;
+            }
+        }
+        if (info.averageCadence != null) {
+            mAvgCadence = info.averageCadence;
+            if (mAvgCadence > 150) {
+                mAvgCadence = mAvgCadence / 2;
             }
         }
 
@@ -513,23 +526,28 @@ class DashView extends WatchUi.DataField {
             rPanelCenterX,
             sideCenterY - panelLabelOffset,
             Graphics.FONT_XTINY,
-            "PWR",
+            mHasPowerData ? "PWR" : "CAD",
             Graphics.TEXT_JUSTIFY_CENTER
         );
 
-        var powerScaleMax = 400.0;
-        if (mMaxPower > powerScaleMax) {
-            powerScaleMax = mMaxPower.toFloat();
+        var rightRatio = 0.0;
+        if (mHasPowerData) {
+            var powerScaleMax = 400.0;
+            if (mMaxPower > powerScaleMax) {
+                powerScaleMax = mMaxPower.toFloat();
+            }
+            rightRatio = mPower3s.toFloat() / powerScaleMax;
+        } else {
+            var cadenceScaleMax = 150.0;
+            rightRatio = mCadence.toFloat() / cadenceScaleMax;
         }
-        System.println("Max Power: " + powerScaleMax);
-        var pwrRatio = mPower3s.toFloat() / powerScaleMax;
-        if (pwrRatio > 1.0) {
-            pwrRatio = 1.0;
+        if (rightRatio > 1.0) {
+            rightRatio = 1.0;
         }
-        if (pwrRatio < 0.0) {
-            pwrRatio = 0.0;
+        if (rightRatio < 0.0) {
+            rightRatio = 0.0;
         }
-        var litPwrSegs = (pwrRatio * segCount + 0.5).toNumber();
+        var litPwrSegs = (rightRatio * segCount + 0.5).toNumber();
 
         dc.setPenWidth(barW);
 
@@ -558,14 +576,16 @@ class DashView extends WatchUi.DataField {
             rPanelCenterX,
             sideCenterY,
             panelValueFont,
-            mPower3s.toString(),
+            mHasPowerData ? mPower3s.toString() : mCadence.format("%.0f"),
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
         );
         dc.drawText(
             rPanelCenterX,
             sideCenterY + panelLabelOffset,
             Graphics.FONT_MEDIUM,
-            mAvgPower.format("%.0f"),
+            mHasPowerData
+                ? mAvgPower.format("%.0f")
+                : mAvgCadence.format("%.0f"),
             Graphics.TEXT_JUSTIFY_CENTER
         );
 
