@@ -4,7 +4,7 @@
 
 Dash is a custom data field for Garmin Edge 1050, 1040 and 1030, built using Garmin's Connect IQ platform. It provides advanced cycling metrics and background services to enhance your ride experience.
 
-Available in [Garmin Connect IQ Store](https://apps.garmin.com/apps/897a8b5e-e07d-4e6b-b175-dd85f3813e48)
+Available in [Garmin Connect IQ Store](https://apps.garmin.com/apps/006a95b6-3619-47ec-a796-496a8dd6a3c9)
 
 ## Data fields:
 
