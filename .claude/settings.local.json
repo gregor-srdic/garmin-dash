@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/grego/AppData/Roaming/Garmin/**)"
+    ],
+    "additionalDirectories": [
+      "d:\\Workspace\\Garmin\\dash\\Dash\\resources-edge1030plus"
+    ]
+  }
+}

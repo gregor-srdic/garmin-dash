@@ -46,9 +46,11 @@ class DashView extends WatchUi.DataField {
         var settings = System.getDeviceSettings();
         mIsMetric = settings.paceUnits == System.UNIT_METRIC;
         mIsElevationMetric = settings.elevationUnits == System.UNIT_METRIC;
+        var deviceType = WatchUi.loadResource(Rez.Strings.deviceType) as String;
         mDeviceProfile = initDeviceProfile(
             settings.screenWidth,
-            settings.screenHeight
+            settings.screenHeight,
+            deviceType
         );
     }
 
@@ -238,7 +240,16 @@ class DashView extends WatchUi.DataField {
 
         var speedFont = mDeviceProfile[:speedFont];
         var panelValueFont = mDeviceProfile[:panelValueFont];
-        var speedTimeNudge = mDeviceProfile[:speedTimeNudge];
+        var speedNudge = mDeviceProfile[:speedNudge];
+        var elapsedTimeNudge = mDeviceProfile[:elapsedTimeNudge];
+        var bottomLabelOffset = mDeviceProfile[:bottomLabelOffset];
+        var midLabelOffset = mDeviceProfile[:midLabelOffset];
+        var hideClockLabel = mDeviceProfile[:hideClockLabel];
+        var unitLabelFont = mDeviceProfile[:unitLabelFont];
+        var avgMaxOffset = mDeviceProfile[:avgMaxOffset];
+        var speedValueOffset = mDeviceProfile[:speedValueOffset];
+        var avgPanelValueOffset = mDeviceProfile[:avgPanelValueOffset];
+        var panelArcSweep = mDeviceProfile[:panelArcSweep];
 
         dc.setColor(bgColor, bgColor);
         dc.clear();
@@ -273,14 +284,16 @@ class DashView extends WatchUi.DataField {
                 topValues[i],
                 Graphics.TEXT_JUSTIFY_CENTER
             );
-            dc.setColor(dimColor, Graphics.COLOR_TRANSPARENT);
-            dc.drawText(
-                x,
-                topBarY + 8 + dc.getFontHeight(Graphics.FONT_LARGE) - 6,
-                Graphics.FONT_XTINY,
-                topLabels[i],
-                Graphics.TEXT_JUSTIFY_CENTER
-            );
+            if (!hideClockLabel || i != 1) {
+                dc.setColor(dimColor, Graphics.COLOR_TRANSPARENT);
+                dc.drawText(
+                    x,
+                    topBarY + 8 + dc.getFontHeight(Graphics.FONT_LARGE) - 6,
+                    Graphics.FONT_XTINY,
+                    topLabels[i],
+                    Graphics.TEXT_JUSTIFY_CENTER
+                );
+            }
         }
 
         // --- GAUGE LAYOUT (Adjusted height) ---
@@ -326,14 +339,14 @@ class DashView extends WatchUi.DataField {
         dc.setColor(dimColor, Graphics.COLOR_TRANSPARENT);
         dc.drawText(
             centerX - radius * 0.35,
-            centerY - radius * 0.65,
+            centerY - radius * 0.65 + avgMaxOffset,
             Graphics.FONT_XTINY,
             "AVG",
             Graphics.TEXT_JUSTIFY_CENTER
         );
         dc.drawText(
             centerX + radius * 0.35,
-            centerY - radius * 0.65,
+            centerY - radius * 0.65 + avgMaxOffset,
             Graphics.FONT_XTINY,
             "MAX",
             Graphics.TEXT_JUSTIFY_CENTER
@@ -341,14 +354,14 @@ class DashView extends WatchUi.DataField {
         dc.setColor(fgColor, Graphics.COLOR_TRANSPARENT);
         dc.drawText(
             centerX - radius * 0.35,
-            centerY - radius * 0.54,
+            centerY - radius * 0.54 + avgMaxOffset,
             Graphics.FONT_MEDIUM,
             mAvgSpeed.format("%.1f"),
             Graphics.TEXT_JUSTIFY_CENTER
         );
         dc.drawText(
             centerX + radius * 0.35,
-            centerY - radius * 0.54,
+            centerY - radius * 0.54 + avgMaxOffset,
             Graphics.FONT_MEDIUM,
             mMaxSpeed.format("%.1f"),
             Graphics.TEXT_JUSTIFY_CENTER
@@ -358,7 +371,7 @@ class DashView extends WatchUi.DataField {
         dc.setColor(fgColor, Graphics.COLOR_TRANSPARENT);
         dc.drawText(
             centerX,
-            centerY + heightOffset + speedTimeNudge,
+            centerY + heightOffset + speedNudge + speedValueOffset,
             speedFont,
             mSpeed.format("%.1f"),
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
@@ -366,8 +379,8 @@ class DashView extends WatchUi.DataField {
         dc.setColor(dimColor, Graphics.COLOR_TRANSPARENT);
         dc.drawText(
             centerX,
-            centerY + radius * 0.3 + speedTimeNudge,
-            Graphics.FONT_SMALL,
+            centerY + radius * 0.3 + speedNudge + speedValueOffset,
+            unitLabelFont,
             mIsMetric ? "km/h" : "mph",
             Graphics.TEXT_JUSTIFY_CENTER
         );
@@ -383,11 +396,11 @@ class DashView extends WatchUi.DataField {
 
         var xtinyH = dc.getFontHeight(Graphics.FONT_XTINY);
         var largeH = dc.getFontHeight(Graphics.FONT_LARGE);
-        var elapsedY = 2 * radius + topBarH / 2 + xtinyH + 1 + speedTimeNudge;
+        var elapsedY = 2 * radius + topBarH / 2 + xtinyH + 1 + elapsedTimeNudge;
         dc.setColor(dimColor, Graphics.COLOR_TRANSPARENT);
         dc.drawText(
             centerX,
-            elapsedY - xtinyH - 1,
+            elapsedY - xtinyH - 1 + midLabelOffset,
             Graphics.FONT_XTINY,
             "TIME",
             Graphics.TEXT_JUSTIFY_CENTER
@@ -407,21 +420,21 @@ class DashView extends WatchUi.DataField {
         dc.setColor(dimColor, Graphics.COLOR_TRANSPARENT);
         dc.drawText(
             width * 0.15,
-            cadenceAndGradientLineY - xtinyH - 1,
+            cadenceAndGradientLineY - xtinyH - 1 + midLabelOffset,
             Graphics.FONT_XTINY,
             "CAD",
             Graphics.TEXT_JUSTIFY_CENTER
         );
         dc.drawText(
             width * 0.5,
-            cadenceAndGradientLineY - xtinyH - 1,
+            cadenceAndGradientLineY - xtinyH - 1 + midLabelOffset,
             Graphics.FONT_XTINY,
             "DI2",
             Graphics.TEXT_JUSTIFY_CENTER
         );
         dc.drawText(
             width * 0.85,
-            cadenceAndGradientLineY - xtinyH - 1,
+            cadenceAndGradientLineY - xtinyH - 1 + midLabelOffset,
             Graphics.FONT_XTINY,
             "GRD",
             Graphics.TEXT_JUSTIFY_CENTER
@@ -461,7 +474,7 @@ class DashView extends WatchUi.DataField {
         var lBarX = (width * 0.021).toNumber();
         var sideRadius = centerX - lBarX - barW / 2.0;
         var sideCenterY = panelTop + panelH / 2.0 + (height * 0.01).toNumber();
-        var arcSweepDeg = 54.0;
+        var arcSweepDeg = panelArcSweep;
         var segCount = 10;
         var gapDeg = 1.0; // The physical gap between segments
 
@@ -481,7 +494,7 @@ class DashView extends WatchUi.DataField {
         dc.drawText(
             lPanelCenterX,
             sideCenterY - panelLabelOffset,
-            Graphics.FONT_SMALL,
+            unitLabelFont,
             "HR",
             Graphics.TEXT_JUSTIFY_CENTER
         );
@@ -527,7 +540,7 @@ class DashView extends WatchUi.DataField {
         dc.setColor(dimColor, Graphics.COLOR_TRANSPARENT);
         dc.drawText(
             lPanelCenterX,
-            sideCenterY + panelLabelOffset - xtinyH - 1,
+            sideCenterY + panelLabelOffset - xtinyH - 1 + avgMaxOffset,
             Graphics.FONT_XTINY,
             "AVG",
             Graphics.TEXT_JUSTIFY_CENTER
@@ -535,7 +548,7 @@ class DashView extends WatchUi.DataField {
         dc.setColor(fgColor, Graphics.COLOR_TRANSPARENT);
         dc.drawText(
             lPanelCenterX,
-            sideCenterY + panelLabelOffset,
+            sideCenterY + panelLabelOffset + avgPanelValueOffset + avgMaxOffset,
             Graphics.FONT_MEDIUM,
             mAvgHeartRate.format("%.0f"),
             Graphics.TEXT_JUSTIFY_CENTER
@@ -551,7 +564,7 @@ class DashView extends WatchUi.DataField {
         dc.drawText(
             rPanelCenterX,
             sideCenterY - panelLabelOffset,
-            Graphics.FONT_SMALL,
+            unitLabelFont,
             mHasPowerData ? "PWR" : "CAD",
             Graphics.TEXT_JUSTIFY_CENTER
         );
@@ -583,7 +596,11 @@ class DashView extends WatchUi.DataField {
             var pwrSegEnd = pwrSegStart + segSweepDeg;
 
             dc.setColor(
-                i < litPwrSegs ? (mHasPowerData ? 0x9900ff : 0xff8800) : bgTrackColor,
+                i < litPwrSegs
+                    ? mHasPowerData
+                        ? 0x9900ff
+                        : 0xff8800
+                    : bgTrackColor,
                 Graphics.COLOR_TRANSPARENT
             );
 
@@ -608,7 +625,7 @@ class DashView extends WatchUi.DataField {
         dc.setColor(dimColor, Graphics.COLOR_TRANSPARENT);
         dc.drawText(
             rPanelCenterX,
-            sideCenterY + panelLabelOffset - xtinyH - 1,
+            sideCenterY + panelLabelOffset - xtinyH - 1 + avgMaxOffset,
             Graphics.FONT_XTINY,
             "AVG",
             Graphics.TEXT_JUSTIFY_CENTER
@@ -616,7 +633,7 @@ class DashView extends WatchUi.DataField {
         dc.setColor(fgColor, Graphics.COLOR_TRANSPARENT);
         dc.drawText(
             rPanelCenterX,
-            sideCenterY + panelLabelOffset,
+            sideCenterY + panelLabelOffset + avgPanelValueOffset + avgMaxOffset,
             Graphics.FONT_MEDIUM,
             mHasPowerData
                 ? mAvgPower.format("%.0f")
@@ -636,7 +653,7 @@ class DashView extends WatchUi.DataField {
             dc.setColor(dimColor, Graphics.COLOR_TRANSPARENT);
             dc.drawText(
                 x,
-                footerY + 2 - xtinyH,
+                footerY + 2 - xtinyH + bottomLabelOffset,
                 Graphics.FONT_XTINY,
                 bottomLabels[i],
                 Graphics.TEXT_JUSTIFY_CENTER
@@ -656,20 +673,38 @@ class DashView extends WatchUi.DataField {
     // To add support for a new device, add a new profile block below.
     //
     // Profile keys:
-    //   :heightOffset    (Number) — vertical offset applied to gauge center and cadence/gradient line
-    //   :speedFont       (Graphics.FontType) — font for the central speed readout
-    //   :panelValueFont  (Graphics.FontType) — font for HR and power panel values
+    //   :heightOffset       (Number) — vertical offset applied to gauge center and cadence/gradient line
+    //   :speedFont          (Graphics.FontType) — font for the central speed readout
+    //   :panelValueFont     (Graphics.FontType) — font for HR and power panel values
+    //   :bottomLabelOffset  (Number)  — extra downward shift for bottom bar labels
+    //   :midLabelOffset     (Number)  — extra downward shift for TIME, CAD, DI2, GRD labels
+    //   :hideClockLabel     (Boolean)        — suppress the CLOCK label in the top bar
+    //   :unitLabelFont      (Graphics.FontType) — font for km/h, HR, and CAD/PWR labels
+    //   :avgMaxOffset       (Number) — vertical shift for AVG/MAX speed labels and values (negative = up)
+    //   :speedValueOffset      (Number) — extra downward shift for the central speed value and km/h label
+    //   :avgPanelValueOffset   (Number) — vertical shift for avg HR and avg power/cadence values (negative = up)
+    //   :panelArcSweep         (Float)  — total sweep angle in degrees for HR and power arc gauges
     private function initDeviceProfile(
         screenWidth as Number,
-        screenHeight as Number
+        screenHeight as Number,
+        deviceType as String
     ) as Lang.Dictionary {
         // --- Edge 1050: 480 x 800 ---
         if (screenWidth >= 400) {
             return {
                 :heightOffset => 0,
-                :speedTimeNudge => 0,
+                :speedNudge => 0,
+                :elapsedTimeNudge => 0,
                 :speedFont => Graphics.FONT_NUMBER_THAI_HOT,
                 :panelValueFont => Graphics.FONT_NUMBER_HOT,
+                :bottomLabelOffset => 0,
+                :midLabelOffset => 0,
+                :hideClockLabel => false,
+                :unitLabelFont => Graphics.FONT_SMALL,
+                :avgMaxOffset => 0,
+                :speedValueOffset => 0,
+                :avgPanelValueOffset => 0,
+                :panelArcSweep => 54.0,
             };
         }
 
@@ -677,18 +712,55 @@ class DashView extends WatchUi.DataField {
         if (screenWidth < 260) {
             return {
                 :heightOffset => 8,
-                :speedTimeNudge => 0,
+                :speedNudge => 0,
+                :elapsedTimeNudge => 0,
                 :speedFont => Graphics.FONT_NUMBER_HOT,
                 :panelValueFont => Graphics.FONT_NUMBER_MEDIUM,
+                :bottomLabelOffset => 0,
+                :midLabelOffset => 0,
+                :hideClockLabel => false,
+                :unitLabelFont => Graphics.FONT_SMALL,
+                :avgMaxOffset => 0,
+                :speedValueOffset => 0,
+                :avgPanelValueOffset => 0,
+                :panelArcSweep => 54.0,
             };
         }
 
-        // --- Edge 1040 / 1030: 282 x 470 (default / fallback) ---
+        // --- Edge 1030 / 1030 Plus: labels sit higher than on 1040 ---
+        if (deviceType.equals("edge1030")) {
+            return {
+                :heightOffset => 5,
+                :speedNudge => -10,
+                :elapsedTimeNudge => -13,
+                :speedFont => Graphics.FONT_NUMBER_HOT,
+                :panelValueFont => Graphics.FONT_NUMBER_MEDIUM,
+                :bottomLabelOffset => 8,
+                :midLabelOffset => 8,
+                :hideClockLabel => true,
+                :unitLabelFont => Graphics.FONT_XTINY,
+                :avgMaxOffset => -6,
+                :speedValueOffset => 10,
+                :avgPanelValueOffset => -6,
+                :panelArcSweep => 45.0,
+            };
+        }
+
+        // --- Edge 1040: 282 x 470 (default / fallback) ---
         return {
             :heightOffset => 5,
-            :speedTimeNudge => -10,
+            :speedNudge => -10,
+            :elapsedTimeNudge => -10,
             :speedFont => Graphics.FONT_NUMBER_HOT,
             :panelValueFont => Graphics.FONT_NUMBER_MEDIUM,
+            :bottomLabelOffset => 0,
+            :midLabelOffset => 0,
+            :hideClockLabel => false,
+            :unitLabelFont => Graphics.FONT_SMALL,
+            :avgMaxOffset => 0,
+            :speedValueOffset => 0,
+            :avgPanelValueOffset => 0,
+            :panelArcSweep => 54.0,
         };
     }
 
