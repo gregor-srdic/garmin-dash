@@ -1,11 +1,15 @@
 # Dash - Peak Performance Data Field
 
-![Edge 1050](assets/Edge1050.png)
 
-![Edge 1040](assets/Edge1040.png)
-![Edge 1030](assets/Edge1030.png)
+![Edge 1050](assets/hero.jpg)
 
-Dash is a custom data field for Garmin Edge devices (1050, 1040, 1030, 1030 Plus, 1030 Bontrager), built using Garmin's Connect IQ platform. It provides advanced cycling metrics and background services to enhance your ride experience.
+<hr>
+
+| ![Edge 1050](assets/Edge1050.png) | ![Edge 1040](assets/Edge1040.png) | ![Edge 1030](assets/Edge1030.png) | ![Edge Explore 2](assets/EdgeExplore2.png) |
+|:-:|:-:|:-:|:-:|
+| Edge 1050 | Edge 1040 | Edge 1030 | Edge Explore 2 |
+
+Dash is a custom data field for Garmin Edge devices (1050, 1040, 1030, 1030 Plus, 1030 Bontrager, Edge Explore 2), built using Garmin's Connect IQ platform. It provides advanced cycling metrics and background services to enhance your ride experience.
 
 Available in [Garmin Connect IQ Store](https://apps.garmin.com/apps/006a95b6-3619-47ec-a796-496a8dd6a3c9)
 
