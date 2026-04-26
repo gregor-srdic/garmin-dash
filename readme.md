@@ -1,14 +1,15 @@
 # Dash - Peak Performance Data Field
 
-![Dash Data Field](assets/image.jpg)
+![Edge 1050](assets/Edge1050.png)
 
-Dash is a custom data field for Garmin Edge 1050, 1040 and 1030, built using Garmin's Connect IQ platform. It provides advanced cycling metrics and background services to enhance your ride experience.
+![Edge 1040](assets/Edge1040.png)
+![Edge 1030](assets/Edge1030.png)
+
+Dash is a custom data field for Garmin Edge devices (1050, 1040, 1030, 1030 Plus, 1030 Bontrager), built using Garmin's Connect IQ platform. It provides advanced cycling metrics and background services to enhance your ride experience.
 
 Available in [Garmin Connect IQ Store](https://apps.garmin.com/apps/006a95b6-3619-47ec-a796-496a8dd6a3c9)
 
 ## Data fields:
-
-![Annotated properties](assets/annotated.jpg)
 
 1. Top row:
     - Ambient Temperature (left)
@@ -32,9 +33,9 @@ Available in [Garmin Connect IQ Store](https://apps.garmin.com/apps/006a95b6-361
     - Average heart rate (bottom left)
     - Current 3s power (center right)
     - Average 3s power (bottom right)
-    - Current power between 0 and larger of 400W and max power (right gauge)
+    - Current power, scaled to 400W or your session max power, whichever is higher (right gauge)
 
-4. Bottom row:
+5. Bottom row:
     - Total ascent (left)
     - Total distance (center)
     - Total calories (right)
@@ -42,6 +43,10 @@ Available in [Garmin Connect IQ Store](https://apps.garmin.com/apps/006a95b6-361
 ### No power data?
 
 If you don't have a power meter, the right gauge will display current cadence between 0 and 150 rpm along with current and average cadence.
+
+### Units & appearance
+
+All values automatically adapt to your device settings: speed in km/h or mph, distance in km or miles, elevation and ascent in metres or feet, and temperature in °C or °F. The UI also adapts to your device's light or dark background color setting.
 
 ## Installation
 
@@ -87,8 +92,8 @@ That's it! When you start a ride with that profile, your custom UI will be live 
 - `bin/` — Build outputs
 
 ### Main Files
-- `DashApp.mc` — Application entry point
-- `DashView.mc` — UI logic
+- `DashApp.mc` — Application entry point; registers a background service that runs every 5 minutes to fetch ambient temperature from the device sensor
+- `DashView.mc` — UI logic; computes and renders all data fields, calculates real-time grade from GPS altitude and distance (smoothed over 15 m intervals, capped at ±30%)
 - `DashBackground.mc` — Background service logic
 - `GlobalBackgroundService.mc` — Global background handler
 
