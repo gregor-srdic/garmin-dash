@@ -34,9 +34,9 @@ class DashView extends WatchUi.DataField {
     private var mIsMetric = true;
     private var mIsElevationMetric = true;
 
-    // grade calculation
-    private var mLastAlt = null;
-    private var mLastDist = null;
+    // grade calculation (tracked in raw meters, independent of display units)
+    private var mGradeLastAlt = null;
+    private var mGradeLastDist = null;
 
     // Device-specific layout and font profile, set once in initialize()
     private var mDeviceProfile = null;
@@ -218,16 +218,19 @@ class DashView extends WatchUi.DataField {
 
         // Elevation Data
         var altMult = mIsElevationMetric ? 1.0 : 3.28084;
-        if (info.altitude != null) {
-            mElevation = info.altitude * altMult;
+        var rawAlt =
+            info.altitude != null
+                ? info.altitude
+                : actInfo != null && actInfo has :altitude
+                  ? actInfo.altitude
+                  : null;
+        if (rawAlt != null) {
+            mElevation = rawAlt * altMult;
         }
         if (info.totalAscent != null) {
             mAscent = info.totalAscent * altMult;
         }
-        // if (info.totalDescent != null) {
-        //     mDescent = info.totalDescent * altMult;
-        // }
-        calculateGrade();
+        calculateGrade(rawAlt, info.elapsedDistance);
     }
 
     function onUpdate(dc as Graphics.Dc) as Void {
@@ -235,8 +238,13 @@ class DashView extends WatchUi.DataField {
         var height = dc.getHeight();
         var bgColor = getBackgroundColor();
         var isDark = bgColor == Graphics.COLOR_BLACK;
-        var fgColor = isDark ? Graphics.COLOR_WHITE : Graphics.COLOR_BLACK;
-        var dimColor = isDark ? Graphics.COLOR_DK_GRAY : Graphics.COLOR_LT_GRAY;
+        var valuesColor = isDark ? 0xffffff : Graphics.COLOR_BLACK;
+        var labelsColor = isDark ? 0xeeeeee : Graphics.COLOR_LT_GRAY;
+        var gaugeTrackColor = isDark ? 0xeeeeee : 0xdddddd;
+        var speedColor = 0x0066ff;
+        var hrColor = 0xff2200;
+        var powerColor = 0x9900ff;
+        var cadenceColor = 0xff8800;
 
         var speedFont = mDeviceProfile[:speedFont];
         var panelValueFont = mDeviceProfile[:panelValueFont];
@@ -265,7 +273,7 @@ class DashView extends WatchUi.DataField {
         var topBarY = 5 + topBarYOffset;
         var topBarH = (height * 0.081).toNumber();
         dc.setPenWidth(1);
-        dc.setColor(isDark ? 0x222222 : 0xdddddd, Graphics.COLOR_TRANSPARENT);
+        dc.setColor(gaugeTrackColor, Graphics.COLOR_TRANSPARENT);
 
         var colW = width / 3.0;
 
@@ -284,7 +292,7 @@ class DashView extends WatchUi.DataField {
         for (var i = 0; i < 3; i++) {
             var x = colW * (i + 0.5);
             if (!hideClockLabel || i != 1) {
-                dc.setColor(dimColor, Graphics.COLOR_TRANSPARENT);
+                dc.setColor(labelsColor, Graphics.COLOR_TRANSPARENT);
                 dc.drawText(
                     x,
                     topBarY + 2,
@@ -293,7 +301,7 @@ class DashView extends WatchUi.DataField {
                     Graphics.TEXT_JUSTIFY_CENTER
                 );
             }
-            dc.setColor(fgColor, Graphics.COLOR_TRANSPARENT);
+            dc.setColor(valuesColor, Graphics.COLOR_TRANSPARENT);
             dc.drawText(
                 x,
                 topBarY +
@@ -332,7 +340,7 @@ class DashView extends WatchUi.DataField {
             var segStartDeg = gaugeStart - i * segArcLen;
             var segEndDeg = segStartDeg - segArcLen + segGapDeg;
             dc.setColor(
-                i < litArcSegs ? 0x0066ff : isDark ? 0x222222 : 0xdddddd,
+                i < litArcSegs ? speedColor : gaugeTrackColor,
                 Graphics.COLOR_TRANSPARENT
             );
             dc.drawArc(
@@ -346,7 +354,7 @@ class DashView extends WatchUi.DataField {
         }
 
         // --- AVG / MAX ABOVE SPEED ---
-        dc.setColor(dimColor, Graphics.COLOR_TRANSPARENT);
+        dc.setColor(labelsColor, Graphics.COLOR_TRANSPARENT);
         dc.drawText(
             centerX - radius * 0.35,
             centerY - radius * 0.65 + avgLabelOffset,
@@ -361,7 +369,7 @@ class DashView extends WatchUi.DataField {
             "MAX",
             Graphics.TEXT_JUSTIFY_CENTER
         );
-        dc.setColor(fgColor, Graphics.COLOR_TRANSPARENT);
+        dc.setColor(valuesColor, Graphics.COLOR_TRANSPARENT);
         dc.drawText(
             centerX - radius * 0.35,
             centerY - radius * 0.54 + avgLabelOffset,
@@ -378,7 +386,7 @@ class DashView extends WatchUi.DataField {
         );
 
         // --- CENTRAL SPEED READOUT ---
-        dc.setColor(fgColor, Graphics.COLOR_TRANSPARENT);
+        dc.setColor(valuesColor, Graphics.COLOR_TRANSPARENT);
         dc.drawText(
             centerX,
             centerY + gaugeCenterYOffset + speedYOffset,
@@ -386,7 +394,7 @@ class DashView extends WatchUi.DataField {
             mSpeed.format("%.1f"),
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
         );
-        dc.setColor(dimColor, Graphics.COLOR_TRANSPARENT);
+        dc.setColor(labelsColor, Graphics.COLOR_TRANSPARENT);
         dc.drawText(
             centerX,
             centerY + radius * 0.3 + speedYOffset,
@@ -408,7 +416,7 @@ class DashView extends WatchUi.DataField {
         var largeH = dc.getFontHeight(Graphics.FONT_LARGE);
         var elapsedY =
             2 * radius + topBarH / 2 + xtinyH + 1 + elapsedTimeYOffset;
-        dc.setColor(dimColor, Graphics.COLOR_TRANSPARENT);
+        dc.setColor(labelsColor, Graphics.COLOR_TRANSPARENT);
         dc.drawText(
             centerX,
             elapsedY - xtinyH - 1 + timeLabelOffset,
@@ -416,7 +424,7 @@ class DashView extends WatchUi.DataField {
             "TIME",
             Graphics.TEXT_JUSTIFY_CENTER
         );
-        dc.setColor(fgColor, Graphics.COLOR_TRANSPARENT);
+        dc.setColor(valuesColor, Graphics.COLOR_TRANSPARENT);
         dc.drawText(
             centerX,
             elapsedY,
@@ -429,7 +437,7 @@ class DashView extends WatchUi.DataField {
 
         var cadenceAndGradientLineY =
             2 * radius + topBarH * 2 - gaugeCenterYOffset + cadenceLineYOffset;
-        dc.setColor(dimColor, Graphics.COLOR_TRANSPARENT);
+        dc.setColor(labelsColor, Graphics.COLOR_TRANSPARENT);
         dc.drawText(
             width * 0.15,
             cadenceAndGradientLineY - xtinyH - 1 + middleRowLabelOffset,
@@ -441,7 +449,7 @@ class DashView extends WatchUi.DataField {
             width * 0.5,
             cadenceAndGradientLineY - xtinyH - 1 + middleRowLabelOffset,
             Graphics.FONT_XTINY,
-            "DI2",
+            "GEAR",
             Graphics.TEXT_JUSTIFY_CENTER
         );
         dc.drawText(
@@ -451,7 +459,7 @@ class DashView extends WatchUi.DataField {
             "GRD",
             Graphics.TEXT_JUSTIFY_CENTER
         );
-        dc.setColor(fgColor, Graphics.COLOR_TRANSPARENT);
+        dc.setColor(valuesColor, Graphics.COLOR_TRANSPARENT);
         dc.drawText(
             width * 0.15,
             cadenceAndGradientLineY,
@@ -499,15 +507,13 @@ class DashView extends WatchUi.DataField {
         var totalGapSweep = gapDeg * (segCount - 1);
         var segSweepDeg = (arcSweepDeg - totalGapSweep) / segCount;
 
-        var bgTrackColor = isDark ? 0x1a1a1a : 0xeeeeee;
-
         // ---- LEFT PANEL: Heart Rate ----
         var lPanelCenterX = (lBarX + barW / 2 + centerX) / 2.0;
         // Start at bottom-left (e.g., 210 deg)
         var hrStartAngle = 180.0 + arcSweepDeg / 2.0;
         var panelLabelOffset = (height * 0.088).toNumber();
 
-        dc.setColor(dimColor, Graphics.COLOR_TRANSPARENT);
+        dc.setColor(labelsColor, Graphics.COLOR_TRANSPARENT);
         dc.drawText(
             lPanelCenterX,
             sideCenterY - panelLabelOffset + panelTopLabelYOffset,
@@ -531,7 +537,7 @@ class DashView extends WatchUi.DataField {
 
             // Set lit color or dark background color
             dc.setColor(
-                i < litSegs ? 0xff2200 : bgTrackColor,
+                i < litSegs ? hrColor : gaugeTrackColor,
                 Graphics.COLOR_TRANSPARENT
             );
 
@@ -546,7 +552,7 @@ class DashView extends WatchUi.DataField {
             );
         }
 
-        dc.setColor(fgColor, Graphics.COLOR_TRANSPARENT);
+        dc.setColor(valuesColor, Graphics.COLOR_TRANSPARENT);
         dc.drawText(
             lPanelCenterX,
             sideCenterY + panelTextYOffset,
@@ -554,7 +560,7 @@ class DashView extends WatchUi.DataField {
             mHeartRate != null ? mHeartRate.toString() : "--",
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
         );
-        dc.setColor(dimColor, Graphics.COLOR_TRANSPARENT);
+        dc.setColor(labelsColor, Graphics.COLOR_TRANSPARENT);
         dc.drawText(
             lPanelCenterX,
             sideCenterY +
@@ -567,7 +573,7 @@ class DashView extends WatchUi.DataField {
             "AVG",
             Graphics.TEXT_JUSTIFY_CENTER
         );
-        dc.setColor(fgColor, Graphics.COLOR_TRANSPARENT);
+        dc.setColor(valuesColor, Graphics.COLOR_TRANSPARENT);
         dc.drawText(
             lPanelCenterX,
             sideCenterY +
@@ -586,7 +592,7 @@ class DashView extends WatchUi.DataField {
         // Start at bottom-right (e.g., 330 deg)
         var pwrStartAngle = 360.0 - arcSweepDeg / 2.0;
 
-        dc.setColor(dimColor, Graphics.COLOR_TRANSPARENT);
+        dc.setColor(labelsColor, Graphics.COLOR_TRANSPARENT);
         dc.drawText(
             rPanelCenterX,
             sideCenterY - panelLabelOffset + panelTopLabelYOffset,
@@ -624,9 +630,9 @@ class DashView extends WatchUi.DataField {
             dc.setColor(
                 i < litPwrSegs
                     ? mHasPowerData
-                        ? 0x9900ff
-                        : 0xff8800
-                    : bgTrackColor,
+                        ? powerColor
+                        : cadenceColor
+                    : gaugeTrackColor,
                 Graphics.COLOR_TRANSPARENT
             );
 
@@ -640,7 +646,7 @@ class DashView extends WatchUi.DataField {
             );
         }
 
-        dc.setColor(fgColor, Graphics.COLOR_TRANSPARENT);
+        dc.setColor(valuesColor, Graphics.COLOR_TRANSPARENT);
         dc.drawText(
             rPanelCenterX,
             sideCenterY + panelTextYOffset,
@@ -648,7 +654,7 @@ class DashView extends WatchUi.DataField {
             mHasPowerData ? mPower3s.toString() : mCadence.format("%.0f"),
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
         );
-        dc.setColor(dimColor, Graphics.COLOR_TRANSPARENT);
+        dc.setColor(labelsColor, Graphics.COLOR_TRANSPARENT);
         dc.drawText(
             rPanelCenterX,
             sideCenterY +
@@ -661,7 +667,7 @@ class DashView extends WatchUi.DataField {
             "AVG",
             Graphics.TEXT_JUSTIFY_CENTER
         );
-        dc.setColor(fgColor, Graphics.COLOR_TRANSPARENT);
+        dc.setColor(valuesColor, Graphics.COLOR_TRANSPARENT);
         dc.drawText(
             rPanelCenterX,
             sideCenterY +
@@ -685,7 +691,7 @@ class DashView extends WatchUi.DataField {
 
         for (var i = 0; i < 3; i++) {
             var x = colW * (i + 0.5);
-            dc.setColor(fgColor, Graphics.COLOR_TRANSPARENT);
+            dc.setColor(valuesColor, Graphics.COLOR_TRANSPARENT);
             dc.drawText(
                 x,
                 footerY + 2 + footerValueYOffset,
@@ -693,7 +699,7 @@ class DashView extends WatchUi.DataField {
                 bottomValues[i],
                 Graphics.TEXT_JUSTIFY_CENTER
             );
-            dc.setColor(dimColor, Graphics.COLOR_TRANSPARENT);
+            dc.setColor(labelsColor, Graphics.COLOR_TRANSPARENT);
             dc.drawText(
                 x,
                 footerY +
@@ -740,7 +746,7 @@ class DashView extends WatchUi.DataField {
         // --- Edge 1050: 480 x 800 ---
         if (screenWidth >= 400) {
             return {
-                :gaugeCenterYOffset => 0,
+                :gaugeCenterYOffset => -5,
                 :speedYOffset => 0,
                 :elapsedTimeYOffset => 0,
                 :speedFont => Graphics.FONT_NUMBER_THAI_HOT,
@@ -759,7 +765,7 @@ class DashView extends WatchUi.DataField {
                 :footerValueYOffset => 0,
                 :panelCenterYOffset => 10,
                 :panelTextYOffset => -12,
-                :panelTopLabelYOffset => -6,
+                :panelTopLabelYOffset => -12,
             };
         }
 
@@ -866,42 +872,39 @@ class DashView extends WatchUi.DataField {
         };
     }
 
-    private function calculateGrade() as Void {
-        // --- NEW GRADE CALCULATION ---
-        if (mElevation != null && mDistance != null) {
-            // Initialize the tracking variables on the first valid reading
-            if (mLastAlt == null || mLastDist == null) {
-                mLastAlt = mElevation;
-                mLastDist = mDistance;
-            } else {
-                var distDiff = mDistance - mLastDist;
-
-                // Wait until we've covered at least 15 meters to recalculate.
-                // This smooths out the sensor drift so the grade isn't jumpy.
-                if (distDiff > 15.0) {
-                    var altDiff = mElevation - mLastAlt;
-
-                    // Grade is (Rise / Run) * 100
-                    mGrade = (altDiff / distDiff) * 100.0;
-
-                    // Cap the grade to realistic cycling limits (-30% to +30%)
-                    if (mGrade > 30.0) {
-                        mGrade = 30.0;
-                    }
-                    if (mGrade < -30.0) {
-                        mGrade = -30.0;
-                    }
-
-                    // Update the markers for the next interval
-                    mLastAlt = mElevation;
-                    mLastDist = mDistance;
-                }
-            }
+    private function calculateGrade(
+        rawAlt as Float?,
+        rawDist as Float?
+    ) as Void {
+        if (rawAlt == null || rawDist == null) {
+            return;
         }
 
-        // Reset grade to 0% if the rider comes to a stop
-        if (mSpeed == null || mSpeed < 1.0) {
-            mGrade = 0.0;
+        if (mGradeLastAlt == null || mGradeLastDist == null) {
+            mGradeLastAlt = rawAlt;
+            mGradeLastDist = rawDist;
+            return;
+        }
+
+        var distDiff = rawDist - mGradeLastDist;
+
+        // 20m window: wide enough to suppress barometric noise, tight enough to stay responsive
+        if (distDiff > 20.0) {
+            var altDiff = rawAlt - mGradeLastAlt;
+            var newGrade = (altDiff / distDiff) * 100.0;
+
+            if (newGrade > 30.0) {
+                newGrade = 30.0;
+            }
+            if (newGrade < -30.0) {
+                newGrade = -30.0;
+            }
+
+            // EMA blend: absorbs altitude spikes without hiding sustained grade changes
+            mGrade = mGrade * 0.5 + newGrade * 0.5;
+
+            mGradeLastAlt = rawAlt;
+            mGradeLastDist = rawDist;
         }
     }
 }
