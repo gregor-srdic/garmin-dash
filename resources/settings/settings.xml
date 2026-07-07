@@ -1,0 +1,5 @@
+<settings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://developer.garmin.com/downloads/connect-iq/resources.xsd">
+    <setting propertyKey="@Properties.ftp" title="@Strings.ftpTitle">
+        <settingConfig type="numeric" min="0" max="600"/>
+    </setting>
+</settings>

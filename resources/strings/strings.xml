@@ -3,4 +3,5 @@
 
     <string id="label">My Value</string>
     <string id="deviceType">default</string>
+    <string id="ftpTitle">FTP (Watts)</string>
 </strings>

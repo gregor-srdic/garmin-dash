@@ -32,12 +32,14 @@ Available in [Garmin Connect IQ Store](https://apps.garmin.com/apps/006a95b6-361
     - Grade (bottom right)
 
 4. Heart rate & Power gauge:
-    - Current heart rate between 0 and 200 bpm (left gauge)
+    - Current heart rate, scaled to your heart rate zones (left gauge)
     - Current heart rate (center left)
     - Average heart rate (bottom left)
     - Current 3s power (center right)
     - Average 3s power (bottom right)
-    - Current power, scaled to 400W or your session max power, whichever is higher (right gauge)
+    - Current power, scaled to your FTP or your session max power, whichever is higher (right gauge)
+
+    Both gauges are colored by training zone, from blue (zone 1) through green, yellow and orange to red (zone 5). Heart rate zones are taken from your Garmin user profile for the current sport. Power zones are derived from your FTP using Coggan-style boundaries — the FTP is read from your Garmin user profile, with a fallback to the app's **FTP (Watts)** setting (configurable in Garmin Connect / Connect IQ, default 200 W). If no zone data is available, the gauges fall back to a single color.
 
 5. Bottom row:
     - Total ascent (left)
@@ -91,7 +93,7 @@ That's it! When you start a ride with that profile, your custom UI will be live 
 
 ### Project Structure
 - `source/` — Main Monkey C source files
-- `resources/` — Layouts, drawables, and strings
+- `resources/` — Layouts, drawables, strings, and app settings (FTP)
 - `assets/` — Images and icons
 - `bin/` — Build outputs
 
