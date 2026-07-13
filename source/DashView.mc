@@ -7,6 +7,7 @@ import Toybox.Time;
 import Toybox.Time.Gregorian;
 import Toybox.Sensor;
 import Toybox.Application;
+import Toybox.UserProfile;
 
 class DashView extends WatchUi.DataField {
     private var mSpeed = 0.0;
@@ -41,6 +42,19 @@ class DashView extends WatchUi.DataField {
     // Device-specific layout and font profile, set once in initialize()
     private var mDeviceProfile = null;
 
+    // Zone boundaries for arc coloring, set once in initialize().
+    // HR zones come from the user's Garmin profile; power zones are derived from the FTP app setting.
+    private var mHrZoneBoundaries = null;
+    private var mPowerZoneBoundaries = null;
+    private var ftp = null;
+    private static var ZONE_COLORS = [
+        0x4da6ff, // Z1 - blue
+        0x33cc33, // Z2 - green
+        0xffcc00, // Z3 - yellow
+        0xff8800, // Z4 - orange
+        0xff2200, // Z5 - red
+    ];
+
     function initialize() {
         DataField.initialize();
         var settings = System.getDeviceSettings();
@@ -52,6 +66,57 @@ class DashView extends WatchUi.DataField {
             settings.screenHeight,
             deviceType
         );
+
+        // HR zones: pulled from the user's Garmin Connect profile for the current sport.
+        try {
+            mHrZoneBoundaries = UserProfile.getHeartRateZones(
+                UserProfile.getCurrentSport()
+            );
+        } catch (e) {
+            mHrZoneBoundaries = null;
+        }
+
+        // Power zones: prefer the FTP from the user's Garmin Connect profile;
+        // fall back to the app's FTP setting if the profile has none set.
+        ftp = null;
+        try {
+            ftp = UserProfile.getFunctionalThresholdPower(Activity.SPORT_CYCLING);
+        } catch (e) {
+            ftp = null;
+        }
+        if (ftp == null || ftp == 0) {
+            ftp = Application.Properties.getValue("ftp");
+        }
+        // Coggan-style boundaries derived from FTP.
+        if (ftp != null && ftp > 0) {
+            mPowerZoneBoundaries = [
+                0,
+                ftp * 0.55,
+                ftp * 0.75,
+                ftp * 0.9,
+                ftp * 1.05,
+                ftp * 999,
+            ];
+        }
+    }
+
+    // Returns the zone color for value given a 6-entry boundary array
+    // (lower bound of zones 1-5 plus an upper cap), or fallbackColor if
+    // boundaries are unavailable.
+    private function zoneColor(
+        value as Numeric,
+        boundaries as Array?,
+        fallbackColor as Number
+    ) as Number {
+        if (boundaries == null || boundaries.size() < 6) {
+            return fallbackColor;
+        }
+        for (var i = 1; i <= 4; i++) {
+            if (value < boundaries[i]) {
+                return ZONE_COLORS[i - 1];
+            }
+        }
+        return ZONE_COLORS[4];
     }
 
     function compute(info as Activity.Info) as Void {
@@ -522,11 +587,33 @@ class DashView extends WatchUi.DataField {
             Graphics.TEXT_JUSTIFY_CENTER
         );
 
-        var hrRatio = mHeartRate != null ? mHeartRate.toFloat() / 200.0 : 0.0;
+        var hrMin = 0.0;
+        var hrMax = 200.0;
+        var hrZones = mHrZoneBoundaries as Array<Numeric>?;
+        if (hrZones != null && hrZones.size() >= 6) {
+            hrMin = hrZones[0].toFloat();
+            hrMax = hrZones[5].toFloat();
+        }
+        var hrRange = hrMax - hrMin;
+        var hrRatio = 0.0;
+        if (mHeartRate != null && hrRange > 0) {
+            hrRatio = (mHeartRate.toFloat() - hrMin) / hrRange;
+        }
         if (hrRatio > 1.0) {
             hrRatio = 1.0;
         }
+        if (hrRatio < 0.0) {
+            hrRatio = 0.0;
+        }
         var litSegs = (hrRatio * segCount + 0.5).toNumber();
+        if(mHeartRate != null && litSegs < 1) {
+            litSegs = 1; // Ensure at least one segment is lit if HR is non-null
+        }
+        var hrZoneColor = zoneColor(
+            mHeartRate != null ? mHeartRate : 0,
+            mHrZoneBoundaries,
+            hrColor
+        );
 
         dc.setPenWidth(barW);
 
@@ -537,7 +624,7 @@ class DashView extends WatchUi.DataField {
 
             // Set lit color or dark background color
             dc.setColor(
-                i < litSegs ? hrColor : gaugeTrackColor,
+                i < litSegs ? hrZoneColor : gaugeTrackColor,
                 Graphics.COLOR_TRANSPARENT
             );
 
@@ -603,7 +690,7 @@ class DashView extends WatchUi.DataField {
 
         var rightRatio = 0.0;
         if (mHasPowerData) {
-            var powerScaleMax = 400.0;
+            var powerScaleMax = ftp;
             if (mMaxPower > powerScaleMax) {
                 powerScaleMax = mMaxPower.toFloat();
             }
@@ -619,6 +706,7 @@ class DashView extends WatchUi.DataField {
             rightRatio = 0.0;
         }
         var litPwrSegs = (rightRatio * segCount + 0.5).toNumber();
+        var pwrZoneColor = zoneColor(mPower3s, mPowerZoneBoundaries, powerColor);
 
         dc.setPenWidth(barW);
 
@@ -630,7 +718,7 @@ class DashView extends WatchUi.DataField {
             dc.setColor(
                 i < litPwrSegs
                     ? mHasPowerData
-                        ? powerColor
+                        ? pwrZoneColor
                         : cadenceColor
                     : gaugeTrackColor,
                 Graphics.COLOR_TRANSPARENT
