@@ -38,6 +38,11 @@ class DashView extends WatchUi.DataField {
     // grade calculation (tracked in raw meters, independent of display units)
     private var mGradeLastAlt = null;
     private var mGradeLastDist = null;
+    // Consecutive compute() calls that produced no grade update. Once the window
+    // anchor is stranded (or its inputs drop out) nothing else can unstick it,
+    // so a long enough run of dead computes forces a re-seed.
+    private var mGradeStallCount = 0;
+    private const GRADE_STALL_LIMIT = 60;
 
     // Device-specific layout and font profile, set once in initialize()
     private var mDeviceProfile = null;
@@ -78,11 +83,18 @@ class DashView extends WatchUi.DataField {
 
         // Power zones: prefer the FTP from the user's Garmin Connect profile;
         // fall back to the app's FTP setting if the profile has none set.
+        // getFunctionalThresholdPower is API 5.2.2+ (Edge 1040/1050 only); the
+        // `has` check is required because a missing symbol is a fatal runtime
+        // error rather than a catchable exception.
         ftp = null;
-        try {
-            ftp = UserProfile.getFunctionalThresholdPower(Activity.SPORT_CYCLING);
-        } catch (e) {
-            ftp = null;
+        if (UserProfile has :getFunctionalThresholdPower) {
+            try {
+                ftp = UserProfile.getFunctionalThresholdPower(
+                    Activity.SPORT_CYCLING
+                );
+            } catch (e) {
+                ftp = null;
+            }
         }
         if (ftp == null || ftp == 0) {
             ftp = Application.Properties.getValue("ftp");
@@ -117,6 +129,17 @@ class DashView extends WatchUi.DataField {
             }
         }
         return ZONE_COLORS[4];
+    }
+
+    // The DataField object outlives a timer reset, so the grade window has to be
+    // cleared explicitly. Otherwise the anchor keeps the finished activity's
+    // distance, the new activity's distance starts back at zero, and no update
+    // can ever land again.
+    function onTimerReset() as Void {
+        mGrade = 0.0;
+        mGradeLastAlt = null;
+        mGradeLastDist = null;
+        mGradeStallCount = 0;
     }
 
     function compute(info as Activity.Info) as Void {
@@ -965,16 +988,23 @@ class DashView extends WatchUi.DataField {
         rawDist as Float?
     ) as Void {
         if (rawAlt == null || rawDist == null) {
+            ageGradeWindow();
             return;
         }
 
         if (mGradeLastAlt == null || mGradeLastDist == null) {
-            mGradeLastAlt = rawAlt;
-            mGradeLastDist = rawDist;
+            seedGradeWindow(rawAlt, rawDist);
             return;
         }
 
         var distDiff = rawDist - mGradeLastDist;
+
+        // Distance ran backwards, so the anchor sits ahead of us and would block
+        // every future update. Re-seed rather than wait for the ride to catch up.
+        if (distDiff < 0) {
+            seedGradeWindow(rawAlt, rawDist);
+            return;
+        }
 
         // 20m window: wide enough to suppress barometric noise, tight enough to stay responsive
         if (distDiff > 20.0) {
@@ -991,8 +1021,28 @@ class DashView extends WatchUi.DataField {
             // EMA blend: absorbs altitude spikes without hiding sustained grade changes
             mGrade = mGrade * 0.5 + newGrade * 0.5;
 
-            mGradeLastAlt = rawAlt;
-            mGradeLastDist = rawDist;
+            seedGradeWindow(rawAlt, rawDist);
+        } else {
+            ageGradeWindow();
+        }
+    }
+
+    private function seedGradeWindow(rawAlt as Float, rawDist as Float) as Void {
+        mGradeLastAlt = rawAlt;
+        mGradeLastDist = rawDist;
+        mGradeStallCount = 0;
+    }
+
+    // Drops the window after a long run of computes that produced no update, so
+    // the next valid sample re-seeds it. Recovers a stranded anchor even when
+    // distance never runs backwards; re-seeding while genuinely stopped just
+    // rewrites the same values, so the normal case is unaffected.
+    private function ageGradeWindow() as Void {
+        mGradeStallCount++;
+        if (mGradeStallCount > GRADE_STALL_LIMIT) {
+            mGradeLastAlt = null;
+            mGradeLastDist = null;
+            mGradeStallCount = 0;
         }
     }
 }
