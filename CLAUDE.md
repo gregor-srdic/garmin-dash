@@ -32,13 +32,17 @@ Four source files, but the interesting behavior is cross-file.
 
 ### Rendering: `DashView.mc`
 
-`DashView extends WatchUi.DataField`. `compute(info)` reads and unit-converts every metric into `m*` member fields; `onUpdate(dc)` draws the entire screen imperatively from those fields. **`resources/layouts/layouts.xml` is vestigial** — `setLayout()` is never called and nothing in it is used except the `Background` drawable class. Do not add UI by editing layouts; add it to `onUpdate`.
+`DashView extends WatchUi.DataField`. `compute(info)` reads and unit-converts every metric into `m*` member fields; `onUpdate(dc)` draws the entire screen imperatively from those fields. **`resources/layouts/layouts.xml` is vestigial** — `setLayout()` is never called and nothing in it is used except the `Background` drawable class. Do not add UI by editing layouts; add it to the band draw functions below.
+
+`onUpdate` itself only sets the palette, resolves the layout and calls five band functions in z-order: `drawTopBar` → `drawSpeedGauge` → `drawMiddleRow` → `drawPanels` → `drawFooter`. None of them derives its own geometry — every position comes from the Dictionary returned by `computeLayout(dc)`, whose keys are documented above `computeFullLayout`. That Dictionary is cached in `mLayoutCache` and only recomputed when the dc dimensions change, so it may not read anything that varies per frame. Colors do vary per frame (the dark/light setting is live) and live in the `mBgColor` / `mValuesColor` / `mLabelsColor` / `mTrackColor` fields, reset at the top of `onUpdate`.
+
+`computeLayout` dispatches on the profile's `:layoutVariant`. Only `:full` exists today; `:compact` is declared for the 246×322 devices and is where a font-height-derived band stack goes.
 
 `DashBackground.mc` defines `class Background extends WatchUi.Drawable`, which shadows `Toybox.Background`. That is why files needing the real background API write `using Toybox.Background` and call it fully qualified.
 
 ### Device targeting: two mechanisms, order-sensitive
 
-`initDeviceProfile(screenWidth, screenHeight, deviceType)` returns a Dictionary of ~20 pixel offsets and font choices that every draw call in `onUpdate` adds to its coordinates. The key list and meaning of each key is documented in the comment block directly above the function — keep it in sync when adding keys.
+`initDeviceProfile(screenWidth, screenHeight, deviceType)` returns a Dictionary of ~20 pixel offsets and font choices that `computeLayout` and the band draw functions add to their coordinates. The key list and meaning of each key is documented in the comment block directly above the function — keep it in sync when adding keys.
 
 Selection uses both screen dimensions *and* a `deviceType` string:
 - `resources/strings/strings.xml` defines `deviceType` = `default`; each `resources-<productId>/` directory overrides it (Connect IQ picks these up by directory-name convention — they are not listed in `monkey.jungle`). Note both 1030 variants and the 1030 Plus all map to `deviceType` = `edge1030`.
