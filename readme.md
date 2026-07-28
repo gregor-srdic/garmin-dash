@@ -9,7 +9,7 @@
 |:-:|:-:|:-:|:-:|
 | Edge 1050 | Edge 1040 | Edge 1030 | Edge Explore 2 |
 
-Dash is a custom data field for Garmin Edge devices (1050, 1040, 1030, 1030 Plus, 1030 Bontrager, 850, 840, 830, Edge Explore 2), built using Garmin's Connect IQ platform. It provides advanced cycling metrics and background services to enhance your ride experience.
+Dash is a custom data field for Garmin Edge devices (1050, 1040, 1030, 1030 Plus, 1030 Bontrager, 850, 840, 830, 550, 540, 530, Edge Explore 2), built using Garmin's Connect IQ platform. It provides advanced cycling metrics and background services to enhance your ride experience.
 
 Available in [Garmin Connect IQ Store](https://apps.garmin.com/apps/006a95b6-3619-47ec-a796-496a8dd6a3c9)
 
