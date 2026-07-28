@@ -336,6 +336,7 @@ class DashView extends WatchUi.DataField {
 
         var speedFont = mDeviceProfile[:speedFont];
         var panelValueFont = mDeviceProfile[:panelValueFont];
+        var rowValueFont = mDeviceProfile[:rowValueFont];
         var speedYOffset = mDeviceProfile[:speedYOffset];
         var elapsedTimeYOffset = mDeviceProfile[:elapsedTimeYOffset];
         var bottomLabelOffset = mDeviceProfile[:bottomLabelOffset];
@@ -347,6 +348,7 @@ class DashView extends WatchUi.DataField {
         var hideClockLabel = mDeviceProfile[:hideClockLabel];
         var unitLabelFont = mDeviceProfile[:unitLabelFont];
         var avgLabelOffset = mDeviceProfile[:avgLabelOffset];
+        var speedAvgValueOffset = mDeviceProfile[:speedAvgValueOffset];
         var panelAvgValueOffset = mDeviceProfile[:panelAvgValueOffset];
         var panelArcSweep = mDeviceProfile[:panelArcSweep];
         var topBarYOffset = mDeviceProfile[:topBarYOffset];
@@ -396,7 +398,7 @@ class DashView extends WatchUi.DataField {
                     2 +
                     dc.getFontHeight(Graphics.FONT_XTINY) +
                     topBarValueYOffset,
-                Graphics.FONT_LARGE,
+                rowValueFont,
                 topValues[i],
                 Graphics.TEXT_JUSTIFY_CENTER
             );
@@ -405,10 +407,10 @@ class DashView extends WatchUi.DataField {
         // --- GAUGE LAYOUT (Adjusted height) ---
         var minDim = width < height ? width : height;
         var trackWidth = (width * 0.083).toNumber();
-        var radius = minDim * 0.33;
+        var radius = minDim * mDeviceProfile[:gaugeRadiusFactor];
         var centerX = width / 2.0;
         var gaugeCenterYOffset = mDeviceProfile[:gaugeCenterYOffset];
-        var centerY = minDim * 0.33 + topBarH + trackWidth + gaugeCenterYOffset;
+        var centerY = radius + topBarH + trackWidth + gaugeCenterYOffset;
         var maxVal = mIsMetric ? 60.0 : 40.0;
         var gaugeStart = 210.0;
         var gaugeSweep = 240.0;
@@ -460,14 +462,14 @@ class DashView extends WatchUi.DataField {
         dc.setColor(valuesColor, Graphics.COLOR_TRANSPARENT);
         dc.drawText(
             centerX - radius * 0.35,
-            centerY - radius * 0.54 + avgLabelOffset,
+            centerY - radius * 0.54 + avgLabelOffset + speedAvgValueOffset,
             Graphics.FONT_MEDIUM,
             mAvgSpeed.format("%.1f"),
             Graphics.TEXT_JUSTIFY_CENTER
         );
         dc.drawText(
             centerX + radius * 0.35,
-            centerY - radius * 0.54 + avgLabelOffset,
+            centerY - radius * 0.54 + avgLabelOffset + speedAvgValueOffset,
             Graphics.FONT_MEDIUM,
             mMaxSpeed.format("%.1f"),
             Graphics.TEXT_JUSTIFY_CENTER
@@ -501,7 +503,7 @@ class DashView extends WatchUi.DataField {
         ]);
 
         var xtinyH = dc.getFontHeight(Graphics.FONT_XTINY);
-        var largeH = dc.getFontHeight(Graphics.FONT_LARGE);
+        var rowValueH = dc.getFontHeight(rowValueFont);
         var elapsedY =
             2 * radius + topBarH / 2 + xtinyH + 1 + elapsedTimeYOffset;
         dc.setColor(labelsColor, Graphics.COLOR_TRANSPARENT);
@@ -516,7 +518,7 @@ class DashView extends WatchUi.DataField {
         dc.drawText(
             centerX,
             elapsedY,
-            Graphics.FONT_LARGE,
+            rowValueFont,
             elapsedStr,
             Graphics.TEXT_JUSTIFY_CENTER
         );
@@ -551,28 +553,27 @@ class DashView extends WatchUi.DataField {
         dc.drawText(
             width * 0.15,
             cadenceAndGradientLineY,
-            Graphics.FONT_LARGE,
+            rowValueFont,
             mCadence.format("%.0f"),
             Graphics.TEXT_JUSTIFY_CENTER
         );
         dc.drawText(
             width * 0.5,
             cadenceAndGradientLineY,
-            Graphics.FONT_LARGE,
+            rowValueFont,
             mGearInfo,
             Graphics.TEXT_JUSTIFY_CENTER
         );
         dc.drawText(
             width * 0.85,
             cadenceAndGradientLineY,
-            Graphics.FONT_LARGE,
+            rowValueFont,
             mGrade.format("%.1f"),
             Graphics.TEXT_JUSTIFY_CENTER
         );
 
         // Footer Y needed by panels — anchored so value + label below both fit
-        var footerY =
-            height - dc.getFontHeight(Graphics.FONT_LARGE) - xtinyH + 1;
+        var footerY = height - rowValueH - xtinyH + 1;
 
         // --- HR & POWER PANELS ---
         var panelTop = centerY + radius * 0.5 + topBarH * 2;
@@ -806,18 +807,14 @@ class DashView extends WatchUi.DataField {
             dc.drawText(
                 x,
                 footerY + 2 + footerValueYOffset,
-                Graphics.FONT_LARGE,
+                rowValueFont,
                 bottomValues[i],
                 Graphics.TEXT_JUSTIFY_CENTER
             );
             dc.setColor(labelsColor, Graphics.COLOR_TRANSPARENT);
             dc.drawText(
                 x,
-                footerY +
-                    2 +
-                    dc.getFontHeight(Graphics.FONT_LARGE) -
-                    6 +
-                    bottomLabelOffset,
+                footerY + 2 + rowValueH - 6 + bottomLabelOffset,
                 Graphics.FONT_XTINY,
                 bottomLabels[i],
                 Graphics.TEXT_JUSTIFY_CENTER
@@ -832,6 +829,12 @@ class DashView extends WatchUi.DataField {
     //   :gaugeCenterYOffset    (Number) — vertical offset applied to gauge center and cadence/gradient line
     //   :speedFont             (Graphics.FontType) — font for the central speed readout
     //   :panelValueFont        (Graphics.FontType) — font for HR and power panel values
+    //   :rowValueFont          (Graphics.FontType) — font for the top bar, elapsed time,
+    //                            cadence/gear/grade and footer values. FONT_LARGE on 1.67
+    //                            aspect screens; shorter screens step it down.
+    //   :gaugeRadiusFactor     (Float) — speed gauge radius as a fraction of the narrow
+    //                            screen dimension. 0.33 on 1.67 aspect screens; shorter
+    //                            screens need less so the rows below still fit.
     //   :speedYOffset          (Number) — vertical shift for the central speed value and km/h label
     //   :elapsedTimeYOffset    (Number) — vertical shift for the elapsed time row
     //   :bottomLabelOffset     (Number) — extra downward shift for bottom bar labels
@@ -847,6 +850,9 @@ class DashView extends WatchUi.DataField {
     //   :hideClockLabel        (Boolean) — suppress the CLOCK label in the top bar
     //   :unitLabelFont         (Graphics.FontType) — font for km/h, HR, and CAD/PWR labels
     //   :avgLabelOffset        (Number) — vertical shift for AVG/MAX and panel AVG labels and values (negative = up)
+    //   :speedAvgValueOffset   (Number) — extra vertical shift for the AVG/MAX speed values
+    //                            only, relative to their AVG/MAX labels. Use to open up the
+    //                            label-to-value gap when a smaller gauge radius closes it.
     //   :panelAvgValueOffset   (Number) — vertical shift for avg HR and avg power/cadence values (negative = up)
     //   :panelArcSweep         (Float)  — total sweep angle in degrees for HR and power arc gauges
     private function initDeviceProfile(
@@ -854,6 +860,40 @@ class DashView extends WatchUi.DataField {
         screenHeight as Number,
         deviceType as String
     ) as Lang.Dictionary {
+        // --- Edge 850: 420 x 600 ---
+        // Same 269 ppi font metrics as the 1050 but 200 fewer vertical pixels, so
+        // the 1050 profile overflows by roughly 160 px. Must be tested before the
+        // screenWidth >= 400 branch below, which would otherwise swallow it.
+        // Recovered by stepping the row, speed and panel fonts down one each and
+        // shrinking the gauge from 0.33 to 0.25 of screen width.
+        if (deviceType.equals("edge850")) {
+            return {
+                :gaugeCenterYOffset => 0,
+                :speedYOffset => 6,
+                :elapsedTimeYOffset => 20,
+                :speedFont => Graphics.FONT_NUMBER_MEDIUM,
+                :panelValueFont => Graphics.FONT_NUMBER_MILD,
+                :rowValueFont => Graphics.FONT_MEDIUM,
+                :gaugeRadiusFactor => 0.25,
+                :bottomLabelOffset => 0,
+                :timeLabelOffset => 0,
+                :cadenceLineYOffset => 30,
+                :middleRowLabelOffset => 0,
+                :hideClockLabel => false,
+                :unitLabelFont => Graphics.FONT_TINY,
+                :avgLabelOffset => 0,
+                :speedAvgValueOffset => 4,
+                :panelAvgValueOffset => 0,
+                :panelArcSweep => 45.0,
+                :topBarYOffset => 0,
+                :topBarValueYOffset => -4,
+                :footerValueYOffset => 0,
+                :panelCenterYOffset => 0,
+                :panelTextYOffset => 0,
+                :panelTopLabelYOffset => 0,
+            };
+        }
+
         // --- Edge 1050: 480 x 800 ---
         if (screenWidth >= 400) {
             return {
@@ -862,6 +902,8 @@ class DashView extends WatchUi.DataField {
                 :elapsedTimeYOffset => 0,
                 :speedFont => Graphics.FONT_NUMBER_THAI_HOT,
                 :panelValueFont => Graphics.FONT_NUMBER_HOT,
+                :rowValueFont => Graphics.FONT_LARGE,
+                :gaugeRadiusFactor => 0.33,
                 :bottomLabelOffset => 0,
                 :timeLabelOffset => 0,
                 :cadenceLineYOffset => 0,
@@ -869,6 +911,7 @@ class DashView extends WatchUi.DataField {
                 :hideClockLabel => false,
                 :unitLabelFont => Graphics.FONT_SMALL,
                 :avgLabelOffset => 0,
+                :speedAvgValueOffset => 0,
                 :panelAvgValueOffset => 0,
                 :panelArcSweep => 54.0,
                 :topBarYOffset => 0,
@@ -888,6 +931,8 @@ class DashView extends WatchUi.DataField {
                 :elapsedTimeYOffset => -10,
                 :speedFont => Graphics.FONT_NUMBER_HOT,
                 :panelValueFont => Graphics.FONT_NUMBER_MEDIUM,
+                :rowValueFont => Graphics.FONT_LARGE,
+                :gaugeRadiusFactor => 0.33,
                 :bottomLabelOffset => 0,
                 :timeLabelOffset => 8,
                 :cadenceLineYOffset => -2,
@@ -895,6 +940,7 @@ class DashView extends WatchUi.DataField {
                 :hideClockLabel => false,
                 :unitLabelFont => Graphics.FONT_SMALL,
                 :avgLabelOffset => 0,
+                :speedAvgValueOffset => 0,
                 :panelAvgValueOffset => -3,
                 :panelArcSweep => 54.0,
                 :topBarYOffset => -6,
@@ -914,6 +960,8 @@ class DashView extends WatchUi.DataField {
                 :elapsedTimeYOffset => 0,
                 :speedFont => Graphics.FONT_NUMBER_HOT,
                 :panelValueFont => Graphics.FONT_NUMBER_MEDIUM,
+                :rowValueFont => Graphics.FONT_LARGE,
+                :gaugeRadiusFactor => 0.33,
                 :bottomLabelOffset => 0,
                 :timeLabelOffset => 0,
                 :cadenceLineYOffset => 0,
@@ -921,6 +969,7 @@ class DashView extends WatchUi.DataField {
                 :hideClockLabel => false,
                 :unitLabelFont => Graphics.FONT_SMALL,
                 :avgLabelOffset => 0,
+                :speedAvgValueOffset => 0,
                 :panelAvgValueOffset => 0,
                 :panelArcSweep => 54.0,
                 :topBarYOffset => 0,
@@ -940,6 +989,8 @@ class DashView extends WatchUi.DataField {
                 :elapsedTimeYOffset => -13,
                 :speedFont => Graphics.FONT_NUMBER_HOT,
                 :panelValueFont => Graphics.FONT_NUMBER_MEDIUM,
+                :rowValueFont => Graphics.FONT_LARGE,
+                :gaugeRadiusFactor => 0.33,
                 :bottomLabelOffset => 2,
                 :timeLabelOffset => 8,
                 :cadenceLineYOffset => 0,
@@ -947,6 +998,7 @@ class DashView extends WatchUi.DataField {
                 :hideClockLabel => false,
                 :unitLabelFont => Graphics.FONT_XTINY,
                 :avgLabelOffset => -6,
+                :speedAvgValueOffset => 0,
                 :panelAvgValueOffset => -6,
                 :panelArcSweep => 45.0,
                 :topBarYOffset => -6,
@@ -965,6 +1017,8 @@ class DashView extends WatchUi.DataField {
             :elapsedTimeYOffset => -10,
             :speedFont => Graphics.FONT_NUMBER_HOT,
             :panelValueFont => Graphics.FONT_NUMBER_MEDIUM,
+            :rowValueFont => Graphics.FONT_LARGE,
+            :gaugeRadiusFactor => 0.33,
             :bottomLabelOffset => 0,
             :timeLabelOffset => 0,
             :cadenceLineYOffset => 0,
@@ -972,6 +1026,7 @@ class DashView extends WatchUi.DataField {
             :hideClockLabel => false,
             :unitLabelFont => Graphics.FONT_SMALL,
             :avgLabelOffset => 0,
+            :speedAvgValueOffset => 0,
             :panelAvgValueOffset => 0,
             :panelArcSweep => 54.0,
             :topBarYOffset => 0,
