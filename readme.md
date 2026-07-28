@@ -9,7 +9,7 @@
 |:-:|:-:|:-:|:-:|
 | Edge 1050 | Edge 1040 | Edge 1030 | Edge Explore 2 |
 
-Dash is a custom data field for Garmin Edge devices (1050, 1040, 1030, 1030 Plus, 1030 Bontrager, 850, Edge Explore 2), built using Garmin's Connect IQ platform. It provides advanced cycling metrics and background services to enhance your ride experience.
+Dash is a custom data field for Garmin Edge devices (1050, 1040, 1030, 1030 Plus, 1030 Bontrager, 850, 840, 830, Edge Explore 2), built using Garmin's Connect IQ platform. It provides advanced cycling metrics and background services to enhance your ride experience.
 
 Available in [Garmin Connect IQ Store](https://apps.garmin.com/apps/006a95b6-3619-47ec-a796-496a8dd6a3c9)
 
@@ -49,6 +49,17 @@ Available in [Garmin Connect IQ Store](https://apps.garmin.com/apps/006a95b6-361
 ### No power data?
 
 If you don't have a power meter, the right gauge will display current cadence between 0 and 150 rpm along with current and average cadence.
+
+### On the Edge 840 and 830
+
+These are 2.6" screens — a third of the pixel height of a 1050 in the same width. Everything above still fits on them at a readable size only if some of it goes, so those two devices get a condensed four-band layout:
+
+1. Current time and ambient temperature
+2. Speed gauge with the current speed at its centre
+3. Heart rate and power as horizontal zone bars, coloured by training zone exactly as the round gauges are
+4. Elapsed time, cadence, grade and distance
+
+What is dropped is the data you look at after the ride rather than during it: average and max speed, average heart rate, average power, elevation, total ascent, calories and the Di2 gear readout. Without a power meter the right bar becomes a cadence bar as above, and the cadence slot in the bottom row shows total ascent instead.
 
 ### Units & appearance
 

@@ -4,7 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-Dash is a Garmin Connect IQ **data field** (not a widget/app) for Edge cycling computers, written in Monkey C. It renders a full-screen ride dashboard: speed gauge, HR/power arc gauges, and stat rows. Target products are declared in `manifest.xml`: edge1030, edge1030bontrager, edge1030plus, edge1040, edge1050, edge850, edgeexplore2. `minApiLevel` is 3.2.0.
+Dash is a Garmin Connect IQ **data field** (not a widget/app) for Edge cycling computers, written in Monkey C. It renders a full-screen ride dashboard: speed gauge, HR/power arc gauges, and stat rows. Target products are declared in `manifest.xml`: edge1030, edge1030bontrager, edge1030plus, edge1040, edge1050, edge530, edge540, edge550, edge830, edge840, edge850, edgeexplore2. `minApiLevel` is 3.2.0.
+
+Three of those twelve are button-only siblings that are pixel-identical to a touch model — same resolution, ppi, memory and font point sizes — and share its profile outright: **530 ≡ 830, 540 ≡ 840, 550 ≡ 850**. A data field takes no input, so buttons vs touch changes nothing here. Tune a parent and the sibling follows.
 
 ## Build & run
 
@@ -34,9 +36,14 @@ Four source files, but the interesting behavior is cross-file.
 
 `DashView extends WatchUi.DataField`. `compute(info)` reads and unit-converts every metric into `m*` member fields; `onUpdate(dc)` draws the entire screen imperatively from those fields. **`resources/layouts/layouts.xml` is vestigial** — `setLayout()` is never called and nothing in it is used except the `Background` drawable class. Do not add UI by editing layouts; add it to the band draw functions below.
 
-`onUpdate` itself only sets the palette, resolves the layout and calls five band functions in z-order: `drawTopBar` → `drawSpeedGauge` → `drawMiddleRow` → `drawPanels` → `drawFooter`. None of them derives its own geometry — every position comes from the Dictionary returned by `computeLayout(dc)`, whose keys are documented above `computeFullLayout`. That Dictionary is cached in `mLayoutCache` and only recomputed when the dc dimensions change, so it may not read anything that varies per frame. Colors do vary per frame (the dark/light setting is live) and live in the `mBgColor` / `mValuesColor` / `mLabelsColor` / `mTrackColor` fields, reset at the top of `onUpdate`.
+`onUpdate` itself only sets the palette, resolves the layout and calls the band functions for the layout's variant in z-order — `:full` calls `drawTopBar` → `drawSpeedGauge` → `drawMiddleRow` → `drawPanels` → `drawFooter`, `:compact` calls `drawCompactTopBar` → `drawCompactSpeedGauge` → `drawCompactBars` → `drawCompactFooter`. None of them derives its own geometry — every position comes from the Dictionary returned by `computeLayout(dc)`, whose keys are documented above `computeFullLayout`. That Dictionary is cached in `mLayoutCache` and only recomputed when the dc dimensions change, so it may not read anything that varies per frame. Colors do vary per frame (the dark/light setting is live) and live in the `mBgColor` / `mValuesColor` / `mLabelsColor` / `mTrackColor` fields, reset at the top of `onUpdate`.
 
-`computeLayout` dispatches on the profile's `:layoutVariant`. Only `:full` exists today; `:compact` is declared for the 246×322 devices and is where a font-height-derived band stack goes.
+`computeLayout` dispatches on the profile's `:layoutVariant`, and the two variants are built on opposite principles:
+
+- `:full` (1030 / 1040 / 1050 / 850 / Explore 2) positions bands with ~20 hand-tuned pixel offsets from the device profile.
+- `:compact` (840 / 830) derives every band from `dc.getFontHeight()` at runtime and carries only six profile keys. It has to: the two devices sharing 246×322 do **not** share font metrics — `FONT_LARGE` is 41 px on the 830 against 31 px on the 840, while their number fonts match within 1 px — so any absolute offset tuned on one is wrong on the other. Lay bands out from the screen edges inward and let the speed gauge absorb the slack; do not add pixel offsets to this path.
+
+The two paths share no draw code. `:compact` drops the metrics it has no room for (AVG HR, AVG power, calories) rather than shrinking them, and draws the HR/power zone bars as horizontal `fillRectangle` runs instead of arcs. It issues 12 `drawArc` calls per frame against `:full`'s 44, which matters on the 830 (2019 hardware).
 
 `DashBackground.mc` defines `class Background extends WatchUi.Drawable`, which shadows `Toybox.Background`. That is why files needing the real background API write `using Toybox.Background` and call it fully qualified.
 
@@ -46,11 +53,27 @@ Four source files, but the interesting behavior is cross-file.
 
 Selection uses both screen dimensions *and* a `deviceType` string:
 - `resources/strings/strings.xml` defines `deviceType` = `default`; each `resources-<productId>/` directory overrides it (Connect IQ picks these up by directory-name convention — they are not listed in `monkey.jungle`). Note both 1030 variants and the 1030 Plus all map to `deviceType` = `edge1030`.
-- Branch order in `initDeviceProfile` matters: `deviceType == "edge850"` → `screenWidth >= 400` (1050) → `deviceType == "edgeexplore2"` → `screenWidth < 260` (840/540, not currently a build target) → `deviceType == "edge1030"` → fallback (1040). A width check placed before a deviceType check will swallow it — the 850 is 420 wide and must be tested before the `>= 400` branch.
+- Branch order in `initDeviceProfile` matters: `deviceType == "edge850"`/`"edge550"` → `screenWidth >= 400` (1050) → `deviceType == "edgeexplore2"` → `deviceType == "edge840"`/`"edge830"`/`"edge540"`/`"edge530"` or `screenWidth < 260` (the `:compact` branch; the width test is now only a safety net for non-target sub-260 devices) → `deviceType == "edge1030"` → fallback (1040). A width check placed before a deviceType check will swallow it — the 850 and 550 are 420 wide and must be tested before the `>= 400` branch.
+- **The 550 is the cautionary case.** 246×322 devices are caught by the `screenWidth < 260` net even on `deviceType` = `default`, so they tolerate a missing resource dir. A 420×600 device does not: without `resources-edge550/`, a 550 falls into `screenWidth >= 400`, takes the **1050** profile, and renders a layout that overflows by ~160 px — while still compiling and drawing, so it looks like it works. Any future 420×600 target needs its `deviceType` wired into the 850 branch.
+- Verifying which branch a device actually takes cannot be done statically: `Rez.mcgen` carries only resource ids, and every `.prg` embeds all the `deviceType` literals regardless of target because they are the `.equals()` operands in `initDeviceProfile`. Print the resolved profile from `initialize()` and run it under `monkeydo`. `:gaugeRadiusFactor` is the cheapest discriminator — 0.25 means the 850 branch, 0.33 the 1050/1040 branches, 0.40 `:compact`.
 
-Two profile keys carry the layout across aspect ratios: `:gaugeRadiusFactor` (speed gauge radius as a fraction of screen width) and `:rowValueFont` (the font for top bar, elapsed time, cadence row and footer values). Every 1.67-aspect device uses `0.33` / `FONT_LARGE`; the 850 at 1.43 needs `0.25` / `FONT_MEDIUM`. The layout is designed to *exactly* fill a 1.67-aspect screen — on the 1050 the shipped design already has ~4px of text-box overlap — so a shorter screen has no slack and needs both keys reduced, not just offsets nudged.
+Two profile keys carry the `:full` layout across aspect ratios: `:gaugeRadiusFactor` (speed gauge radius as a fraction of screen width) and `:rowValueFont` (the font for top bar, elapsed time, cadence row and footer values). Every 1.67-aspect device uses `0.33` / `FONT_LARGE`; the 850 at 1.43 needs `0.25` / `FONT_MEDIUM`. The layout is designed to *exactly* fill a 1.67-aspect screen — on the 1050 the shipped design already has ~4px of text-box overlap — so a shorter screen has no slack and needs both keys reduced, not just offsets nudged. Below roughly 1.4 this stops working at any font size and the device belongs on `:compact`, where `:gaugeRadiusFactor` becomes an upper bound the layout shrinks past if the band cannot take it.
 
 To add a device: add the `<iq:product>` to `manifest.xml`, add `resources-<productId>/strings/strings.xml` with a `deviceType`, and add a profile branch — inserted at the right position in that chain.
+
+Font heights are **not** derivable from ppi or from the SDK's `simulator.json` point sizes, and devices with identical resolution and ppi do not necessarily share them. Measure them: build a `(:debug)` `System.println` of `dc.getFontHeight()` / `dc.getTextWidthInPixels()` for the fonts and worst-case strings you plan to use, then `monkeydo` it and read the console. Known values:
+
+| Font | 830 | 840 | 1040 | Explore 2 | 1050 / 850 |
+|---|---|---|---|---|---|
+| xtiny | 13 | 11 | 13 | 12 | 21 |
+| tiny | 20 | 14 | 17 | 16 | 28 |
+| small | 22 | 17 | 19 | 19 | 33 |
+| medium | 26 | 19 | 22 | 22 | 38 |
+| large | 41 | 31 | 36 | 36 | 61 |
+| numberMild | 36 | 35 | 42 | 41 | 71 |
+| numberMedium | 42 | 42 | 48 | 48 | 82 |
+| numberHot | 56 | 55 | 64 | 64 | 109 |
+| numberThaiHot | 70 | 67 | 80 | 81 | 136 |
 
 ### Temperature: spans all four files
 
