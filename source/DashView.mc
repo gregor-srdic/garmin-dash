@@ -8,6 +8,7 @@ import Toybox.Time.Gregorian;
 import Toybox.Sensor;
 import Toybox.Application;
 import Toybox.UserProfile;
+import Toybox.Math;
 
 class DashView extends WatchUi.DataField {
     private var mSpeed = 0.0;
@@ -492,6 +493,9 @@ class DashView extends WatchUi.DataField {
     //                                                        under the label row at :topBarY
     //   :speedAvgLabelY :speedAvgValueY                    — the AVG / MAX pair
     //                                                        in the gauge crown
+    //   :speedAvgColOffset                                 — how far off centre
+    //                                                        that pair's two
+    //                                                        columns sit
     //   :colW                                              — band 1 column width,
     //                                                        a quarter of the screen
     //   :footerLabelY                                      — band 4 label row
@@ -559,19 +563,16 @@ class DashView extends WatchUi.DataField {
         if (gaugeSlack < 0) {
             gaugeSlack = 0;
         }
-        // The first of the two hand-tuned pixel offsets on this path. Centring
-        // the gauge in its band leaves it low against the crown's open bottom,
-        // so it is lifted clear of centre by eye. Applied to centerY, not to
-        // the individual draws so the AVG/MAX pair, the speed readout and the
-        // unit label — all derived from it below — travel with the arc.
-        var gaugeLift = 8;
-        var centerY =
-            gaugeTop + gaugeSlack + trackWidth / 2.0 + radius - gaugeLift;
+        // No hand-tuned lift here: the gauge sits where centring in its band
+        // puts it. It used to be raised 8 px off centre by eye to compensate for
+        // the crown's open bottom, which read as too high once the top bar and
+        // footer went up a font size and closed in on it.
+        var centerY = gaugeTop + gaugeSlack + trackWidth / 2.0 + radius;
 
-        // The second hand-tuned offset, and the reason band 2 is measured
-        // against the unlifted barsValueY above: band 3 sat lower in the gap
-        // under the gauge crown than it needed to. Lifting it here rather than
-        // at its definition keeps the gauge where it is — folded into
+        // The one hand-tuned offset on this path, and the reason band 2 is
+        // measured against the unlifted barsValueY above: band 3 sat lower in
+        // the gap under the gauge crown than it needed to. Lifting it here
+        // rather than at its definition keeps the gauge where it is — folded into
         // barsValueY earlier it would have eaten the gauge band and carried the
         // arc up with it. Clamped against the bottom of the arc, because on a
         // small dc (one cell of a multi-field screen) the gap it eats is not
@@ -592,10 +593,54 @@ class DashView extends WatchUi.DataField {
         // 830 is 26 px against the 840's 19, so one radius fraction would leave
         // a gap on one device and an overlap on the other. The +2s are the same
         // text-box leading slack the footer and band 3 take out.
+        //
+        // :crownYOffset then nudges the whole pair, label and value together.
+        // This is the one pixel offset on the :compact path, and it is only safe
+        // because the two 246x322 devices now take separate profiles — a value
+        // tuned against the 840's font metrics is never applied to the 830's.
         var speedH = dc.getFontHeight(mDeviceProfile[:speedFont]);
-        var avgValueH = dc.getFontHeight(Graphics.FONT_MEDIUM);
-        var speedAvgValueY = centerY - speedH / 2.0 - avgValueH + 2;
+        var avgValueH = dc.getFontHeight(mDeviceProfile[:crownValueFont]);
+        var crownYOffset = mDeviceProfile[:crownYOffset];
+        var speedAvgValueY =
+            centerY - speedH / 2.0 - avgValueH + 2 + crownYOffset;
         var speedAvgLabelY = speedAvgValueY - xtinyH + 2;
+
+        // How far off centre the AVG / MAX columns sit. :full and the 830 can
+        // afford the flat 0.35 of the radius this pair was designed around, but
+        // the 840's larger crown font pushes the stack higher, and the crown
+        // narrows as it goes up: at 0.35 the top corner of the value box lands
+        // 0.45 px off the arc's inner edge there, against 13 px on the 830.
+        //
+        // So derive it rather than pin it. The binding point is the top corner
+        // of the value box — the box's widest row at its narrowest crown height
+        // — and the string measured is a two-digit speed, the widest that leaves
+        // the pair room to sit side by side. A three-digit speed is wider than
+        // half the crown at this height on the 840, so no offset both clears the
+        // arc and keeps the two values apart; sizing for it would push them into
+        // each other, which reads worse than clipping the arc. Two-digit it is.
+        var crownValueW = dc.getTextWidthInPixels(
+            "99.9",
+            mDeviceProfile[:crownValueFont]
+        );
+        var crownInner = radius - trackWidth / 2.0;
+        var crownDy = centerY - speedAvgValueY;
+        var crownHalf = 0.0;
+        if (crownDy < crownInner) {
+            crownHalf = Math.sqrt(
+                crownInner * crownInner - crownDy * crownDy
+            );
+        }
+        // Outward until the box corner is 2 px off the arc, but never so far in
+        // that the two values touch, and never wider than the 0.35 the crown was
+        // laid out around. On the 830 the cap binds and nothing changes.
+        var avgColOffset = crownHalf - 2 - crownValueW / 2.0;
+        var avgColMin = crownValueW / 2.0 + 3;
+        if (avgColOffset < avgColMin) {
+            avgColOffset = avgColMin;
+        }
+        if (avgColOffset > radius * 0.35) {
+            avgColOffset = radius * 0.35;
+        }
 
         var barLen = centerX - edge * 2;
         var segGap = 2;
@@ -616,6 +661,7 @@ class DashView extends WatchUi.DataField {
             :trackWidth => trackWidth,
             :speedAvgLabelY => speedAvgLabelY,
             :speedAvgValueY => speedAvgValueY,
+            :speedAvgColOffset => avgColOffset,
 
             :barsValueY => barsValueY,
             :barsBarY => barsValueY + barValueH + pad,
@@ -1153,9 +1199,18 @@ class DashView extends WatchUi.DataField {
     // spaced columns, each under an xtiny label — the same column order and
     // label-over-value stack the full layout's top bar uses, with DI2 appended.
     // Four columns is a quarter of the screen each, 61 px on both devices. The
-    // widest thing that can land in one is a five-digit elevation in feet, 45 px
-    // at FONT_SMALL on the 830 (the 840 renders that font 5 px shorter and
-    // correspondingly narrower), so the row has margin at its worst case.
+    // widest things that can land in one are a five-digit elevation in feet and
+    // a negative one-decimal temperature.
+    //
+    // The columns are centre-justified, so what actually constrains the row is
+    // neighbour-to-neighbour, not string-vs-column: a string wider than 61 px is
+    // fine as long as the column beside it is running something narrow.
+    //   830 at FONT_MEDIUM: 55 and 54 px. Everything clears with margin.
+    //   840 at FONT_LARGE:  70 and 69 px, and even the clock is 64. Typical
+    //     values still clear — "12.3°" (58) ends at 60 and "23:59" starts at 60
+    //     — but a sub-zero temperature overlaps the clock by ~5 px, and a
+    //     five-digit elevation in feet overlaps it by ~5 px on the other side.
+    //     Metric elevation is four digits (56 px) and never collides.
     private function drawCompactTopBar(
         dc as Graphics.Dc,
         layout as Lang.Dictionary
@@ -1243,11 +1298,12 @@ class DashView extends WatchUi.DataField {
         }
 
         // --- AVG / MAX PAIR ---
-        // Same 0.35-of-radius columns as :full. At the pair's height the crown
-        // is ~77 px wide either side of centre on both devices, so the values
-        // clear the arc with room to spare.
-        var avgX = centerX - radius * 0.35;
-        var maxX = centerX + radius * 0.35;
+        // Columns come from the layout, which starts at the same 0.35 of the
+        // radius :full uses and pulls them in if the crown font is too big to
+        // clear the arc there — see :speedAvgColOffset in computeCompactLayout.
+        var avgColOffset = layout[:speedAvgColOffset];
+        var avgX = centerX - avgColOffset;
+        var maxX = centerX + avgColOffset;
         var avgLabelY = layout[:speedAvgLabelY];
         var avgValueY = layout[:speedAvgValueY];
 
@@ -1267,17 +1323,18 @@ class DashView extends WatchUi.DataField {
             Graphics.TEXT_JUSTIFY_CENTER
         );
         dc.setColor(mValuesColor, Graphics.COLOR_TRANSPARENT);
+        var crownFont = mDeviceProfile[:crownValueFont];
         dc.drawText(
             avgX,
             avgValueY,
-            Graphics.FONT_MEDIUM,
+            crownFont,
             mAvgSpeed.format("%.1f"),
             Graphics.TEXT_JUSTIFY_CENTER
         );
         dc.drawText(
             maxX,
             avgValueY,
-            Graphics.FONT_MEDIUM,
+            crownFont,
             mMaxSpeed.format("%.1f"),
             Graphics.TEXT_JUSTIFY_CENTER
         );
@@ -1453,6 +1510,17 @@ class DashView extends WatchUi.DataField {
     // spaced by content rather than evenly — elapsed time is three times the
     // width of the others. When there is no power data the cadence bar above
     // already carries cadence, so that slot shows ascent instead.
+    // This is the tighter of the two text bands, because TIME is wide and the
+    // three columns beside it are fixed fractions of the width.
+    //   830 at FONT_MEDIUM: the tightest pair is GRD/DIST, "-12.3" and "199.9"
+    //     at 46 and 49 px against centres 52 px apart — ~4 px clear. That is
+    //     what caps the font on this device, not the band height.
+    //   840 at FONT_LARGE: typical values clear (a 1-hour time, 2-digit cadence,
+    //     1-digit grade and 2-digit distance leave 9 px at the tightest point),
+    //     but the absolute worst case needs 262 px of a 246 px row, so it cannot
+    //     be respaced into fitting. Two things overrun: a 10-hour-plus TIME is
+    //     100 px and clips ~6 px off the left edge, and a 3-digit distance
+    //     beside a 2-digit negative grade overlaps it by ~9 px.
     private function drawCompactFooter(
         dc as Graphics.Dc,
         layout as Lang.Dictionary
@@ -1506,7 +1574,7 @@ class DashView extends WatchUi.DataField {
     // To add support for a new device, add a new profile block below.
     //
     // Which keys a profile must carry depends on its :layoutVariant. A :full
-    // profile carries all of them; a :compact profile carries only the six
+    // profile carries all of them; a :compact profile carries only the eight
     // marked [compact] below, because computeCompactLayout derives its bands
     // from measured font heights rather than from pixel offsets.
     //
@@ -1523,6 +1591,15 @@ class DashView extends WatchUi.DataField {
     //                            aspect screens; shorter screens step it down. [compact]
     //   :barValueFont          (Graphics.FontType) — font for the HR and power values on the
     //                            compact zone bars. [compact only]
+    //   :crownValueFont        (Graphics.FontType) — font for the AVG / MAX speed pair inside
+    //                            the gauge crown. Sized independently of :rowValueFont because
+    //                            the crown narrows as the pair grows: the columns are pulled
+    //                            in to compensate (:speedAvgColOffset), and past a point the
+    //                            two values would meet in the middle. [compact only]
+    //   :crownYOffset          (Number) — vertical nudge for the AVG / MAX pair, label and
+    //                            value together (positive = lower). The only pixel offset on
+    //                            the :compact path; safe only because the 830 and 840 take
+    //                            separate profiles. [compact only]
     //   :gaugeRadiusFactor     (Float) — speed gauge radius as a fraction of the narrow
     //                            screen dimension. 0.33 on 1.67 aspect screens; shorter
     //                            screens need less so the rows below still fit. On :compact
@@ -1653,20 +1730,52 @@ class DashView extends WatchUi.DataField {
             };
         }
 
-        // --- Edge 830 / 840 / 530 / 540: 246 x 322 ---
-        // The only :compact profile, and the only one that carries the short key
-        // set — computeCompactLayout derives its bands from measured font
-        // heights, so the ~20 pixel offsets the :full path needs have nothing to
-        // apply to. One profile covers all four devices despite their font
-        // metrics differing by up to 10 px (830 FONT_LARGE 41, 840 31): the font
-        // *choices* are the same and the layout measures whatever it gets.
-        // 530 and 540 are the button-only 830 and 840 — identical panel, ppi and
-        // font point sizes. The width test stays as a safety net for any other
-        // sub-260 device that is not a build target.
+        // --- Edge 840 / 540: 246 x 322 ---
+        // Same panel as the 830/530 below and the same :compact layout, split
+        // out for one key: :rowValueFont. This pair renders the system fonts far
+        // smaller than the 830 does — FONT_MEDIUM is 19 px here against 26 —
+        // so the step that fills the top bar and footer on the 830 leaves these
+        // two looking undersized, and they have the room for one more step.
+        //
+        // FONT_LARGE is the last font available (the FONT_NUMBER_* faces carry
+        // no '°', ':' or '/', and this device reports no vector font support),
+        // and it is a big step: 19 px to 31. It fits typical values with a few
+        // px to spare but overruns its neighbours at the extremes — see
+        // drawCompactTopBar and drawCompactFooter for which strings and by how
+        // much. That trade is deliberate; step back to FONT_MEDIUM to undo it.
+        if (deviceType.equals("edge840") || deviceType.equals("edge540")) {
+            return {
+                :layoutVariant => :compact,
+                :speedFont => Graphics.FONT_NUMBER_THAI_HOT,
+                :barValueFont => Graphics.FONT_NUMBER_MILD,
+                :rowValueFont => Graphics.FONT_LARGE,
+                :crownValueFont => Graphics.FONT_LARGE,
+                // The taller crown font stacks the pair higher than it wants to
+                // sit; 6 px back down re-centres it in the crown by eye. That is
+                // as far as it goes: the AVG / MAX digits end 1 px above the top
+                // of the speed digits here (measured via getFontAscent, and the
+                // number fonts carry no leading — box height is ascent+descent
+                // exactly, so the boxes are the glyphs). 7 would touch.
+                :crownYOffset => 6,
+                :unitLabelFont => Graphics.FONT_TINY,
+                :gaugeRadiusFactor => 0.40,
+                :speedYOffset => 0,
+            };
+        }
+
+        // --- Edge 830 / 530: 246 x 322 ---
+        // The other :compact profile. Both carry the short key set —
+        // computeCompactLayout derives its bands from measured font heights, so
+        // the ~20 pixel offsets the :full path needs have nothing to apply to,
+        // and the same profile covers a device pair whose font metrics differ
+        // (830 FONT_LARGE 41, 840 31) because the layout measures whatever it
+        // gets. 530 and 540 are the button-only 830 and 840 — identical panel,
+        // ppi and font point sizes. The width test stays as a safety net for any
+        // other sub-260 device that is not a build target; it lands here rather
+        // than on the 840 profile because this is the more conservative of the
+        // two font choices.
         if (
-            deviceType.equals("edge840") ||
             deviceType.equals("edge830") ||
-            deviceType.equals("edge540") ||
             deviceType.equals("edge530") ||
             screenWidth < 260
         ) {
@@ -1674,7 +1783,15 @@ class DashView extends WatchUi.DataField {
                 :layoutVariant => :compact,
                 :speedFont => Graphics.FONT_NUMBER_THAI_HOT,
                 :barValueFont => Graphics.FONT_NUMBER_MILD,
-                :rowValueFont => Graphics.FONT_SMALL,
+                // FONT_MEDIUM rather than FONT_SMALL: the top bar and footer
+                // values are the least glanceable thing on this screen, and
+                // both bands have the width for the step (see drawCompactTopBar
+                // for the worst-case column). The extra height comes out of the
+                // gauge band, which shrinks to fit on its own. FONT_LARGE is 41
+                // px here and does not fit — that step is 840/540 only.
+                :rowValueFont => Graphics.FONT_MEDIUM,
+                :crownValueFont => Graphics.FONT_MEDIUM,
+                :crownYOffset => 0,
                 :unitLabelFont => Graphics.FONT_TINY,
                 :gaugeRadiusFactor => 0.40,
                 :speedYOffset => 0,
