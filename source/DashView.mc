@@ -522,14 +522,20 @@ class DashView extends WatchUi.DataField {
         // at footerY + rowValueH + xtinyH - 2, which is what is subtracted here.
         var footerY = height - pad - (rowValueH + xtinyH - 2);
 
-        // Band 3: label and value share a line, with the bar under them.
-        var barH = (height * 0.032).toNumber();
+        // The speed gauge's pen width, and with it the thickness of every lit
+        // element on the screen: band 3's zone bars are drawn this tall so the
+        // three gauges read as one weight rather than three.
+        var trackWidth = (width * 0.075).toNumber();
+
+        // Band 3: label and value share a line, with the bar under them. This
+        // is the band's unlifted position — band 2 is measured against it, then
+        // the band is lifted clear of the gauge below (see barsLift).
+        var barH = trackWidth;
         var barsValueY = footerY - pad * 2 - (barValueH + pad + barH);
 
         // Band 2: everything left between bands 1 and 3. The gauge sweeps 240
         // degrees from 210, so it stands `radius` above its center and
         // `radius / 2` below it, plus half the track width at each end.
-        var trackWidth = (width * 0.075).toNumber();
         var gaugeTop = topBarValueY + rowValueH + pad * 2;
         var gaugeBandH = barsValueY - pad * 2 - gaugeTop;
         var radius = width * mDeviceProfile[:gaugeRadiusFactor];
@@ -553,14 +559,32 @@ class DashView extends WatchUi.DataField {
         if (gaugeSlack < 0) {
             gaugeSlack = 0;
         }
-        // The one hand-tuned pixel offset on this path. Centring the gauge in
-        // its band leaves it sitting low against the crown's open bottom, so it
-        // is lifted clear of centre by eye. Applied to centerY rather than to
+        // The first of the two hand-tuned pixel offsets on this path. Centring
+        // the gauge in its band leaves it low against the crown's open bottom,
+        // so it is lifted clear of centre by eye. Applied to centerY, not to
         // the individual draws so the AVG/MAX pair, the speed readout and the
         // unit label — all derived from it below — travel with the arc.
         var gaugeLift = 8;
         var centerY =
             gaugeTop + gaugeSlack + trackWidth / 2.0 + radius - gaugeLift;
+
+        // The second hand-tuned offset, and the reason band 2 is measured
+        // against the unlifted barsValueY above: band 3 sat lower in the gap
+        // under the gauge crown than it needed to. Lifting it here rather than
+        // at its definition keeps the gauge where it is — folded into
+        // barsValueY earlier it would have eaten the gauge band and carried the
+        // arc up with it. Clamped against the bottom of the arc, because on a
+        // small dc (one cell of a multi-field screen) the gap it eats is not
+        // there to take.
+        var barsLift = 20;
+        var gaugeBottom = centerY + radius / 2.0 + trackWidth / 2.0;
+        if (barsValueY - barsLift < gaugeBottom) {
+            barsLift = (barsValueY - gaugeBottom).toNumber();
+        }
+        if (barsLift < 0) {
+            barsLift = 0;
+        }
+        barsValueY -= barsLift;
 
         // The AVG / MAX pair sits inside the crown above the speed readout, as
         // it does on :full. Stacked upward from the top of the speed number
@@ -1267,9 +1291,12 @@ class DashView extends WatchUi.DataField {
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
         );
         dc.setColor(mLabelsColor, Graphics.COLOR_TRANSPARENT);
+        // The -10 tucks the unit label up under the speed number: 0.38 of the
+        // radius clears the THAI_HOT text box, but the box carries more leading
+        // under the digits than they need, so the label read as detached.
         dc.drawText(
             centerX,
-            centerY + radius * 0.38 + mDeviceProfile[:speedYOffset],
+            centerY + radius * 0.38 - 10 + mDeviceProfile[:speedYOffset],
             mDeviceProfile[:unitLabelFont],
             mIsMetric ? "KMH" : "MPH",
             Graphics.TEXT_JUSTIFY_CENTER
