@@ -1,5 +1,10 @@
 <settings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://developer.garmin.com/downloads/connect-iq/resources.xsd">
+    <!-- min is 50, not 0: FTP is the divisor for the power gauge's full-scale
+         value, and 0 made the field divide by zero at ride start. -->
     <setting propertyKey="@Properties.ftp" title="@Strings.ftpTitle">
-        <settingConfig type="numeric" min="0" max="600"/>
+        <settingConfig type="numeric" min="50" max="600"/>
+    </setting>
+    <setting propertyKey="@Properties.speedGaugeMax" title="@Strings.speedGaugeMaxTitle">
+        <settingConfig type="numeric" min="0" max="200"/>
     </setting>
 </settings>

@@ -157,16 +157,16 @@ The layout is tuned per device, so build against more than one target after chan
 ### Project structure
 
 - `source/` — Monkey C source files
-- `resources/` — drawables, strings, and the app setting (FTP)
+- `resources/` — drawables, strings, and the app settings (FTP, speed gauge max)
 - `resources-<product>/` — per-device overrides, picked up automatically by product id
 - `assets/` — images and icons
 - `bin/` — build outputs
 
 ### Main files
 
-- `DashApp.mc` — application entry point; registers a background service that runs every 5 minutes to fetch ambient temperature from the device sensor
+- `DashApp.mc` — application entry point; registers a background service that runs every 5 minutes to fetch ambient temperature from the device sensor, and forwards setting changes to the view
 - `DashView.mc` — UI logic; computes and renders every metric, resolves the device layout, and calculates real-time grade from GPS altitude and distance (updated every 20 m, capped at ±30%)
-- `DashBackground.mc` — background service logic
+- `DeviceProfiles.mc` — the per-device table of pixel offsets and font choices the layout is built from
 - `GlobalBackgroundService.mc` — global background handler
 
 ## Contributing
