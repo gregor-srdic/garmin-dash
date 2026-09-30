@@ -4,4 +4,5 @@
     <string id="deviceType">default</string>
     <string id="ftpTitle">FTP (Watts)</string>
     <string id="speedGaugeMaxTitle">Speed Gauge Max (0 = default)</string>
+    <string id="visualizeSpeedIndicatorTitle">visualize average/max speed</string>
 </strings>

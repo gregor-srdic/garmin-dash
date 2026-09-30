@@ -85,6 +85,8 @@ class DashView extends WatchUi.DataField {
     private const COLOR_HR = 0xff2200;
     private const COLOR_POWER = 0x9900ff;
     private const COLOR_CADENCE = 0xff8800;
+    private const COLOR_AVG_INDICATOR = 0xff8800;   //orange
+    private const COLOR_MAX_INDICATOR = 0x00aa00;   //green
 
     // Band label rows. Constant for the life of the field, so they live here
     // rather than being rebuilt as fresh Arrays on every draw call.
@@ -110,6 +112,8 @@ class DashView extends WatchUi.DataField {
     // Always a usable positive number: it is the divisor for the power gauge.
     private var mFtp as Number = FTP_DEFAULT;
     private var mSpeedGaugeMax as Float = SPEED_MAX_DEFAULT_METRIC;
+    // Avg/max markers on the speed arc, from the visualizeSpeedIndicator setting.
+    private var mShowSpeedIndicators as Boolean = true;
     private const ZONE_COLORS = [
         0x4da6ff, // Z1 - blue
         0x33cc33, // Z2 - green
@@ -195,6 +199,11 @@ class DashView extends WatchUi.DataField {
                 ? SPEED_MAX_DEFAULT_METRIC
                 : SPEED_MAX_DEFAULT_STATUTE;
         }
+
+        // Avg/max speed markers. Read here rather than once in initialize() so
+        // toggling the setting mid-ride takes effect through onSettingsChanged.
+        var showIndicators = Application.Properties.getValue("visualizeSpeedIndicator");
+        mShowSpeedIndicators = !(showIndicators instanceof Lang.Boolean) || showIndicators;
     }
 
     // Called by DashApp when the user edits the app's settings.
@@ -926,27 +935,90 @@ class DashView extends WatchUi.DataField {
         var arcSegCount = 24;
         var segArcLen = gaugeSweep / arcSegCount;
         var segGapDeg = 2.5;
+        
+        // --- 1. VALUE CLAMPING ---
         var ratio = mSpeed / maxVal;
-        if (ratio > 1.0) {
-            ratio = 1.0;
-        }
-        var litArcSegs = (ratio * arcSegCount + 0.5).toNumber();
+        if (ratio > 1.0) { ratio = 1.0; }
+        if (ratio < 0.0) { ratio = 0.0; }
+        var activeSweep = ratio * gaugeSweep;
+
+        var avgRatio = mAvgSpeed / maxVal;
+        if (avgRatio > 1.0) { avgRatio = 1.0; }
+        if (avgRatio < 0.0) { avgRatio = 0.0; }
+
+        var maxRatio = mMaxSpeed / maxVal;
+        if (maxRatio > 1.0) { maxRatio = 1.0; }
+        if (maxRatio < 0.0) { maxRatio = 0.0; }
 
         dc.setPenWidth(layout[:trackWidth]);
+
+        // --- 2. STEP ONE: DRAW THE ENTIRE BACKGROUND TRACK (GREY) ---
+        dc.setColor(mTrackColor, Graphics.COLOR_TRANSPARENT);
         for (var i = 0; i < arcSegCount; i++) {
             var segStartDeg = gaugeStart - i * segArcLen;
             var segEndDeg = segStartDeg - segArcLen + segGapDeg;
-            dc.setColor(
-                i < litArcSegs ? COLOR_SPEED : mTrackColor,
-                Graphics.COLOR_TRANSPARENT
-            );
+            
+            dc.drawArc(centerX, centerY, radius, Graphics.ARC_CLOCKWISE, segStartDeg, segEndDeg);
+        }
+
+        // --- 3. STEP TWO: OVERLAY THE ACTIVE SPEED (SMOOTH FILL) ---
+        dc.setColor(COLOR_SPEED, Graphics.COLOR_TRANSPARENT);
+        for (var i = 0; i < arcSegCount; i++) {
+            var segStartDeg = gaugeStart - i * segArcLen;
+            var segEndDeg = segStartDeg - segArcLen + segGapDeg;
+            
+            var currentSegStartSweep = i * segArcLen;
+            var currentSegEndSweep = (i + 1) * segArcLen - segGapDeg;
+
+            if (activeSweep >= currentSegEndSweep) {
+                // Speed completely covers this block -> Fill full segment
+                dc.drawArc(centerX, centerY, radius, Graphics.ARC_CLOCKWISE, segStartDeg, segEndDeg);
+            } 
+            else if (activeSweep > currentSegStartSweep) {
+                // Speed ends mid-segment -> Safely calculate partial fill
+                var partialSweep = activeSweep - currentSegStartSweep;
+                var smoothCutoffDeg = segStartDeg - partialSweep;
+
+                // Protect against 0-degree / full-circle inversion error
+                if ((segStartDeg - smoothCutoffDeg).abs() > 0.1) {
+                    dc.drawArc(centerX, centerY, radius, Graphics.ARC_CLOCKWISE, segStartDeg, smoothCutoffDeg);
+                }
+                break; // No need to process remaining segments since speed is exhausted
+            } 
+            else {
+                break; // Remaining segments are unreached
+            }
+        }
+
+        // --- 4. STEP THREE: DRAW THE AVERAGE SPEED INDICATOR ---
+        if (mAvgSpeed > 0.0 and mShowSpeedIndicators) {
+            var avgAngleDeg = gaugeStart - (avgRatio * gaugeSweep);
+            dc.setColor(COLOR_AVG_INDICATOR, Graphics.COLOR_TRANSPARENT);
+            dc.setPenWidth(layout[:trackWidth] + 4);
+            
             dc.drawArc(
                 centerX,
                 centerY,
                 radius,
                 Graphics.ARC_CLOCKWISE,
-                segStartDeg,
-                segEndDeg
+                avgAngleDeg + 2,
+                avgAngleDeg - 2
+            );
+        }
+
+        // --- 5. STEP FOUR: DRAW THE MAX SPEED INDICATOR ---
+        if (mMaxSpeed > 0.0 and mShowSpeedIndicators) {
+            var maxAngleDeg = gaugeStart - (maxRatio * gaugeSweep);
+            dc.setColor(COLOR_MAX_INDICATOR, Graphics.COLOR_TRANSPARENT);
+            dc.setPenWidth(layout[:trackWidth] + 4);
+            
+            dc.drawArc(
+                centerX,
+                centerY,
+                radius,
+                Graphics.ARC_CLOCKWISE,
+                maxAngleDeg + 2,
+                maxAngleDeg - 2
             );
         }
 
@@ -1397,27 +1469,90 @@ class DashView extends WatchUi.DataField {
         var arcSegCount = 12;
         var segArcLen = gaugeSweep / arcSegCount;
         var segGapDeg = 3.5;
+        
+        // --- 1. VALUE CLAMPING ---
         var ratio = mSpeed / maxVal;
-        if (ratio > 1.0) {
-            ratio = 1.0;
-        }
-        var litArcSegs = (ratio * arcSegCount + 0.5).toNumber();
+        if (ratio > 1.0) { ratio = 1.0; }
+        if (ratio < 0.0) { ratio = 0.0; }
+        var activeSweep = ratio * gaugeSweep;
+
+        var avgRatio = mAvgSpeed / maxVal;
+        if (avgRatio > 1.0) { avgRatio = 1.0; }
+        if (avgRatio < 0.0) { avgRatio = 0.0; }
+
+        var maxRatio = mMaxSpeed / maxVal;
+        if (maxRatio > 1.0) { maxRatio = 1.0; }
+        if (maxRatio < 0.0) { maxRatio = 0.0; }
 
         dc.setPenWidth(layout[:trackWidth]);
+
+        // --- 2. STEP ONE: DRAW THE ENTIRE BACKGROUND TRACK (GREY) ---
+        dc.setColor(mTrackColor, Graphics.COLOR_TRANSPARENT);
         for (var i = 0; i < arcSegCount; i++) {
             var segStartDeg = gaugeStart - i * segArcLen;
             var segEndDeg = segStartDeg - segArcLen + segGapDeg;
-            dc.setColor(
-                i < litArcSegs ? COLOR_SPEED : mTrackColor,
-                Graphics.COLOR_TRANSPARENT
-            );
+            
+            dc.drawArc(centerX, centerY, radius, Graphics.ARC_CLOCKWISE, segStartDeg, segEndDeg);
+        }
+
+        // --- 3. STEP TWO: OVERLAY THE ACTIVE SPEED (SMOOTH FILL) ---
+        dc.setColor(COLOR_SPEED, Graphics.COLOR_TRANSPARENT);
+        for (var i = 0; i < arcSegCount; i++) {
+            var segStartDeg = gaugeStart - i * segArcLen;
+            var segEndDeg = segStartDeg - segArcLen + segGapDeg;
+            
+            var currentSegStartSweep = i * segArcLen;
+            var currentSegEndSweep = (i + 1) * segArcLen - segGapDeg;
+
+            if (activeSweep >= currentSegEndSweep) {
+                // Speed completely covers this block -> Fill full segment
+                dc.drawArc(centerX, centerY, radius, Graphics.ARC_CLOCKWISE, segStartDeg, segEndDeg);
+            } 
+            else if (activeSweep > currentSegStartSweep) {
+                // Speed ends mid-segment -> Safely calculate partial fill
+                var partialSweep = activeSweep - currentSegStartSweep;
+                var smoothCutoffDeg = segStartDeg - partialSweep;
+
+                // Protect against 0-degree / full-circle inversion error
+                if ((segStartDeg - smoothCutoffDeg).abs() > 0.1) {
+                    dc.drawArc(centerX, centerY, radius, Graphics.ARC_CLOCKWISE, segStartDeg, smoothCutoffDeg);
+                }
+                break; // No need to process remaining segments since speed is exhausted
+            } 
+            else {
+                break; // Remaining segments are unreached
+            }
+        }
+
+        // --- 4. STEP THREE: DRAW THE AVERAGE SPEED INDICATOR ---
+        if (mAvgSpeed > 0.0 and mShowSpeedIndicators) {
+            var avgAngleDeg = gaugeStart - (avgRatio * gaugeSweep);
+            dc.setColor(COLOR_AVG_INDICATOR, Graphics.COLOR_TRANSPARENT);
+            dc.setPenWidth(layout[:trackWidth] + 4);
+            
             dc.drawArc(
                 centerX,
                 centerY,
                 radius,
                 Graphics.ARC_CLOCKWISE,
-                segStartDeg,
-                segEndDeg
+                avgAngleDeg + 2,
+                avgAngleDeg - 2
+            );
+        }
+
+        // --- 5. STEP FOUR: DRAW THE MAX SPEED INDICATOR ---
+        if (mMaxSpeed > 0.0 and mShowSpeedIndicators) {
+            var maxAngleDeg = gaugeStart - (maxRatio * gaugeSweep);
+            dc.setColor(COLOR_MAX_INDICATOR, Graphics.COLOR_TRANSPARENT);
+            dc.setPenWidth(layout[:trackWidth] + 4);
+            
+            dc.drawArc(
+                centerX,
+                centerY,
+                radius,
+                Graphics.ARC_CLOCKWISE,
+                maxAngleDeg + 2,
+                maxAngleDeg - 2
             );
         }
 

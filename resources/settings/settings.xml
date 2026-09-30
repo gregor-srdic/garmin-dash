@@ -7,4 +7,7 @@
     <setting propertyKey="@Properties.speedGaugeMax" title="@Strings.speedGaugeMaxTitle">
         <settingConfig type="numeric" min="0" max="200"/>
     </setting>
+    <setting propertyKey="@Properties.visualizeSpeedIndicator" title="@Strings.visualizeSpeedIndicatorTitle">
+        <settingConfig type="boolean"/>
+    </setting>
 </settings>
