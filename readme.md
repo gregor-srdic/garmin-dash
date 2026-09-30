@@ -39,7 +39,8 @@ Dash is a full-screen field: add it to a **1-Field** data screen so it has the w
     - Current time (center)
     - Current elevation (right)
 
-2. **Speed gauge** — a 24-segment arc reading 0–60 km/h (0–40 mph)
+2. **Speed gauge** — a 24-segment arc reading 0–60 km/h (0–40 mph) by default, filling smoothly with your current speed
+    - Average speed (orange) and max speed (green) markers on the arc
     - Average speed (top left)
     - Max speed (top right)
     - Current speed (center)
@@ -100,7 +101,11 @@ Configurable in Garmin Connect (or Connect IQ) under the app's settings:
 
 | Setting | Range | Default | What it does |
 |---|---|---|---|
-| **FTP (Watts)** | 0–600 | 200 | Functional threshold power, used to derive the power zone colours and to scale the power gauge. Only used when your Garmin user profile has no FTP set, or when the device cannot report it. |
+| **FTP (Watts)** | 50–600 | 200 | Functional threshold power, used to derive the power zone colours and to scale the power gauge. Only used when your Garmin user profile has no FTP set, or when the device cannot report it. |
+| **Speed Gauge Max** | 0–200 | 0 | Full-scale value of the speed gauge, in your display units (km/h or mph). 0 keeps the built-in default of 60 km/h / 40 mph. |
+| **Visualize average/max speed** | on / off | on | Shows your average speed (orange) and max speed (green) as markers on the speed gauge. |
+
+Setting changes take effect immediately, including mid-ride.
 
 ## Installation
 
@@ -168,6 +173,10 @@ The layout is tuned per device, so build against more than one target after chan
 - `DashView.mc` — UI logic; computes and renders every metric, resolves the device layout, and calculates real-time grade from GPS altitude and distance (updated every 20 m, capped at ±30%)
 - `DeviceProfiles.mc` — the per-device table of pixel offsets and font choices the layout is built from
 - `GlobalBackgroundService.mc` — global background handler
+
+## Contributors
+
+- [@LowRunneR](https://github.com/LowRunneR) — smooth speed gauge fill and average/max speed markers ([#10](https://github.com/gregor-srdic/garmin-dash/pull/10))
 
 ## Contributing
 
