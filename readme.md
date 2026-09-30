@@ -79,11 +79,11 @@ If you don't have a power meter, the right gauge becomes a cadence gauge reading
 These are 2.6" screens at 246 × 322 px, about a fifth of the pixel area of a 1050. Everything above still fits at a readable size only if some of it goes, so those four devices get a condensed four-band layout:
 
 1. Ambient temperature, current time, elevation and Di2 gears
-2. Speed gauge with the current speed at its centre
+2. Speed gauge with the current speed at its centre, average and max speed above it, and the same average/max markers on the arc
 3. Heart rate and power as horizontal zone bars, coloured by training zone exactly as the round gauges are
 4. Elapsed time, cadence, grade and distance
 
-What is dropped is the data you look at after the ride rather than during it: average and max speed, average heart rate, average power, total ascent and calories. Without a power meter the right bar becomes a cadence bar as above, and the cadence slot in the bottom row shows total ascent instead.
+What is dropped is the data you look at after the ride rather than during it: average heart rate, average power, total ascent and calories. Without a power meter the right bar becomes a cadence bar as above, and the cadence slot in the bottom row shows total ascent instead.
 
 ### Units & appearance
 
