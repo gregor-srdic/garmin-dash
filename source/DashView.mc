@@ -3,50 +3,66 @@ import Toybox.Graphics;
 import Toybox.System;
 import Toybox.Activity;
 import Toybox.Lang;
-import Toybox.Time;
-import Toybox.Time.Gregorian;
-import Toybox.Sensor;
 import Toybox.Application;
+import Toybox.Background;
 import Toybox.UserProfile;
 import Toybox.Math;
 
 class DashView extends WatchUi.DataField {
-    private var mSpeed = 0.0;
-    private var mAvgSpeed = 0.0;
-    private var mMaxSpeed = 0.0;
-    private var mDistance = 0.0;
-    private var mElapsedMs = 0;
+    // Live metrics. The ones that can drop out mid-ride are nullable and the
+    // draw path renders "--" for them: a power meter or cadence sensor that
+    // disconnects used to leave its last value frozen on screen, which reads
+    // as live data. Cumulative stats (averages, maxima, totals) are not
+    // nullable — they keep their last value by definition.
+    private var mSpeed as Float = 0.0;
+    private var mAvgSpeed as Float = 0.0;
+    private var mMaxSpeed as Float = 0.0;
+    private var mDistance as Float = 0.0;
+    private var mElapsedMs as Number = 0;
     private var mHeartRate as Number? = null;
-    private var mPower3s = 0;
-    private var mTemp = 0.0;
-    private var mCadence = 0;
-    private var mCalories = 0;
-    private var mAvgHeartRate = 0;
-    private var mAvgCadence = 0;
-    private var mAvgPower = 0;
-    private var mMaxPower = 0;
-    private var mHasPowerData = false;
+    private var mPower3s as Number? = null;
+    private var mTemp as Float? = null;
+    private var mCadence as Number? = null;
+    private var mCalories as Number = 0;
+    private var mAvgHeartRate as Number = 0;
+    private var mAvgCadence as Number = 0;
+    private var mAvgPower as Number = 0;
+    private var mMaxPower as Number = 0;
+    private var mHasPowerData as Boolean = false;
 
     // Header Fields
-    private var mGrade = 0.0;
-    private var mElevation = 0.0;
-    private var mAscent = 0.0;
-    private var mGearInfo = "--";
+    private var mGrade as Float = 0.0;
+    private var mElevation as Float = 0.0;
+    private var mAscent as Float = 0.0;
+    private var mGearInfo as String = "--";
 
-    private var mIsMetric = true;
-    private var mIsElevationMetric = true;
+    private var mIsMetric as Boolean = true;
+    private var mIsElevationMetric as Boolean = true;
+    private var mIsTempStatute as Boolean = false;
 
     // grade calculation (tracked in raw meters, independent of display units)
-    private var mGradeLastAlt = null;
-    private var mGradeLastDist = null;
+    private var mGradeLastAlt as Float? = null;
+    private var mGradeLastDist as Float? = null;
     // Consecutive compute() calls that produced no grade update. Once the window
     // anchor is stranded (or its inputs drop out) nothing else can unstick it,
     // so a long enough run of dead computes forces a re-seed.
-    private var mGradeStallCount = 0;
+    private var mGradeStallCount as Number = 0;
     private const GRADE_STALL_LIMIT = 60;
 
+    // Last temperature handed over by the background service, pushed in by
+    // DashApp.onBackgroundData. Seeded from Storage once at startup so a
+    // restart mid-ride does not blank the reading; compute() never touches
+    // Storage, which used to cost a flash-backed read every second for a value
+    // that changes every five minutes.
+    private var mBackgroundTemp as Numeric? = null;
+    // Set once info.ambientTemperature returns a real reading. That proves the
+    // device reports temperature directly, so the five-minute background wake
+    // is pure battery cost and gets cancelled. DashApp re-registers on the next
+    // load if it turns out to be needed after all.
+    private var mDirectTempSeen as Boolean = false;
+
     // Device-specific layout and font profile, set once in initialize()
-    private var mDeviceProfile = null;
+    private var mDeviceProfile as Lang.Dictionary;
 
     // Band geometry every draw function works from. Depends only on the dc
     // dimensions, the device profile and font heights, so it is computed on the
@@ -54,16 +70,16 @@ class DashView extends WatchUi.DataField {
     // layout change without costing anything on a normal frame.
     // Named ...Cache because WatchUi.View already declares a protected mLayout.
     private var mLayoutCache as Lang.Dictionary? = null;
-    private var mLayoutWidth = -1;
-    private var mLayoutHeight = -1;
+    private var mLayoutWidth as Number = -1;
+    private var mLayoutHeight as Number = -1;
 
     // Palette for the frame being drawn. Recomputed at the top of every
     // onUpdate because the device's dark/light setting can change at runtime;
     // held in fields so the draw pass itself allocates nothing.
-    private var mBgColor = Graphics.COLOR_BLACK;
-    private var mValuesColor = 0xffffff;
-    private var mLabelsColor = 0xeeeeee;
-    private var mTrackColor = 0xeeeeee;
+    private var mBgColor as Number = Graphics.COLOR_BLACK;
+    private var mValuesColor as Number = 0xffffff;
+    private var mLabelsColor as Number = 0xeeeeee;
+    private var mTrackColor as Number = 0xeeeeee;
 
     private const COLOR_SPEED = 0x0066ff;
     private const COLOR_HR = 0xff2200;
@@ -72,13 +88,33 @@ class DashView extends WatchUi.DataField {
     private const COLOR_AVG_INDICATOR = 0xff8800;   //orange
     private const COLOR_MAX_INDICATOR = 0x00aa00;   //green
 
-    // Zone boundaries for arc coloring, set once in initialize().
+    // Band label rows. Constant for the life of the field, so they live here
+    // rather than being rebuilt as fresh Arrays on every draw call.
+    private const TOP_LABELS = ["TEMP", "CLOCK", "ELEV"];
+    private const BOTTOM_LABELS = ["ASC", "DIST", "CAL"];
+    private const COMPACT_TOP_LABELS = ["TEMP", "CLOCK", "ELEV", "DI2"];
+    private const COMPACT_FOOTER_COLUMNS = [0.18, 0.45, 0.66, 0.87];
+
+    // Placeholder for a metric whose sensor is not reporting.
+    private const NO_VALUE = "--";
+
+    // Fallback full-scale speed when the speedGaugeMax setting is left at 0.
+    private const SPEED_MAX_DEFAULT_METRIC = 60.0;
+    private const SPEED_MAX_DEFAULT_STATUTE = 40.0;
+    // Used when FTP is missing or nonsensical. The setting itself is clamped to
+    // 50 W at the bottom, but a null or corrupt stored value still lands here.
+    private const FTP_DEFAULT = 200;
+
+    // Zone boundaries for arc coloring, refreshed by readSettings().
     // HR zones come from the user's Garmin profile; power zones are derived from the FTP app setting.
-    private var mHrZoneBoundaries = null;
-    private var mPowerZoneBoundaries = null;
-    private var ftp = null;
-    private var showSpeedIndicators = null;
-    private static var ZONE_COLORS = [
+    private var mHrZoneBoundaries as Array<Number>? = null;
+    private var mPowerZoneBoundaries as Array<Numeric>? = null;
+    // Always a usable positive number: it is the divisor for the power gauge.
+    private var mFtp as Number = FTP_DEFAULT;
+    private var mSpeedGaugeMax as Float = SPEED_MAX_DEFAULT_METRIC;
+    // Avg/max markers on the speed arc, from the visualizeSpeedIndicator setting.
+    private var mShowSpeedIndicators as Boolean = true;
+    private const ZONE_COLORS = [
         0x4da6ff, // Z1 - blue
         0x33cc33, // Z2 - green
         0xffcc00, // Z3 - yellow
@@ -89,14 +125,25 @@ class DashView extends WatchUi.DataField {
     function initialize() {
         DataField.initialize();
         var settings = System.getDeviceSettings();
-        mIsMetric = settings.paceUnits == System.UNIT_METRIC;
-        mIsElevationMetric = settings.elevationUnits == System.UNIT_METRIC;
         var deviceType = WatchUi.loadResource(Rez.Strings.deviceType) as String;
-        mDeviceProfile = initDeviceProfile(
+        mDeviceProfile = DeviceProfiles.forDevice(
             settings.screenWidth,
             settings.screenHeight,
             deviceType
         );
+        mBackgroundTemp = Storage.getValue("sensorTemperature") as Numeric?;
+        readSettings();
+    }
+
+    // Everything that comes from device settings, the user profile or the app's
+    // own properties, in one place so onSettingsChanged can re-run it. Before
+    // this existed an FTP edit in Connect IQ did nothing until the data field
+    // was recreated, and temperatureUnits was re-read on every compute().
+    private function readSettings() as Void {
+        var settings = System.getDeviceSettings();
+        mIsMetric = settings.paceUnits == System.UNIT_METRIC;
+        mIsElevationMetric = settings.elevationUnits == System.UNIT_METRIC;
+        mIsTempStatute = settings.temperatureUnits == System.UNIT_STATUTE;
 
         // HR zones: pulled from the user's Garmin Connect profile for the current sport.
         try {
@@ -112,7 +159,7 @@ class DashView extends WatchUi.DataField {
         // getFunctionalThresholdPower is API 5.2.2+ (Edge 1040/1050 only); the
         // `has` check is required because a missing symbol is a fatal runtime
         // error rather than a catchable exception.
-        ftp = null;
+        var ftp = null;
         if (UserProfile has :getFunctionalThresholdPower) {
             try {
                 ftp = UserProfile.getFunctionalThresholdPower(
@@ -122,34 +169,51 @@ class DashView extends WatchUi.DataField {
                 ftp = null;
             }
         }
-        if (ftp == null || ftp == 0) {
+        if (!(ftp instanceof Lang.Number) || ftp <= 0) {
             ftp = Application.Properties.getValue("ftp");
         }
+        // mFtp is the divisor for the power gauge's full-scale value, so it is
+        // never allowed to be null or zero. The setting used to permit 0, which
+        // divided by zero at ride start before any max power had been recorded.
+        if (!(ftp instanceof Lang.Number) || ftp <= 0) {
+            ftp = FTP_DEFAULT;
+        }
+        mFtp = ftp;
         // Coggan-style boundaries derived from FTP.
-        if (ftp != null && ftp > 0) {
-            mPowerZoneBoundaries = [
-                0,
-                ftp * 0.55,
-                ftp * 0.75,
-                ftp * 0.9,
-                ftp * 1.05,
-                ftp * 999,
-            ];
-        }
+        mPowerZoneBoundaries = [
+            0,
+            mFtp * 0.55,
+            mFtp * 0.75,
+            mFtp * 0.9,
+            mFtp * 1.05,
+            mFtp * 999,
+        ];
 
-        if (Application has :Properties) {
-            try {
-                showSpeedIndicators = Application.Properties.getValue("visualizeSpeedIndicator");
-                } catch(ex) {
-                    // Fallback default value if the property hasn't been initialized yet
-                    showSpeedIndicators = false;
-                }
+        // Speed gauge full scale, in the rider's display units. 0 means "leave
+        // it at the built-in default", which is what ships.
+        var speedMax = Application.Properties.getValue("speedGaugeMax");
+        if (speedMax instanceof Lang.Number && speedMax > 0) {
+            mSpeedGaugeMax = speedMax.toFloat();
         } else {
-            // Legacy fallback for very old Garmin Edge devices running Connect IQ 1.x/2.x
-            showSpeedIndicators = Application.getApp().getProperty("visualizeSpeedIndicator");
+            mSpeedGaugeMax = mIsMetric
+                ? SPEED_MAX_DEFAULT_METRIC
+                : SPEED_MAX_DEFAULT_STATUTE;
         }
 
-       
+        // Avg/max speed markers. Read here rather than once in initialize() so
+        // toggling the setting mid-ride takes effect through onSettingsChanged.
+        var showIndicators = Application.Properties.getValue("visualizeSpeedIndicator");
+        mShowSpeedIndicators = !(showIndicators instanceof Lang.Boolean) || showIndicators;
+    }
+
+    // Called by DashApp when the user edits the app's settings.
+    function onSettingsChanged() as Void {
+        readSettings();
+    }
+
+    // Called by DashApp when the background service reports a temperature.
+    function onSensorTemperature(temp as Numeric) as Void {
+        mBackgroundTemp = temp;
     }
 
     // Returns the zone color for value given a 6-entry boundary array
@@ -171,6 +235,89 @@ class DashView extends WatchUi.DataField {
         return ZONE_COLORS[4];
     }
 
+    // How full the HR gauge should be, 0.0 to 1.0. Scaled across the user's
+    // own zone span when the profile has zones, 0-200 bpm otherwise.
+    //
+    // Shared by drawPanels and drawCompactBars. The two render paths
+    // deliberately share no geometry, but this is metric arithmetic rather
+    // than geometry, and keeping one copy is what stops the arc and the bar
+    // disagreeing about what a given heart rate means.
+    private function hrFillRatio() as Float {
+        var hr = mHeartRate;
+        if (hr == null) {
+            return 0.0;
+        }
+        var hrMin = 0.0;
+        var hrMax = 200.0;
+        var hrZones = mHrZoneBoundaries;
+        if (hrZones != null && hrZones.size() >= 6) {
+            hrMin = hrZones[0].toFloat();
+            hrMax = hrZones[5].toFloat();
+        }
+        var hrRange = hrMax - hrMin;
+        if (hrRange <= 0) {
+            return 0.0;
+        }
+        return clampRatio((hr.toFloat() - hrMin) / hrRange);
+    }
+
+    // How full the right-hand gauge should be, 0.0 to 1.0. Power against FTP
+    // (or the ride's max power, once it exceeds FTP) when a meter is present,
+    // otherwise cadence against 150 rpm. mFtp is guaranteed positive by
+    // readSettings, which is what keeps this from dividing by zero.
+    private function rightFillRatio() as Float {
+        if (mHasPowerData) {
+            var power = mPower3s;
+            if (power == null) {
+                return 0.0;
+            }
+            var powerScaleMax = mFtp.toFloat();
+            if (mMaxPower > powerScaleMax) {
+                powerScaleMax = mMaxPower.toFloat();
+            }
+            return clampRatio(power.toFloat() / powerScaleMax);
+        }
+        var cadence = mCadence;
+        if (cadence == null) {
+            return 0.0;
+        }
+        return clampRatio(cadence.toFloat() / 150.0);
+    }
+
+    private function clampRatio(ratio as Float) as Float {
+        if (ratio > 1.0) {
+            return 1.0;
+        }
+        if (ratio < 0.0) {
+            return 0.0;
+        }
+        return ratio;
+    }
+
+    // Lit segment count for a gauge of `segCount` segments. `floorToOne` keeps
+    // a live-but-very-low reading visible as one lit segment instead of an
+    // empty gauge; it is off for power, where zero watts is a real reading.
+    private function litSegments(
+        ratio as Float,
+        segCount as Number,
+        floorToOne as Boolean
+    ) as Number {
+        var lit = (ratio * segCount + 0.5).toNumber();
+        if (floorToOne && lit < 1) {
+            lit = 1;
+        }
+        return lit;
+    }
+
+    // The colour the right-hand gauge lights up in.
+    private function rightZoneColor() as Number {
+        if (!mHasPowerData) {
+            return COLOR_CADENCE;
+        }
+        var power = mPower3s;
+        return zoneColor(power != null ? power : 0, mPowerZoneBoundaries, COLOR_POWER);
+    }
+
     // The DataField object outlives a timer reset, so the grade window has to be
     // cleared explicitly. Otherwise the anchor keeps the finished activity's
     // distance, the new activity's distance starts back at zero, and no update
@@ -182,10 +329,11 @@ class DashView extends WatchUi.DataField {
         mGradeStallCount = 0;
     }
 
+    // `info` is the current Activity.Info. The redundant
+    // Activity.getActivityInfo() call this used to make on every tick returned
+    // the same object, so its "fallbacks" could never differ from the values
+    // already in hand; the `has` guards moved onto `info` unchanged.
     function compute(info as Activity.Info) as Void {
-        var settings = System.getDeviceSettings();
-        var actInfo = Activity.getActivityInfo();
-
         // Current Speed
         if (info.currentSpeed != null) {
             mSpeed = mIsMetric
@@ -222,32 +370,25 @@ class DashView extends WatchUi.DataField {
         }
 
         // Heart Rate
-        mHeartRate = null;
-        if (info.currentHeartRate != null) {
-            mHeartRate = info.currentHeartRate;
-        } else if (actInfo != null && actInfo.currentHeartRate != null) {
-            mHeartRate = actInfo.currentHeartRate;
-        }
+        mHeartRate = info.currentHeartRate;
         if (info.averageHeartRate != null) {
             mAvgHeartRate = info.averageHeartRate;
         }
 
         // Shifting
-        mGearInfo = "--";
-        var rear =
-            actInfo != null && actInfo has :rearDerailleurIndex
-                ? actInfo.rearDerailleurIndex
-                : null;
-        var front =
-            actInfo != null && actInfo has :frontDerailleurIndex
-                ? actInfo.frontDerailleurIndex
-                : null;
-        if (rear) {
+        mGearInfo = NO_VALUE;
+        var rear = info has :rearDerailleurIndex
+            ? info.rearDerailleurIndex
+            : null;
+        var front = info has :frontDerailleurIndex
+            ? info.frontDerailleurIndex
+            : null;
+        if (rear != null) {
             if (rear > 13 || rear < 1) {
                 rear = 1;
             }
             mGearInfo = rear.format("%d");
-            if (front) {
+            if (front != null) {
                 if (front > 3 || front < 1) {
                     front = 1;
                 }
@@ -255,19 +396,15 @@ class DashView extends WatchUi.DataField {
             }
         }
 
-        // 3s Power
-        mHasPowerData = false;
-        if (info.currentPower != null) {
-            mPower3s = info.currentPower;
+        // 3s Power. mPower3s goes back to null the moment the meter stops
+        // reporting, so a dropout shows "--" rather than freezing the last
+        // watt number on screen. mHasPowerData stays true for the rest of the
+        // ride once any power has been seen, which is what keeps the right
+        // panel a power gauge instead of flipping to cadence at every gap.
+        mPower3s = info.currentPower;
+        if (mPower3s != null) {
             mHasPowerData = true;
-        } else {
-            if (actInfo != null && actInfo.currentPower != null) {
-                mPower3s = actInfo.currentPower;
-                mHasPowerData = true;
-            }
         }
-
-        // Average Power
         if (info.averagePower != null) {
             mAvgPower = info.averagePower;
             mHasPowerData = true;
@@ -279,18 +416,12 @@ class DashView extends WatchUi.DataField {
             mHasPowerData = true;
         }
 
-        // Cadence
-        if (info.currentCadence != null) {
-            mCadence = info.currentCadence;
-            if (mCadence > 150) {
-                mCadence = mCadence / 2;
-            }
-        }
+        // Cadence. Same dropout handling as power. The old "halve anything over
+        // 150 rpm" correction is gone: it silently halved a legitimate sprint
+        // cadence, and Garmin already validates this value.
+        mCadence = info.currentCadence;
         if (info.averageCadence != null) {
             mAvgCadence = info.averageCadence;
-            if (mAvgCadence > 150) {
-                mAvgCadence = mAvgCadence / 2;
-            }
         }
 
         // Calories
@@ -299,25 +430,29 @@ class DashView extends WatchUi.DataField {
         }
 
         // --- TEMPERATURE RESOLUTION ---
-        var rawTemp = Storage.getValue("sensorTemperature");
+        // Priority 1: the background service's reading, pushed in by
+        // DashApp.onBackgroundData and seeded from Storage at startup.
+        var rawTemp = mBackgroundTemp;
 
         // Priority 2: Activity.Info (Standard way)
         if (info has :ambientTemperature && info.ambientTemperature != null) {
             rawTemp = info.ambientTemperature;
-        }
-
-        // Priority 3: Activity.getActivityInfo (Final fallback)
-        if (rawTemp == null) {
-            if (
-                actInfo != null &&
-                actInfo has :ambientTemperature &&
-                actInfo.ambientTemperature != null
-            ) {
-                rawTemp = actInfo.ambientTemperature;
+            if (!mDirectTempSeen) {
+                mDirectTempSeen = true;
+                // The device reports temperature directly, so the five-minute
+                // background wake buys nothing. Cancel it; DashApp registers
+                // again on the next load, and this cancels it again one tick
+                // later, so at worst one wake per ride is wasted.
+                if (
+                    System has :ServiceDelegate &&
+                    Background.getTemporalEventRegisteredTime() != null
+                ) {
+                    Background.deleteTemporalEvent();
+                }
             }
         }
 
-        // Priority 4: SensorHistory fallback (for older CIQ devices like Edge 1030)
+        // Priority 3: SensorHistory fallback (for older CIQ devices like Edge 1030)
         if (rawTemp == null) {
             if (
                 Toybox has :SensorHistory &&
@@ -336,22 +471,17 @@ class DashView extends WatchUi.DataField {
             }
         }
 
-        if (rawTemp != null) {
-            if (settings.temperatureUnits == System.UNIT_STATUTE) {
-                mTemp = (rawTemp * 9.0) / 5.0 + 32.0;
-            } else {
-                mTemp = rawTemp.toFloat();
-            }
+        if (rawTemp == null) {
+            mTemp = null;
+        } else if (mIsTempStatute) {
+            mTemp = (rawTemp * 9.0) / 5.0 + 32.0;
+        } else {
+            mTemp = rawTemp.toFloat();
         }
 
         // Elevation Data
         var altMult = mIsElevationMetric ? 1.0 : 3.28084;
-        var rawAlt =
-            info.altitude != null
-                ? info.altitude
-                : actInfo != null && actInfo has :altitude
-                  ? actInfo.altitude
-                  : null;
+        var rawAlt = info.altitude;
         if (rawAlt != null) {
             mElevation = rawAlt * altMult;
         }
@@ -396,6 +526,41 @@ class DashView extends WatchUi.DataField {
             drawPanels(dc, layout);
             drawFooter(dc, layout);
         }
+    }
+
+    // --- VALUE FORMATTING ---------------------------------------------------
+    //
+    // One place per metric that can be absent, so the two render paths print
+    // the same thing when a sensor is not reporting.
+
+    private function tempString() as String {
+        var temp = mTemp;
+        if (temp == null) {
+            return NO_VALUE;
+        }
+        return temp.format("%.1f") + "°";
+    }
+
+    private function cadenceString() as String {
+        var cadence = mCadence;
+        return cadence != null ? cadence.format("%d") : NO_VALUE;
+    }
+
+    private function clockString(now as System.ClockTime) as String {
+        return Lang.format("$1$:$2$", [
+            now.hour.format("%02d"),
+            now.min.format("%02d"),
+        ]);
+    }
+
+    // h:mm:ss, hours unpadded.
+    private function elapsedString() as String {
+        var totalSecs = mElapsedMs / 1000;
+        return Lang.format("$1$:$2$:$3$", [
+            (totalSecs / 3600).format("%d"),
+            ((totalSecs % 3600) / 60).format("%02d"),
+            (totalSecs % 60).format("%02d"),
+        ]);
     }
 
     // --- LAYOUT -------------------------------------------------------------
@@ -719,14 +884,11 @@ class DashView extends WatchUi.DataField {
         var now = System.getClockTime();
 
         var topValues = [
-            mTemp.format("%.1f") + "°",
-            Lang.format("$1$:$2$", [
-                now.hour.format("%02d"),
-                now.min.format("%02d"),
-            ]),
+            tempString(),
+            clockString(now),
             mElevation.format("%.0f"),
         ];
-        var topLabels = ["TEMP", "CLOCK", "ELEV"];
+        var topLabels = TOP_LABELS;
 
         for (var i = 0; i < 3; i++) {
             var x = colW * (i + 0.5);
@@ -760,12 +922,12 @@ class DashView extends WatchUi.DataField {
         var centerX = layout[:centerX];
         var centerY = layout[:centerY];
         var radius = layout[:radius];
-        var speedGaugeCenterYOffset = mDeviceProfile[:speedGaugeCenterYOffset];
         var speedYOffset = mDeviceProfile[:speedYOffset];
+        var unitLabelYOffset = mDeviceProfile[:unitLabelYOffset];
         var avgLabelOffset = mDeviceProfile[:avgLabelOffset];
         var speedAvgValueOffset = mDeviceProfile[:speedAvgValueOffset];
 
-        var maxVal = mIsMetric ? 60.0 : 40.0;
+        var maxVal = mSpeedGaugeMax;
         var gaugeStart = 210.0;
         var gaugeSweep = 240.0;
 
@@ -829,7 +991,7 @@ class DashView extends WatchUi.DataField {
         }
 
         // --- 4. STEP THREE: DRAW THE AVERAGE SPEED INDICATOR ---
-        if (mAvgSpeed > 0.0 and showSpeedIndicators) {
+        if (mAvgSpeed > 0.0 and mShowSpeedIndicators) {
             var avgAngleDeg = gaugeStart - (avgRatio * gaugeSweep);
             dc.setColor(COLOR_AVG_INDICATOR, Graphics.COLOR_TRANSPARENT);
             dc.setPenWidth(layout[:trackWidth] + 4);
@@ -845,7 +1007,7 @@ class DashView extends WatchUi.DataField {
         }
 
         // --- 5. STEP FOUR: DRAW THE MAX SPEED INDICATOR ---
-        if (mMaxSpeed > 0.0 and showSpeedIndicators) {
+        if (mMaxSpeed > 0.0 and mShowSpeedIndicators) {
             var maxAngleDeg = gaugeStart - (maxRatio * gaugeSweep);
             dc.setColor(COLOR_MAX_INDICATOR, Graphics.COLOR_TRANSPARENT);
             dc.setPenWidth(layout[:trackWidth] + 4);
@@ -896,7 +1058,7 @@ class DashView extends WatchUi.DataField {
         dc.setColor(mValuesColor, Graphics.COLOR_TRANSPARENT);
         dc.drawText(
             centerX,
-            centerY + speedGaugeCenterYOffset + speedYOffset,
+            centerY + speedYOffset,
             mDeviceProfile[:speedFont],
             mSpeed.format("%.1f"),
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
@@ -904,7 +1066,7 @@ class DashView extends WatchUi.DataField {
         dc.setColor(mLabelsColor, Graphics.COLOR_TRANSPARENT);
         dc.drawText(
             centerX,
-            centerY + radius * 0.3 + speedYOffset,
+            centerY + radius * 0.3 + unitLabelYOffset,
             mDeviceProfile[:unitLabelFont],
             mIsMetric ? "KMH" : "MPH",
             Graphics.TEXT_JUSTIFY_CENTER
@@ -924,12 +1086,7 @@ class DashView extends WatchUi.DataField {
         var middleRowLabelOffset = mDeviceProfile[:middleRowLabelOffset];
 
         // --- ELAPSED TIME ---
-        var totalSecs = mElapsedMs / 1000;
-        var elapsedStr = Lang.format("$1$:$2$:$3$", [
-            (totalSecs / 3600).format("%d"),
-            ((totalSecs % 3600) / 60).format("%02d"),
-            (totalSecs % 60).format("%02d"),
-        ]);
+        var elapsedStr = elapsedString();
 
         var elapsedY = layout[:elapsedY];
         dc.setColor(mLabelsColor, Graphics.COLOR_TRANSPARENT);
@@ -979,7 +1136,7 @@ class DashView extends WatchUi.DataField {
             width * 0.15,
             middleRowY,
             rowValueFont,
-            mCadence.format("%.0f"),
+            cadenceString(),
             Graphics.TEXT_JUSTIFY_CENTER
         );
         dc.drawText(
@@ -1041,30 +1198,10 @@ class DashView extends WatchUi.DataField {
             Graphics.TEXT_JUSTIFY_CENTER
         );
 
-        var hrMin = 0.0;
-        var hrMax = 200.0;
-        var hrZones = mHrZoneBoundaries as Array<Numeric>?;
-        if (hrZones != null && hrZones.size() >= 6) {
-            hrMin = hrZones[0].toFloat();
-            hrMax = hrZones[5].toFloat();
-        }
-        var hrRange = hrMax - hrMin;
-        var hrRatio = 0.0;
-        if (mHeartRate != null && hrRange > 0) {
-            hrRatio = (mHeartRate.toFloat() - hrMin) / hrRange;
-        }
-        if (hrRatio > 1.0) {
-            hrRatio = 1.0;
-        }
-        if (hrRatio < 0.0) {
-            hrRatio = 0.0;
-        }
-        var litSegs = (hrRatio * segCount + 0.5).toNumber();
-        if (mHeartRate != null && litSegs < 1) {
-            litSegs = 1; // Ensure at least one segment is lit if HR is non-null
-        }
+        var heartRate = mHeartRate;
+        var litSegs = litSegments(hrFillRatio(), segCount, heartRate != null);
         var hrZoneColor = zoneColor(
-            mHeartRate != null ? mHeartRate : 0,
+            heartRate != null ? heartRate : 0,
             mHrZoneBoundaries,
             COLOR_HR
         );
@@ -1098,7 +1235,7 @@ class DashView extends WatchUi.DataField {
             lPanelCenterX,
             sideCenterY + panelTextYOffset,
             panelValueFont,
-            mHeartRate != null ? mHeartRate.toString() : "--",
+            heartRate != null ? heartRate.toString() : NO_VALUE,
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
         );
         dc.setColor(mLabelsColor, Graphics.COLOR_TRANSPARENT);
@@ -1140,29 +1277,8 @@ class DashView extends WatchUi.DataField {
             Graphics.TEXT_JUSTIFY_CENTER
         );
 
-        var rightRatio = 0.0;
-        if (mHasPowerData) {
-            var powerScaleMax = ftp;
-            if (mMaxPower > powerScaleMax) {
-                powerScaleMax = mMaxPower.toFloat();
-            }
-            rightRatio = mPower3s.toFloat() / powerScaleMax;
-        } else {
-            var cadenceScaleMax = 150.0;
-            rightRatio = mCadence.toFloat() / cadenceScaleMax;
-        }
-        if (rightRatio > 1.0) {
-            rightRatio = 1.0;
-        }
-        if (rightRatio < 0.0) {
-            rightRatio = 0.0;
-        }
-        var litPwrSegs = (rightRatio * segCount + 0.5).toNumber();
-        var pwrZoneColor = zoneColor(
-            mPower3s,
-            mPowerZoneBoundaries,
-            COLOR_POWER
-        );
+        var litPwrSegs = litSegments(rightFillRatio(), segCount, false);
+        var pwrZoneColor = rightZoneColor();
 
         dc.setPenWidth(barW);
 
@@ -1172,11 +1288,7 @@ class DashView extends WatchUi.DataField {
             var pwrSegEnd = pwrSegStart + segSweepDeg;
 
             dc.setColor(
-                i < litPwrSegs
-                    ? mHasPowerData
-                        ? pwrZoneColor
-                        : COLOR_CADENCE
-                    : mTrackColor,
+                i < litPwrSegs ? pwrZoneColor : mTrackColor,
                 Graphics.COLOR_TRANSPARENT
             );
 
@@ -1195,7 +1307,7 @@ class DashView extends WatchUi.DataField {
             rPanelCenterX,
             sideCenterY + panelTextYOffset,
             panelValueFont,
-            mHasPowerData ? mPower3s.toString() : mCadence.format("%.0f"),
+            rightValueString(),
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
         );
         dc.setColor(mLabelsColor, Graphics.COLOR_TRANSPARENT);
@@ -1227,6 +1339,13 @@ class DashView extends WatchUi.DataField {
         );
     }
 
+    // What the right-hand gauge prints: watts with a meter attached, rpm
+    // without, "--" when that sensor is not currently reporting.
+    private function rightValueString() as String {
+        var value = mHasPowerData ? mPower3s : mCadence;
+        return value != null ? value.toString() : NO_VALUE;
+    }
+
     // Band 5: ascent, distance and calories across three columns.
     private function drawFooter(
         dc as Graphics.Dc,
@@ -1244,7 +1363,7 @@ class DashView extends WatchUi.DataField {
             (mDistance / 1000).format("%.1f"),
             mCalories.format("%.0f"),
         ];
-        var bottomLabels = ["ASC", "DIST", "CAL"];
+        var bottomLabels = BOTTOM_LABELS;
 
         for (var i = 0; i < 3; i++) {
             var x = colW * (i + 0.5);
@@ -1302,13 +1421,10 @@ class DashView extends WatchUi.DataField {
 
         var now = System.getClockTime();
 
-        var topLabels = ["TEMP", "CLOCK", "ELEV", "DI2"];
+        var topLabels = COMPACT_TOP_LABELS;
         var topValues = [
-            mTemp.format("%.1f") + "°",
-            Lang.format("$1$:$2$", [
-                now.hour.format("%02d"),
-                now.min.format("%02d"),
-            ]),
+            tempString(),
+            clockString(now),
             mElevation.format("%.0f"),
             mGearInfo,
         ];
@@ -1346,7 +1462,7 @@ class DashView extends WatchUi.DataField {
         var centerY = layout[:centerY];
         var radius = layout[:radius];
 
-        var maxVal = mIsMetric ? 60.0 : 40.0;
+        var maxVal = mSpeedGaugeMax;
         var gaugeStart = 210.0;
         var gaugeSweep = 240.0;
 
@@ -1409,7 +1525,7 @@ class DashView extends WatchUi.DataField {
         }
 
         // --- 4. STEP THREE: DRAW THE AVERAGE SPEED INDICATOR ---
-        if (mAvgSpeed > 0.0 and showSpeedIndicators) {
+        if (mAvgSpeed > 0.0 and mShowSpeedIndicators) {
             var avgAngleDeg = gaugeStart - (avgRatio * gaugeSweep);
             dc.setColor(COLOR_AVG_INDICATOR, Graphics.COLOR_TRANSPARENT);
             dc.setPenWidth(layout[:trackWidth] + 4);
@@ -1425,7 +1541,7 @@ class DashView extends WatchUi.DataField {
         }
 
         // --- 5. STEP FOUR: DRAW THE MAX SPEED INDICATOR ---
-        if (mMaxSpeed > 0.0 and showSpeedIndicators) {
+        if (mMaxSpeed > 0.0 and mShowSpeedIndicators) {
             var maxAngleDeg = gaugeStart - (maxRatio * gaugeSweep);
             dc.setColor(COLOR_MAX_INDICATOR, Graphics.COLOR_TRANSPARENT);
             dc.setPenWidth(layout[:trackWidth] + 4);
@@ -1496,7 +1612,7 @@ class DashView extends WatchUi.DataField {
         // under the digits than they need, so the label read as detached.
         dc.drawText(
             centerX,
-            centerY + radius * 0.38 - 10 + mDeviceProfile[:speedYOffset],
+            centerY + radius * 0.38 - 10 + mDeviceProfile[:unitLabelYOffset],
             mDeviceProfile[:unitLabelFont],
             mIsMetric ? "KMH" : "MPH",
             Graphics.TEXT_JUSTIFY_CENTER
@@ -1528,30 +1644,10 @@ class DashView extends WatchUi.DataField {
         var labelY = valueY + layout[:barValueH] - xtinyH - 2;
 
         // ---- LEFT: heart rate, filling centre-outward ----
-        var hrMin = 0.0;
-        var hrMax = 200.0;
-        var hrZones = mHrZoneBoundaries as Array<Numeric>?;
-        if (hrZones != null && hrZones.size() >= 6) {
-            hrMin = hrZones[0].toFloat();
-            hrMax = hrZones[5].toFloat();
-        }
-        var hrRange = hrMax - hrMin;
-        var hrRatio = 0.0;
-        if (mHeartRate != null && hrRange > 0) {
-            hrRatio = (mHeartRate.toFloat() - hrMin) / hrRange;
-        }
-        if (hrRatio > 1.0) {
-            hrRatio = 1.0;
-        }
-        if (hrRatio < 0.0) {
-            hrRatio = 0.0;
-        }
-        var litHrSegs = (hrRatio * 10 + 0.5).toNumber();
-        if (mHeartRate != null && litHrSegs < 1) {
-            litHrSegs = 1;
-        }
+        var heartRate = mHeartRate;
+        var litHrSegs = litSegments(hrFillRatio(), 10, heartRate != null);
         var hrZoneColor = zoneColor(
-            mHeartRate != null ? mHeartRate : 0,
+            heartRate != null ? heartRate : 0,
             mHrZoneBoundaries,
             COLOR_HR
         );
@@ -1569,7 +1665,7 @@ class DashView extends WatchUi.DataField {
             lX1,
             valueY,
             barValueFont,
-            mHeartRate != null ? mHeartRate.toString() : "--",
+            heartRate != null ? heartRate.toString() : NO_VALUE,
             Graphics.TEXT_JUSTIFY_RIGHT
         );
 
@@ -1589,28 +1685,8 @@ class DashView extends WatchUi.DataField {
         }
 
         // ---- RIGHT: power, or cadence when the bike has no power meter ----
-        var rightRatio = 0.0;
-        if (mHasPowerData) {
-            var powerScaleMax = ftp;
-            if (mMaxPower > powerScaleMax) {
-                powerScaleMax = mMaxPower.toFloat();
-            }
-            rightRatio = mPower3s.toFloat() / powerScaleMax;
-        } else {
-            rightRatio = mCadence.toFloat() / 150.0;
-        }
-        if (rightRatio > 1.0) {
-            rightRatio = 1.0;
-        }
-        if (rightRatio < 0.0) {
-            rightRatio = 0.0;
-        }
-        var litPwrSegs = (rightRatio * 10 + 0.5).toNumber();
-        var pwrZoneColor = zoneColor(
-            mPower3s,
-            mPowerZoneBoundaries,
-            COLOR_POWER
-        );
+        var litPwrSegs = litSegments(rightFillRatio(), 10, false);
+        var pwrZoneColor = rightZoneColor();
 
         dc.setColor(mLabelsColor, Graphics.COLOR_TRANSPARENT);
         dc.drawText(
@@ -1625,7 +1701,7 @@ class DashView extends WatchUi.DataField {
             rX0,
             valueY,
             barValueFont,
-            mHasPowerData ? mPower3s.toString() : mCadence.format("%.0f"),
+            rightValueString(),
             Graphics.TEXT_JUSTIFY_LEFT
         );
 
@@ -1633,11 +1709,7 @@ class DashView extends WatchUi.DataField {
         // runs out towards the right screen edge. Slot 9 lands exactly on rX1.
         for (var i = 0; i < 10; i++) {
             dc.setColor(
-                i < litPwrSegs
-                    ? mHasPowerData
-                        ? pwrZoneColor
-                        : COLOR_CADENCE
-                    : mTrackColor,
+                i < litPwrSegs ? pwrZoneColor : mTrackColor,
                 Graphics.COLOR_TRANSPARENT
             );
             dc.fillRectangle(
@@ -1673,14 +1745,9 @@ class DashView extends WatchUi.DataField {
         var labelY = layout[:footerLabelY];
         var rowValueFont = mDeviceProfile[:rowValueFont];
 
-        var totalSecs = mElapsedMs / 1000;
         var values = [
-            Lang.format("$1$:$2$:$3$", [
-                (totalSecs / 3600).format("%d"),
-                ((totalSecs % 3600) / 60).format("%02d"),
-                (totalSecs % 60).format("%02d"),
-            ]),
-            mHasPowerData ? mCadence.format("%.0f") : mAscent.format("%.0f"),
+            elapsedString(),
+            mHasPowerData ? cadenceString() : mAscent.format("%.0f"),
             mGrade.format("%.1f"),
             (mDistance / 1000).format("%.1f"),
         ];
@@ -1690,7 +1757,7 @@ class DashView extends WatchUi.DataField {
             "GRD",
             "DIST",
         ];
-        var columns = [0.18, 0.45, 0.66, 0.87];
+        var columns = COMPACT_FOOTER_COLUMNS;
 
         for (var i = 0; i < 4; i++) {
             var x = width * columns[i];
@@ -1713,318 +1780,6 @@ class DashView extends WatchUi.DataField {
         }
     }
 
-    // Returns a Dictionary of device-specific layout and font values keyed by screen size.
-    // To add support for a new device, add a new profile block below.
-    //
-    // Which keys a profile must carry depends on its :layoutVariant. A :full
-    // profile carries all of them; a :compact profile carries only the eight
-    // marked [compact] below, because computeCompactLayout derives its bands
-    // from measured font heights rather than from pixel offsets.
-    //
-    // Profile keys:
-    //   :layoutVariant         (Symbol) — which band stack computeLayout builds.
-    //                            :full is the 1.67-aspect layout the 1030 /
-    //                            1040 / 1050 / 850 / Explore 2 use; :compact is
-    //                            the four-band stack for the 246x322 830 / 840.
-    //   :speedGaugeCenterYOffset
-    //                          (Number) — vertical offset for the speed gauge (positive =
-    //                            lower). Reaches three places at different strengths, so a
-    //                            change here is not a simple translation: the arc centre
-    //                            moves +1x, the cadence/gear/grade row moves -1x (it is
-    //                            measured up from the gauge, so the gauge going down pulls
-    //                            the row up), and the central speed digits move +2x because
-    //                            drawSpeedGauge adds the offset again on top of the centre
-    //                            it is already baked into. Use :speedYOffset to move the
-    //                            digits alone. The HR/power gauge below is not read from
-    //                            this key but still shifts +0.5x — see
-    //                            :hrPwrGaugeCenterYOffset.
-    //   :speedFont             (Graphics.FontType) — font for the central speed readout [compact]
-    //   :panelValueFont        (Graphics.FontType) — font for HR and power panel values
-    //   :rowValueFont          (Graphics.FontType) — font for the top bar, elapsed time,
-    //                            cadence/gear/grade and footer values. FONT_LARGE on 1.67
-    //                            aspect screens; shorter screens step it down. [compact]
-    //   :barValueFont          (Graphics.FontType) — font for the HR and power values on the
-    //                            compact zone bars. [compact only]
-    //   :crownValueFont        (Graphics.FontType) — font for the AVG / MAX speed pair inside
-    //                            the gauge crown. Sized independently of :rowValueFont because
-    //                            the crown narrows as the pair grows: the columns are pulled
-    //                            in to compensate (:speedAvgColOffset), and past a point the
-    //                            two values would meet in the middle. [compact only]
-    //   :crownYOffset          (Number) — vertical nudge for the AVG / MAX pair, label and
-    //                            value together (positive = lower). The only pixel offset on
-    //                            the :compact path; safe only because the 830 and 840 take
-    //                            separate profiles. [compact only]
-    //   :gaugeRadiusFactor     (Float) — speed gauge radius as a fraction of the narrow
-    //                            screen dimension. 0.33 on 1.67 aspect screens; shorter
-    //                            screens need less so the rows below still fit. On :compact
-    //                            it is an upper bound — the layout shrinks below it if the
-    //                            band or the screen width cannot take it. [compact]
-    //   :speedYOffset          (Number) — vertical shift for the central speed value and km/h label [compact]
-    //   :elapsedTimeYOffset    (Number) — vertical shift for the elapsed time row
-    //   :bottomLabelOffset     (Number) — extra downward shift for bottom bar labels
-    //   :timeLabelOffset       (Number) — extra downward shift for the TIME label
-    //   :cadenceLineYOffset    (Number) — vertical shift for the cadence/gradient row (negative = higher)
-    //   :middleRowLabelOffset  (Number) — extra downward shift for CAD, DI2, GRD labels relative to the row
-    //   :topBarYOffset         (Number) — vertical shift for the entire top bar (negative = higher)
-    //   :topBarValueYOffset    (Number) — extra vertical shift for top bar values relative to labels (negative = closer)
-    //   :footerValueYOffset    (Number) — extra downward shift for footer bar values
-    //   :hrPwrGaugeCenterYOffset
-    //                          (Number) — vertical offset for the HR and power gauges
-    //                            (positive = lower), applied +1x to their shared centre and
-    //                            to nothing else. This is the only key that moves those two
-    //                            gauges alone. It is not the only thing that moves them: the
-    //                            band is the leftover space between the gauge bottom and the
-    //                            fixed footer, and its centre is that space's midpoint, so
-    //                            anything changing the speed gauge's size or position
-    //                            (:gaugeRadiusFactor, :speedGaugeCenterYOffset) drags the
-    //                            HR/power gauges along at half strength. That is the band
-    //                            re-centring itself, and it is deliberate — this key is for
-    //                            nudging off that midpoint, not for holding position
-    //                            against it.
-    //   :panelTextYOffset      (Number) — vertical shift for panel values and avg text (negative = up), arc unaffected
-    //   :panelTopLabelYOffset  (Number) — vertical shift for the HR / PWR top labels (negative = up)
-    //   :hideClockLabel        (Boolean) — suppress the CLOCK label in the top bar
-    //   :unitLabelFont         (Graphics.FontType) — font for km/h, HR, and CAD/PWR labels [compact]
-    //   :avgLabelOffset        (Number) — vertical shift for AVG/MAX and panel AVG labels and values (negative = up)
-    //   :speedAvgValueOffset   (Number) — extra vertical shift for the AVG/MAX speed values
-    //                            only, relative to their AVG/MAX labels. Use to open up the
-    //                            label-to-value gap when a smaller gauge radius closes it.
-    //   :panelAvgValueOffset   (Number) — vertical shift for avg HR and avg power/cadence values (negative = up)
-    //   :panelArcSweep         (Float)  — total sweep angle in degrees for HR and power arc gauges
-    private function initDeviceProfile(
-        screenWidth as Number,
-        screenHeight as Number,
-        deviceType as String
-    ) as Lang.Dictionary {
-        // --- Edge 850 / 550: 420 x 600 ---
-        // Same 269 ppi font metrics as the 1050 but 200 fewer vertical pixels, so
-        // the 1050 profile overflows by roughly 160 px. Must be tested before the
-        // screenWidth >= 400 branch below, which would otherwise swallow it.
-        // Recovered by stepping the row, speed and panel fonts down one each and
-        // shrinking the gauge from 0.33 to 0.275 of screen width. That started at
-        // 0.25 and was opened up 10%; the gauge band is the one place this layout
-        // has slack, and everything below it keys off the radius, so the cost is
-        // paid by the panel band — see :gaugeRadiusFactor below.
-        // The 550 is the button-only 850 — identical panel, ppi and font point
-        // sizes — so it shares this profile outright. It MUST be matched here by
-        // deviceType: unlike the 530 / 540, no width test catches it, and a 550
-        // falling through to screenWidth >= 400 would silently take the 1050
-        // profile and render the overflow above.
-        if (deviceType.equals("edge850") || deviceType.equals("edge550")) {
-            return {
-                :layoutVariant => :full,
-                :speedGaugeCenterYOffset => 0,
-                :speedYOffset => 6,
-                :elapsedTimeYOffset => 12,
-                :speedFont => Graphics.FONT_NUMBER_MEDIUM,
-                :panelValueFont => Graphics.FONT_NUMBER_MILD,
-                :rowValueFont => Graphics.FONT_MEDIUM,
-                :gaugeRadiusFactor => 0.275,
-                :bottomLabelOffset => 0,
-                :timeLabelOffset => 0,
-                :cadenceLineYOffset => 22,
-                :middleRowLabelOffset => 0,
-                :hideClockLabel => false,
-                :unitLabelFont => Graphics.FONT_TINY,
-                :avgLabelOffset => 0,
-                :speedAvgValueOffset => 4,
-                :panelAvgValueOffset => 0,
-                :panelArcSweep => 45.0,
-                :topBarYOffset => 0,
-                :topBarValueYOffset => -4,
-                :footerValueYOffset => 0,
-                :hrPwrGaugeCenterYOffset => 10,
-                :panelTextYOffset => 0,
-                :panelTopLabelYOffset => 0,
-            };
-        }
-
-        // --- Edge 1050: 480 x 800 ---
-        if (screenWidth >= 400) {
-            return {
-                :layoutVariant => :full,
-                :speedGaugeCenterYOffset => -5,
-                :speedYOffset => 0,
-                :elapsedTimeYOffset => 0,
-                :speedFont => Graphics.FONT_NUMBER_THAI_HOT,
-                :panelValueFont => Graphics.FONT_NUMBER_HOT,
-                :rowValueFont => Graphics.FONT_LARGE,
-                :gaugeRadiusFactor => 0.33,
-                :bottomLabelOffset => 0,
-                :timeLabelOffset => 0,
-                :cadenceLineYOffset => 0,
-                :middleRowLabelOffset => 0,
-                :hideClockLabel => false,
-                :unitLabelFont => Graphics.FONT_SMALL,
-                :avgLabelOffset => 0,
-                :speedAvgValueOffset => 0,
-                :panelAvgValueOffset => 0,
-                :panelArcSweep => 54.0,
-                :topBarYOffset => 0,
-                :topBarValueYOffset => 0,
-                :footerValueYOffset => 0,
-                :hrPwrGaugeCenterYOffset => 10,
-                :panelTextYOffset => -12,
-                :panelTopLabelYOffset => -12,
-            };
-        }
-
-        // --- Edge Explore 2: 240 x 400 ---
-        if (deviceType.equals("edgeexplore2")) {
-            return {
-                :layoutVariant => :full,
-                :speedGaugeCenterYOffset => 5,
-                :speedYOffset => -4,
-                :elapsedTimeYOffset => -10,
-                :speedFont => Graphics.FONT_NUMBER_HOT,
-                :panelValueFont => Graphics.FONT_NUMBER_MEDIUM,
-                :rowValueFont => Graphics.FONT_LARGE,
-                :gaugeRadiusFactor => 0.33,
-                :bottomLabelOffset => 0,
-                :timeLabelOffset => 8,
-                :cadenceLineYOffset => -2,
-                :middleRowLabelOffset => 8,
-                :hideClockLabel => false,
-                :unitLabelFont => Graphics.FONT_SMALL,
-                :avgLabelOffset => 0,
-                :speedAvgValueOffset => 0,
-                :panelAvgValueOffset => -3,
-                :panelArcSweep => 54.0,
-                :topBarYOffset => -6,
-                :topBarValueYOffset => -6,
-                :footerValueYOffset => 0,
-                :hrPwrGaugeCenterYOffset => 8,
-                :panelTextYOffset => -10,
-                :panelTopLabelYOffset => -10,
-            };
-        }
-
-        // --- Edge 840 / 540: 246 x 322 ---
-        // Same panel as the 830/530 below and the same :compact layout, split
-        // out for one key: :rowValueFont. This pair renders the system fonts far
-        // smaller than the 830 does — FONT_MEDIUM is 19 px here against 26 —
-        // so the step that fills the top bar and footer on the 830 leaves these
-        // two looking undersized, and they have the room for one more step.
-        //
-        // FONT_LARGE is the last font available (the FONT_NUMBER_* faces carry
-        // no '°', ':' or '/', and this device reports no vector font support),
-        // and it is a big step: 19 px to 31. It fits typical values with a few
-        // px to spare but overruns its neighbours at the extremes — see
-        // drawCompactTopBar and drawCompactFooter for which strings and by how
-        // much. That trade is deliberate; step back to FONT_MEDIUM to undo it.
-        if (deviceType.equals("edge840") || deviceType.equals("edge540")) {
-            return {
-                :layoutVariant => :compact,
-                :speedFont => Graphics.FONT_NUMBER_THAI_HOT,
-                :barValueFont => Graphics.FONT_NUMBER_MILD,
-                :rowValueFont => Graphics.FONT_LARGE,
-                :crownValueFont => Graphics.FONT_LARGE,
-                // The taller crown font stacks the pair higher than it wants to
-                // sit; 6 px back down re-centres it in the crown by eye. That is
-                // as far as it goes: the AVG / MAX digits end 1 px above the top
-                // of the speed digits here (measured via getFontAscent, and the
-                // number fonts carry no leading — box height is ascent+descent
-                // exactly, so the boxes are the glyphs). 7 would touch.
-                :crownYOffset => 6,
-                :unitLabelFont => Graphics.FONT_TINY,
-                :gaugeRadiusFactor => 0.40,
-                :speedYOffset => 0,
-            };
-        }
-
-        // --- Edge 830 / 530: 246 x 322 ---
-        // The other :compact profile. Both carry the short key set —
-        // computeCompactLayout derives its bands from measured font heights, so
-        // the ~20 pixel offsets the :full path needs have nothing to apply to,
-        // and the same profile covers a device pair whose font metrics differ
-        // (830 FONT_LARGE 41, 840 31) because the layout measures whatever it
-        // gets. 530 and 540 are the button-only 830 and 840 — identical panel,
-        // ppi and font point sizes. The width test stays as a safety net for any
-        // other sub-260 device that is not a build target; it lands here rather
-        // than on the 840 profile because this is the more conservative of the
-        // two font choices.
-        if (
-            deviceType.equals("edge830") ||
-            deviceType.equals("edge530") ||
-            screenWidth < 260
-        ) {
-            return {
-                :layoutVariant => :compact,
-                :speedFont => Graphics.FONT_NUMBER_THAI_HOT,
-                :barValueFont => Graphics.FONT_NUMBER_MILD,
-                // FONT_MEDIUM rather than FONT_SMALL: the top bar and footer
-                // values are the least glanceable thing on this screen, and
-                // both bands have the width for the step (see drawCompactTopBar
-                // for the worst-case column). The extra height comes out of the
-                // gauge band, which shrinks to fit on its own. FONT_LARGE is 41
-                // px here and does not fit — that step is 840/540 only.
-                :rowValueFont => Graphics.FONT_MEDIUM,
-                :crownValueFont => Graphics.FONT_MEDIUM,
-                :crownYOffset => 0,
-                :unitLabelFont => Graphics.FONT_TINY,
-                :gaugeRadiusFactor => 0.40,
-                :speedYOffset => 0,
-            };
-        }
-
-        // --- Edge 1030 / 1030 Plus: labels sit higher than on 1040 ---
-        if (deviceType.equals("edge1030")) {
-            return {
-                :layoutVariant => :full,
-                :speedGaugeCenterYOffset => 5,
-                :speedYOffset => 0,
-                :elapsedTimeYOffset => -13,
-                :speedFont => Graphics.FONT_NUMBER_HOT,
-                :panelValueFont => Graphics.FONT_NUMBER_MEDIUM,
-                :rowValueFont => Graphics.FONT_LARGE,
-                :gaugeRadiusFactor => 0.33,
-                :bottomLabelOffset => 2,
-                :timeLabelOffset => 8,
-                :cadenceLineYOffset => 0,
-                :middleRowLabelOffset => 8,
-                :hideClockLabel => false,
-                :unitLabelFont => Graphics.FONT_XTINY,
-                :avgLabelOffset => -6,
-                :speedAvgValueOffset => 0,
-                :panelAvgValueOffset => -6,
-                :panelArcSweep => 45.0,
-                :topBarYOffset => -6,
-                :topBarValueYOffset => -6,
-                :footerValueYOffset => 4,
-                :hrPwrGaugeCenterYOffset => 10,
-                :panelTextYOffset => -10,
-                :panelTopLabelYOffset => -10,
-            };
-        }
-
-        // --- Edge 1040: 282 x 470 (default / fallback) ---
-        return {
-            :layoutVariant => :full,
-            :speedGaugeCenterYOffset => 5,
-            :speedYOffset => -14,
-            :elapsedTimeYOffset => -10,
-            :speedFont => Graphics.FONT_NUMBER_HOT,
-            :panelValueFont => Graphics.FONT_NUMBER_MEDIUM,
-            :rowValueFont => Graphics.FONT_LARGE,
-            :gaugeRadiusFactor => 0.33,
-            :bottomLabelOffset => 0,
-            :timeLabelOffset => 0,
-            :cadenceLineYOffset => 0,
-            :middleRowLabelOffset => 0,
-            :hideClockLabel => false,
-            :unitLabelFont => Graphics.FONT_SMALL,
-            :avgLabelOffset => 0,
-            :speedAvgValueOffset => 0,
-            :panelAvgValueOffset => 0,
-            :panelArcSweep => 54.0,
-            :topBarYOffset => 0,
-            :topBarValueYOffset => 0,
-            :footerValueYOffset => 0,
-            :hrPwrGaugeCenterYOffset => 4,
-            :panelTextYOffset => -12,
-            :panelTopLabelYOffset => -4,
-        };
-    }
 
     private function calculateGrade(
         rawAlt as Float?,

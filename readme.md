@@ -39,7 +39,8 @@ Dash is a full-screen field: add it to a **1-Field** data screen so it has the w
     - Current time (center)
     - Current elevation (right)
 
-2. **Speed gauge** — a 24-segment arc reading 0–60 km/h (0–40 mph)
+2. **Speed gauge** — a 24-segment arc reading 0–60 km/h (0–40 mph) by default, filling smoothly with your current speed
+    - Average speed (orange) and max speed (green) markers on the arc
     - Average speed (top left)
     - Max speed (top right)
     - Current speed (center)
@@ -78,11 +79,11 @@ If you don't have a power meter, the right gauge becomes a cadence gauge reading
 These are 2.6" screens at 246 × 322 px, about a fifth of the pixel area of a 1050. Everything above still fits at a readable size only if some of it goes, so those four devices get a condensed four-band layout:
 
 1. Ambient temperature, current time, elevation and Di2 gears
-2. Speed gauge with the current speed at its centre
+2. Speed gauge with the current speed at its centre, average and max speed above it, and the same average/max markers on the arc
 3. Heart rate and power as horizontal zone bars, coloured by training zone exactly as the round gauges are
 4. Elapsed time, cadence, grade and distance
 
-What is dropped is the data you look at after the ride rather than during it: average and max speed, average heart rate, average power, total ascent and calories. Without a power meter the right bar becomes a cadence bar as above, and the cadence slot in the bottom row shows total ascent instead.
+What is dropped is the data you look at after the ride rather than during it: average heart rate, average power, total ascent and calories. Without a power meter the right bar becomes a cadence bar as above, and the cadence slot in the bottom row shows total ascent instead.
 
 ### Units & appearance
 
@@ -100,7 +101,11 @@ Configurable in Garmin Connect (or Connect IQ) under the app's settings:
 
 | Setting | Range | Default | What it does |
 |---|---|---|---|
-| **FTP (Watts)** | 0–600 | 200 | Functional threshold power, used to derive the power zone colours and to scale the power gauge. Only used when your Garmin user profile has no FTP set, or when the device cannot report it. |
+| **FTP (Watts)** | 50–600 | 200 | Functional threshold power, used to derive the power zone colours and to scale the power gauge. Only used when your Garmin user profile has no FTP set, or when the device cannot report it. |
+| **Speed Gauge Max** | 0–200 | 0 | Full-scale value of the speed gauge, in your display units (km/h or mph). 0 keeps the built-in default of 60 km/h / 40 mph. |
+| **Visualize average/max speed** | on / off | on | Shows your average speed (orange) and max speed (green) as markers on the speed gauge. |
+
+Setting changes take effect immediately, including mid-ride.
 
 ## Installation
 
@@ -157,17 +162,21 @@ The layout is tuned per device, so build against more than one target after chan
 ### Project structure
 
 - `source/` — Monkey C source files
-- `resources/` — drawables, strings, and the app setting (FTP)
+- `resources/` — drawables, strings, and the app settings (FTP, speed gauge max)
 - `resources-<product>/` — per-device overrides, picked up automatically by product id
 - `assets/` — images and icons
 - `bin/` — build outputs
 
 ### Main files
 
-- `DashApp.mc` — application entry point; registers a background service that runs every 5 minutes to fetch ambient temperature from the device sensor
+- `DashApp.mc` — application entry point; registers a background service that runs every 5 minutes to fetch ambient temperature from the device sensor, and forwards setting changes to the view
 - `DashView.mc` — UI logic; computes and renders every metric, resolves the device layout, and calculates real-time grade from GPS altitude and distance (updated every 20 m, capped at ±30%)
-- `DashBackground.mc` — background service logic
+- `DeviceProfiles.mc` — the per-device table of pixel offsets and font choices the layout is built from
 - `GlobalBackgroundService.mc` — global background handler
+
+## Contributors
+
+- [@LowRunneR](https://github.com/LowRunneR) — smooth speed gauge fill and average/max speed markers ([#10](https://github.com/gregor-srdic/garmin-dash/pull/10))
 
 ## Contributing
 

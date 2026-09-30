@@ -1,1 +1,6 @@
 project.manifest = manifest.xml
+
+# Without this the source scan also picks up the copies the VS Code extension
+# leaves in bin/optimized/, and every CLI build fails with "Redefinition of
+# '$.DashApp'" once an IDE build has run. Keep it pinned to source/.
+base.sourcePath = source

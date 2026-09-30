@@ -1,4 +1,7 @@
 <properties xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://developer.garmin.com/downloads/connect-iq/resources.xsd">
     <property id="ftp" type="number">200</property>
+    <!-- Full-scale value for the speed gauge, in the rider's display units.
+         0 keeps the built-in default (60 km/h / 40 mph). -->
+    <property id="speedGaugeMax" type="number">0</property>
     <property id="visualizeSpeedIndicator" type="boolean">true</property>
 </properties>

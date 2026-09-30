@@ -12,7 +12,9 @@ class GlobalBackgroundService extends System.ServiceDelegate {
     // THIS is the only place this function works
     function onTemporalEvent() {
         var sensorInfo = Sensor.getInfo();
-        var temperature = sensorInfo.temperature;
+        // getInfo() can come back null when the background slice runs before
+        // the sensor subsystem is up; exit empty rather than fault the service.
+        var temperature = sensorInfo != null ? sensorInfo.temperature : null;
         Background.exit(temperature);
     }
 }

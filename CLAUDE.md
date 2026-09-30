@@ -10,7 +10,7 @@ Three of those twelve are button-only siblings that are pixel-identical to a tou
 
 ## Build & run
 
-There is no test suite, linter, or package manager — verification means "it compiles and looks right in the simulator".
+There is no test suite, linter, or package manager — verification means "it compiles and looks right in the simulator". The project builds clean at type-check level 2 (`-l 2`, "informative"), which `.vscode/settings.json` pins via `monkeyC.typeCheckLevel`; keep it there, and pass `-l 2` on the CLI. `monkey.jungle` sets `base.sourcePath = source` — without it the source scan also picks up the copies the extension leaves in `bin/optimized/`, and every CLI build fails with `Redefinition of '$.DashApp'` once an IDE build has run.
 
 Primary workflow is the VS Code Monkey C extension:
 - `Monkey C: Build for Device`
@@ -21,7 +21,7 @@ CLI equivalent (SDK lives under `%APPDATA%\Garmin\ConnectIQ\Sdks\<version>\bin`;
 
 ```powershell
 $sdk = (Get-Content "$env:APPDATA\Garmin\ConnectIQ\current-sdk.cfg").Trim()
-& "$sdk\bin\monkeyc.bat" -f monkey.jungle -o bin/Dash.prg -y "$env:APPDATA\Garmin\ConnectIQ\developer_key.der" -d edge1050
+& "$sdk\bin\monkeyc.bat" -f monkey.jungle -o bin/Dash.prg -y "$env:APPDATA\Garmin\ConnectIQ\developer_key.der" -d edge1050 -l 2
 & "$sdk\bin\connectiq.bat"          # start simulator, then:
 & "$sdk\bin\monkeydo.bat" bin/Dash.prg edge1050
 ```
@@ -34,7 +34,9 @@ Four source files, but the interesting behavior is cross-file.
 
 ### Rendering: `DashView.mc`
 
-`DashView extends WatchUi.DataField`. `compute(info)` reads and unit-converts every metric into `m*` member fields; `onUpdate(dc)` draws the entire screen imperatively from those fields. **`resources/layouts/layouts.xml` is vestigial** — `setLayout()` is never called and nothing in it is used except the `Background` drawable class. Do not add UI by editing layouts; add it to the band draw functions below.
+`DashView extends WatchUi.DataField`. `compute(info)` reads and unit-converts every metric into `m*` member fields; `onUpdate(dc)` draws the entire screen imperatively from those fields. There is no layout XML — `setLayout()` is never called, and `resources/layouts/` was deleted along with the `Background` drawable that shadowed `Toybox.Background`. Do not add UI by adding layouts; add it to the band draw functions below.
+
+Metrics that can drop out mid-ride — heart rate, power, cadence, temperature — are **nullable** fields, and the draw path prints `NO_VALUE` (`"--"`) for them. This is load-bearing: they used to be plain numbers that were only ever assigned when a reading arrived, so a power meter disconnecting left its last watt number frozen on screen, reading as live data. Cumulative stats (averages, maxima, totals, distance) are non-nullable and keep their last value by definition. Each such metric gets one formatter (`tempString`, `cadenceString`, `rightValueString`) so both render paths print the same thing when a sensor is quiet.
 
 `onUpdate` itself only sets the palette, resolves the layout and calls the band functions for the layout's variant in z-order — `:full` calls `drawTopBar` → `drawSpeedGauge` → `drawMiddleRow` → `drawPanels` → `drawFooter`, `:compact` calls `drawCompactTopBar` → `drawCompactSpeedGauge` → `drawCompactBars` → `drawCompactFooter`. None of them derives its own geometry — every position comes from the Dictionary returned by `computeLayout(dc)`, whose keys are documented above `computeFullLayout`. That Dictionary is cached in `mLayoutCache` and only recomputed when the dc dimensions change, so it may not read anything that varies per frame. Colors do vary per frame (the dark/light setting is live) and live in the `mBgColor` / `mValuesColor` / `mLabelsColor` / `mTrackColor` fields, reset at the top of `onUpdate`.
 
@@ -47,21 +49,23 @@ Four source files, but the interesting behavior is cross-file.
 
 The two paths share no draw code. `:compact` drops the metrics it has no room for (AVG HR, AVG power, calories) rather than shrinking them, and draws the HR/power zone bars as horizontal `fillRectangle` runs instead of arcs. It issues 12 `drawArc` calls per frame against `:full`'s 44, which matters on the 830 (2019 hardware).
 
-`DashBackground.mc` defines `class Background extends WatchUi.Drawable`, which shadows `Toybox.Background`. That is why files needing the real background API write `using Toybox.Background` and call it fully qualified.
+The metric-to-gauge arithmetic — `hrFillRatio`, `rightFillRatio`, `clampRatio`, `litSegments`, `rightZoneColor` — is shared by both render paths. The two paths share no *geometry* on purpose, but a heart rate has to mean the same fill on an arc as on a bar, so that arithmetic lives in one place.
 
 ### Device targeting: two mechanisms, order-sensitive
 
-`initDeviceProfile(screenWidth, screenHeight, deviceType)` returns a Dictionary of ~20 pixel offsets and font choices that `computeLayout` and the band draw functions add to their coordinates. The key list and meaning of each key is documented in the comment block directly above the function — keep it in sync when adding keys.
+`DeviceProfiles.forDevice(screenWidth, screenHeight, deviceType)`, in `DeviceProfiles.mc`, returns a Dictionary of ~20 pixel offsets and font choices that `computeLayout` and the band draw functions add to their coordinates. The key list and meaning of each key is documented in the comment block directly above the function — keep it in sync when adding keys.
 
 Selection uses both screen dimensions *and* a `deviceType` string:
 - `resources/strings/strings.xml` defines `deviceType` = `default`; each `resources-<productId>/` directory overrides it (Connect IQ picks these up by directory-name convention — they are not listed in `monkey.jungle`). Note both 1030 variants and the 1030 Plus all map to `deviceType` = `edge1030`.
-- Branch order in `initDeviceProfile` matters: `deviceType == "edge850"`/`"edge550"` → `screenWidth >= 400` (1050) → `deviceType == "edgeexplore2"` → `deviceType == "edge840"`/`"edge540"` → `deviceType == "edge830"`/`"edge530"` or `screenWidth < 260` (the two `:compact` branches; the width test is now only a safety net for non-target sub-260 devices, and sits on the 830 branch because that is the more conservative font choice) → `deviceType == "edge1030"` → fallback (1040). A width check placed before a deviceType check will swallow it — the 850 and 550 are 420 wide and must be tested before the `>= 400` branch.
+- Branch order in `DeviceProfiles.forDevice` matters: `deviceType == "edge850"`/`"edge550"` → `screenWidth >= 400` (1050) → `deviceType == "edgeexplore2"` → `deviceType == "edge840"`/`"edge540"` → `deviceType == "edge830"`/`"edge530"` or `screenWidth < 260` (the two `:compact` branches; the width test is now only a safety net for non-target sub-260 devices, and sits on the 830 branch because that is the more conservative font choice) → `deviceType == "edge1030"` → fallback (1040). A width check placed before a deviceType check will swallow it — the 850 and 550 are 420 wide and must be tested before the `>= 400` branch.
 - **The 550 is the cautionary case.** 246×322 devices are caught by the `screenWidth < 260` net even on `deviceType` = `default`, so they tolerate a missing resource dir. A 420×600 device does not: without `resources-edge550/`, a 550 falls into `screenWidth >= 400`, takes the **1050** profile, and renders a layout that overflows by ~160 px — while still compiling and drawing, so it looks like it works. Any future 420×600 target needs its `deviceType` wired into the 850 branch.
-- Verifying which branch a device actually takes cannot be done statically: `Rez.mcgen` carries only resource ids, and every `.prg` embeds all the `deviceType` literals regardless of target because they are the `.equals()` operands in `initDeviceProfile`. Print the resolved profile from `initialize()` and run it under `monkeydo`. `:gaugeRadiusFactor` is the cheapest discriminator — 0.25 means the 850 branch, 0.33 the 1050/1040 branches, 0.40 either `:compact` branch. To tell the two `:compact` branches apart use `:rowValueFont` / `:crownValueFont` instead (`FONT_LARGE` = 840/540, `FONT_MEDIUM` = 830/530).
+- Verifying which branch a device actually takes cannot be done statically: `Rez.mcgen` carries only resource ids, and every `.prg` embeds all the `deviceType` literals regardless of target because they are the `.equals()` operands in `DeviceProfiles.forDevice`. Print the resolved profile from `initialize()` and run it under `monkeydo`. `:gaugeRadiusFactor` is the cheapest discriminator — **0.275** means the 850/550 branch, 0.33 the 1050/1040 branches, 0.40 either `:compact` branch. (It was 0.25 when that procedure was written; read the value out of the profile rather than matching a remembered literal.) To tell the two `:compact` branches apart use `:rowValueFont` / `:crownValueFont` instead (`FONT_LARGE` = 840/540, `FONT_MEDIUM` = 830/530).
 
-Two profile keys carry the `:full` layout across aspect ratios: `:gaugeRadiusFactor` (speed gauge radius as a fraction of screen width) and `:rowValueFont` (the font for top bar, elapsed time, cadence row and footer values). Every 1.67-aspect device uses `0.33` / `FONT_LARGE`; the 850 at 1.43 needs `FONT_MEDIUM` and a reduced radius — `0.25` is what the recovery was tuned at, `0.275` is what it ships at. Everything below the gauge keys off the radius, and the footer is anchored to the bottom, so the panel band is what pays for a larger gauge: on the 850 each 0.025 of factor moves the middle row down ~21 px and the panel top down ~16 px, taking that 16 px straight out of `:panelH`. The layout is designed to *exactly* fill a 1.67-aspect screen — on the 1050 the shipped design already has ~4px of text-box overlap — so a shorter screen has no slack and needs both keys reduced, not just offsets nudged. Below roughly 1.4 this stops working at any font size and the device belongs on `:compact`, where `:gaugeRadiusFactor` becomes an upper bound the layout shrinks past if the band cannot take it.
+Two pairs of keys have to move together. `:speedYOffset` shifts the central speed digits and `:unitLabelYOffset` the KMH/MPH label under them; they were one key until `drawSpeedGauge` stopped re-adding `:speedGaugeCenterYOffset` on top of the centre `computeFullLayout` had already baked it into (which moved the digits at 2x and left every profile's digits offset from the arc centre as a side effect). `:panelTextYOffset` moves the panel values and AVG rows but **not** the HR/PWR label above them, which takes `:panelTopLabelYOffset` — change one alone and you resize the label-to-value gap instead of translating the group.
 
-To add a device: add the `<iq:product>` to `manifest.xml`, add `resources-<productId>/strings/strings.xml` with a `deviceType`, and add a profile branch — inserted at the right position in that chain.
+Two profile keys carry the `:full` layout across aspect ratios: `:gaugeRadiusFactor` (speed gauge radius as a fraction of screen width) and `:rowValueFont` (the font for top bar, elapsed time, cadence row and footer values). Every 1.67-aspect device uses `0.33` / `FONT_LARGE`; the 850 at 1.43 needs `FONT_MEDIUM` and a reduced radius — `0.25` is what the recovery was tuned at, `0.275` is what it ships at. Opening it up cost the panel band 16 px, which pushed the panel AVG row into the footer; the 850/550 profile pays that back with `:panelTextYOffset`/`:panelTopLabelYOffset` at -10, bringing it into line with every other `:full` profile. Everything below the gauge keys off the radius, and the footer is anchored to the bottom, so the panel band is what pays for a larger gauge: on the 850 each 0.025 of factor moves the middle row down ~21 px and the panel top down ~16 px, taking that 16 px straight out of `:panelH`. The layout is designed to *exactly* fill a 1.67-aspect screen — on the 1050 the shipped design already has ~4px of text-box overlap — so a shorter screen has no slack and needs both keys reduced, not just offsets nudged. Below roughly 1.4 this stops working at any font size and the device belongs on `:compact`, where `:gaugeRadiusFactor` becomes an upper bound the layout shrinks past if the band cannot take it.
+
+To add a device: add the `<iq:product>` to `manifest.xml`, add `resources-<productId>/strings/strings.xml` with a `deviceType`, and add a profile branch in `DeviceProfiles.mc` — inserted at the right position in that chain.
 
 Font heights are **not** derivable from ppi or from the SDK's `simulator.json` point sizes, and devices with identical resolution and ppi do not necessarily share them. Measure them: build a `(:debug)` `System.println` of `dc.getFontHeight()` / `dc.getTextWidthInPixels()` for the fonts and worst-case strings you plan to use, then `monkeydo` it and read the console. Known values:
 
@@ -79,9 +83,11 @@ Font heights are **not** derivable from ppi or from the SDK's `simulator.json` p
 
 ### Temperature: spans all four files
 
-Edge devices vary in whether ambient temperature is exposed to a data field, so there is a fallback chain in `compute()`: `Storage["sensorTemperature"]` → `info.ambientTemperature` → `Activity.getActivityInfo().ambientTemperature` → `SensorHistory.getTemperatureHistory()`.
+Edge devices vary in whether ambient temperature is exposed to a data field, so there is a fallback chain in `compute()`: the background service's last reading → `info.ambientTemperature` → `SensorHistory.getTemperatureHistory()`. If all three are empty the field shows `"--"` rather than a stale number.
 
-The `Storage` entry is populated by a background service: `DashApp.getInitialView()` registers a 5-minute temporal event, `GlobalBackgroundService.onTemporalEvent()` (must carry the `(:background)` annotation) reads the sensor and calls `Background.exit(temp)`, and `DashApp.onBackgroundData()` writes it to `Storage`. `onTemporalEvent` only works on the `ServiceDelegate` — the commented-out copy in `DashBackground.mc` is a record of that dead end.
+The background reading lives in `mBackgroundTemp`, seeded from `Storage` once in `initialize()` and pushed in afterwards by `DashApp.onBackgroundData` → `DashView.onSensorTemperature`. `compute()` does **not** read `Storage` — that was a flash-backed read every second for a value that changes every five minutes. Once `info.ambientTemperature` returns a real reading the device has proved it reports temperature directly, so `compute()` cancels the temporal event outright; `DashApp` re-registers on the next load if it turns out to be needed.
+
+The reading is produced by a background service: `DashApp.getInitialView()` registers a 5-minute temporal event **only when none is registered** (re-registering restarts the five-minute window, so a field that reloads often never reaches its first event), `GlobalBackgroundService.onTemporalEvent()` (must carry the `(:background)` annotation) reads the sensor and calls `Background.exit(temp)`, and `DashApp.onBackgroundData()` persists it to `Storage` and hands it to the view. `onTemporalEvent` only works on the `ServiceDelegate`; a copy on a `WatchUi.Drawable` is never called, which is the dead end `DashBackground.mc` used to record before it was deleted.
 
 ### API-level guards
 
@@ -91,6 +97,10 @@ Because the app targets devices from CIQ 3.2 to 5.x, optional APIs must be probe
 
 `zoneColor(value, boundaries, fallback)` maps a value onto the 5-entry `ZONE_COLORS` table given a 6-element boundary array. HR boundaries come from `UserProfile.getHeartRateZones()`; power boundaries are Coggan multiples derived from FTP (profile FTP first, then the `ftp` app property, default 200 W — declared in `resources/properties/properties.xml` and exposed via `resources/settings/settings.xml`). If boundaries are unavailable the gauge falls back to a single flat color.
 
+`mFtp` is **guaranteed positive**: it is the divisor for the power gauge's full-scale value, and `readSettings()` falls back to `FTP_DEFAULT` for anything null, non-numeric or `<= 0`. The setting's `min` is 50 for the same reason — it used to allow 0, which divided by zero at ride start, before any max power had been recorded to take over as the scale.
+
+The speed gauge's full scale comes from the `speedGaugeMax` property, in display units; 0 means the built-in default (60 km/h / 40 mph).
+
 The right panel is dual-purpose: with no power data (`mHasPowerData == false`) it silently becomes a 0–150 rpm cadence gauge, label and all.
 
 ### Grade
@@ -99,6 +109,10 @@ The right panel is dual-purpose: with no power data (`mHasPowerData == false`) i
 
 ## Conventions
 
-- Metrics are unit-converted once in `compute()` and stored ready-to-display; `onUpdate` does no conversion. `mIsMetric` (speed/distance) and `mIsElevationMetric` (altitude/ascent) are separate device settings and are read independently, as is `settings.temperatureUnits`.
+- Metrics are unit-converted once in `compute()` and stored ready-to-display; `onUpdate` does no conversion. `mIsMetric` (speed/distance) and `mIsElevationMetric` (altitude/ascent) are separate device settings and are read independently, as is `settings.temperatureUnits` (`mIsTempStatute`).
+- Anything read from device settings, the user profile or app properties is read in `readSettings()` and cached — never on the 1 Hz path. `DashApp.onSettingsChanged()` re-runs it, which is what makes an FTP edit take effect without recreating the field.
+- `compute(info)` uses `info` for everything. It is the current `Activity.Info`, so the `Activity.getActivityInfo()` "fallbacks" this used to make on every tick returned the same object and could never differ; the `has` guards sit on `info` instead.
+- Constant label rows (`TOP_LABELS`, `BOTTOM_LABELS`, `COMPACT_TOP_LABELS`, `COMPACT_FOOTER_COLUMNS`) are class constants, not Arrays rebuilt per draw call.
+- `manifest.xml` declares only the permissions the code uses: `Background`, `Sensor`, `SensorHistory`, `UserProfile`. Do not re-add `Ant`/`BluetoothLowEnergy`/`DataFieldAlert`/`PersistedContent`/`Positioning` — none of them is used, and they show on the store listing.
 - Dark/light is driven by `getBackgroundColor()`; colors are chosen at the top of `onUpdate` from the `isDark` flag rather than hardcoded per draw call.
 - Never commit `developer_key`/`*.der`/`*.pem`, `bin/`, or `*.prg` — already covered by `.gitignore`.
