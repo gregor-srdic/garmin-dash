@@ -22,7 +22,7 @@ Requires Connect IQ 3.2 or newer. Dash adapts its layout to the screen it is run
 
 | Device | Screen | Layout |
 |---|---|---|
-| Edge 1050 | 480 × 800 | Full |
+| Edge 1060 / 1050 | 480 × 800 | Full |
 | Edge 1040 / 1040 Solar | 282 × 470 | Full |
 | Edge 1030 / 1030 Plus / 1030 Bontrager | 282 × 470 | Full |
 | Edge 850 / 550 | 420 × 600 | Full |
