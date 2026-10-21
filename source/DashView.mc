@@ -7,6 +7,7 @@ import Toybox.Application;
 import Toybox.Background;
 import Toybox.UserProfile;
 import Toybox.Math;
+import Toybox.FitContributor;
 
 class DashView extends WatchUi.DataField {
     // Live metrics. The ones that can drop out mid-ride are nullable and the
@@ -29,6 +30,13 @@ class DashView extends WatchUi.DataField {
     private var mAvgPower as Number = 0;
     private var mMaxPower as Number = 0;
     private var mHasPowerData as Boolean = false;
+
+    // NP / IF / TSS / kJ / W'bal, fed once per compute(). See PowerMetrics.mc.
+    private var mPowerMetrics as PowerMetrics;
+    // info.timerTime at the previous compute(), for the delta PowerMetrics
+    // steps by. Timer time rather than wall time, so pauses advance nothing.
+    // Null until the first reading and again after a timer reset.
+    private var mLastTimerMs as Number? = null;
 
     // Header Fields
     private var mGrade as Float = 0.0;
@@ -104,6 +112,27 @@ class DashView extends WatchUi.DataField {
     // Used when FTP is missing or nonsensical. The setting itself is clamped to
     // 50 W at the bottom, but a null or corrupt stored value still lands here.
     private const FTP_DEFAULT = 200;
+    private const W_PRIME_DEFAULT = 20000;
+
+    // What the row under the :full power gauge shows, from the powerPanelStat
+    // setting. Indexed by that setting, so the order is the settings list's.
+    private const RIGHT_PANEL_STAT_LABELS = ["AVG", "NP", "W'BAL", "TSS", "IF", "KJ"];
+    private const STAT_AVG = 0;
+    private const STAT_NP = 1;
+    private const STAT_WBAL = 2;
+    private const STAT_TSS = 3;
+    private const STAT_IF = 4;
+    private const STAT_KJ = 5;
+    private var mPowerPanelStat as Number = STAT_AVG;
+
+    // FIT developer fields, ids matching resources/fitcontributions. W'bal
+    // only: the Edge already records NP, IF, TSS and work natively.
+    private const FIT_WBAL = 0;
+    private const FIT_WBAL_MIN = 1;
+    private const FIT_WBAL_MIN_LAP = 2;
+    private var mFitWbal as FitContributor.Field? = null;
+    private var mFitWbalMin as FitContributor.Field? = null;
+    private var mFitWbalMinLap as FitContributor.Field? = null;
 
     // Zone boundaries for arc coloring, refreshed by readSettings().
     // HR zones come from the user's Garmin profile; power zones are derived from the FTP app setting.
@@ -132,7 +161,35 @@ class DashView extends WatchUi.DataField {
             deviceType
         );
         mBackgroundTemp = Storage.getValue("sensorTemperature") as Numeric?;
+        // Before readSettings, which hands it the thresholds.
+        mPowerMetrics = new PowerMetrics();
         readSettings();
+        createFitFields();
+    }
+
+    // Created up front, before it is known whether a power meter is present,
+    // because fields cannot be added once recording has started. Nothing is
+    // written to them until power has been seen (see updatePowerMetrics), so
+    // a ride without a meter carries no W'bal data.
+    private function createFitFields() as Void {
+        mFitWbal = createField(
+            "w_bal",
+            FIT_WBAL,
+            FitContributor.DATA_TYPE_FLOAT,
+            { :mesgType => FitContributor.MESG_TYPE_RECORD, :units => "kJ" }
+        );
+        mFitWbalMin = createField(
+            "w_bal_min",
+            FIT_WBAL_MIN,
+            FitContributor.DATA_TYPE_FLOAT,
+            { :mesgType => FitContributor.MESG_TYPE_SESSION, :units => "kJ" }
+        );
+        mFitWbalMinLap = createField(
+            "w_bal_min_lap",
+            FIT_WBAL_MIN_LAP,
+            FitContributor.DATA_TYPE_FLOAT,
+            { :mesgType => FitContributor.MESG_TYPE_LAP, :units => "kJ" }
+        );
     }
 
     // Everything that comes from device settings, the user profile or the app's
@@ -204,6 +261,25 @@ class DashView extends WatchUi.DataField {
         // toggling the setting mid-ride takes effect through onSettingsChanged.
         var showIndicators = Application.Properties.getValue("visualizeSpeedIndicator");
         mShowSpeedIndicators = !(showIndicators instanceof Lang.Boolean) || showIndicators;
+
+        // W'bal thresholds. CP 0 (the default) means "same as FTP", so it has
+        // to be resolved after mFtp. W' is a divisor in the recovery model,
+        // so anything null or non-positive falls back the way FTP does.
+        var cp = Application.Properties.getValue("cp");
+        if (!(cp instanceof Lang.Number) || cp <= 0) {
+            cp = mFtp;
+        }
+        var wPrime = Application.Properties.getValue("wPrime");
+        if (!(wPrime instanceof Lang.Number) || wPrime <= 0) {
+            wPrime = W_PRIME_DEFAULT;
+        }
+        mPowerMetrics.setThresholds(mFtp, cp, wPrime);
+
+        var stat = Application.Properties.getValue("powerPanelStat");
+        mPowerPanelStat =
+            stat instanceof Lang.Number && stat >= STAT_AVG && stat <= STAT_KJ
+                ? stat
+                : STAT_AVG;
     }
 
     // Called by DashApp when the user edits the app's settings.
@@ -327,6 +403,12 @@ class DashView extends WatchUi.DataField {
         mGradeLastAlt = null;
         mGradeLastDist = null;
         mGradeStallCount = 0;
+        mPowerMetrics.reset();
+        mLastTimerMs = null;
+    }
+
+    function onTimerLap() as Void {
+        mPowerMetrics.startLap();
     }
 
     // `info` is the current Activity.Info. The redundant
@@ -416,6 +498,8 @@ class DashView extends WatchUi.DataField {
             mHasPowerData = true;
         }
 
+        updatePowerMetrics(info.timerTime);
+
         // Cadence. Same dropout handling as power. The old "halve anything over
         // 150 rpm" correction is gone: it silently halved a legitimate sprint
         // cadence, and Garmin already validates this value.
@@ -489,6 +573,28 @@ class DashView extends WatchUi.DataField {
             mAscent = info.totalAscent * altMult;
         }
         calculateGrade(rawAlt, info.elapsedDistance);
+    }
+
+    // Steps the power analytics by however far the activity timer moved, and
+    // writes W'bal to the FIT file once there is power to report.
+    private function updatePowerMetrics(timerMs as Number?) as Void {
+        var last = mLastTimerMs;
+        if (timerMs != null && last != null) {
+            mPowerMetrics.addSample(mPower3s, timerMs - last);
+        }
+        mLastTimerMs = timerMs;
+
+        if (!mHasPowerData) {
+            return;
+        }
+        var wbal = mFitWbal;
+        var wbalMin = mFitWbalMin;
+        var wbalMinLap = mFitWbalMinLap;
+        if (wbal != null && wbalMin != null && wbalMinLap != null) {
+            wbal.setData(mPowerMetrics.wbal() / 1000.0);
+            wbalMin.setData(mPowerMetrics.minWbal() / 1000.0);
+            wbalMinLap.setData(mPowerMetrics.lapMinWbal() / 1000.0);
+        }
     }
 
     function onUpdate(dc as Graphics.Dc) as Void {
@@ -1320,7 +1426,7 @@ class DashView extends WatchUi.DataField {
                 avgLabelOffset +
                 panelTextYOffset,
             Graphics.FONT_XTINY,
-            "AVG",
+            rightPanelStatLabel(),
             Graphics.TEXT_JUSTIFY_CENTER
         );
         dc.setColor(mValuesColor, Graphics.COLOR_TRANSPARENT);
@@ -1332,9 +1438,7 @@ class DashView extends WatchUi.DataField {
                 avgLabelOffset +
                 panelTextYOffset,
             Graphics.FONT_MEDIUM,
-            mHasPowerData
-                ? mAvgPower.format("%.0f")
-                : mAvgCadence.format("%.0f"),
+            rightPanelStatString(),
             Graphics.TEXT_JUSTIFY_CENTER
         );
     }
@@ -1344,6 +1448,46 @@ class DashView extends WatchUi.DataField {
     private function rightValueString() as String {
         var value = mHasPowerData ? mPower3s : mCadence;
         return value != null ? value.toString() : NO_VALUE;
+    }
+
+    // The label and value under the right gauge on :full. With a power meter
+    // the powerPanelStat setting picks the metric; without one the panel is
+    // the cadence gauge and shows average cadence, as it always has.
+    private function rightPanelStatLabel() as String {
+        if (!mHasPowerData) {
+            return RIGHT_PANEL_STAT_LABELS[STAT_AVG];
+        }
+        return RIGHT_PANEL_STAT_LABELS[mPowerPanelStat];
+    }
+
+    // Widest output is a W'bal of "-100%" under "W'BAL", wider than the
+    // four-digit average power this slot used to hold. Checked on screen on
+    // the 1040, Explore 2 and 850, the three tightest :full panels; it clears
+    // the arc on all of them.
+    private function rightPanelStatString() as String {
+        if (!mHasPowerData) {
+            return mAvgCadence.format("%.0f");
+        }
+        var metrics = mPowerMetrics;
+        if (mPowerPanelStat == STAT_NP) {
+            var np = metrics.np();
+            return np != null ? np.format("%d") : NO_VALUE;
+        }
+        if (mPowerPanelStat == STAT_WBAL) {
+            return metrics.wbalPercent().format("%d") + "%";
+        }
+        if (mPowerPanelStat == STAT_TSS) {
+            var tss = metrics.tss();
+            return tss != null ? tss.format("%.0f") : NO_VALUE;
+        }
+        if (mPowerPanelStat == STAT_IF) {
+            var intensity = metrics.intensity();
+            return intensity != null ? intensity.format("%.2f") : NO_VALUE;
+        }
+        if (mPowerPanelStat == STAT_KJ) {
+            return metrics.kilojoules().format("%d");
+        }
+        return mAvgPower.format("%.0f");
     }
 
     // Band 5: ascent, distance and calories across three columns.

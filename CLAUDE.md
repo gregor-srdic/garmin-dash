@@ -10,7 +10,7 @@ Three of those thirteen are button-only siblings that are pixel-identical to a t
 
 ## Build & run
 
-There is no test suite, linter, or package manager — verification means "it compiles and looks right in the simulator". The project builds clean at type-check level 2 (`-l 2`, "informative"), which `.vscode/settings.json` pins via `monkeyC.typeCheckLevel`; keep it there, and pass `-l 2` on the CLI. `monkey.jungle` sets `base.sourcePath = source` — without it the source scan also picks up the copies the extension leaves in `bin/optimized/`, and every CLI build fails with `Redefinition of '$.DashApp'` once an IDE build has run.
+There is no linter or package manager. The one test suite covers `PowerMetrics` only (`source/PowerMetricsTest.mc`, Run No Evil); everything else is verified by "it compiles and looks right in the simulator". The project builds clean at type-check level 2 (`-l 2`, "informative"), which `.vscode/settings.json` pins via `monkeyC.typeCheckLevel`; keep it there, and pass `-l 2` on the CLI. `monkey.jungle` sets `base.sourcePath = source` — without it the source scan also picks up the copies the extension leaves in `bin/optimized/`, and every CLI build fails with `Redefinition of '$.DashApp'` once an IDE build has run.
 
 Primary workflow is the VS Code Monkey C extension:
 - `Monkey C: Build for Device`
@@ -26,11 +26,13 @@ $sdk = (Get-Content "$env:APPDATA\Garmin\ConnectIQ\current-sdk.cfg").Trim()
 & "$sdk\bin\monkeydo.bat" bin/Dash.prg edge1050
 ```
 
+Unit tests: add `--unit-test` to the build (`-o bin/DashTest.prg`), then `monkeydo bin/DashTest.prg edge1050 /t` with the simulator open. Run them on the edge830 too, the oldest CIQ target. Helpers go in the `(:test)` module `PowerMetricsTestKit`, because the compiler rejects any `(:test)` global function that is not itself a test (it must take a `Logger` and return a `Boolean`).
+
 Always build against **more than one device** after touching layout code — the layout is device-tuned (see below) and a change that looks right on the 1050 routinely breaks the 1030.
 
 ## Architecture
 
-Four source files, but the interesting behavior is cross-file.
+Five source files plus one test file, but the interesting behavior is cross-file.
 
 ### Rendering: `DashView.mc`
 
@@ -103,6 +105,14 @@ The speed gauge's full scale comes from the `speedGaugeMax` property, in display
 
 The right panel is dual-purpose: with no power data (`mHasPowerData == false`) it silently becomes a 0–150 rpm cadence gauge, label and all.
 
+### Power metrics and FIT fields
+
+`PowerMetrics.mc` computes NP, IF, TSS, kJ and W' balance (Skiba's differential model). It has no WatchUi or Activity dependency, so it can be unit tested. `compute()` feeds it through `updatePowerMetrics` with the **`info.timerTime` delta**, not wall time, so pauses advance nothing. A delta over 5 s is a gap and is dropped, and a null power (dropout) advances nothing, including the NP window. NP's fourth-power sum is a `Double`, because a long ride takes it past what a Float can add to. The SDK has no `Math.exp`; recovery uses `Math.pow(E, x)`.
+
+On screen it appears only on `:full`: the `powerPanelStat` setting picks the label and value under the right gauge (`rightPanelStatLabel` / `rightPanelStatString`). Without power data that row stays average cadence. `:compact` does not show it.
+
+The FIT file gets **W' balance only**: a RECORD chart and SESSION/LAP minimums, ids 0–2 in `resources/fitcontributions/`. The Edge already writes NP, IF, TSS and work natively, so do not add them as developer fields; Connect would show each one twice. The fields are created in `initialize()` but written only once `mHasPowerData` is true.
+
 ### Grade
 
 `calculateGrade()` keeps a distance/altitude anchor in **raw metres**, deliberately independent of the display-unit conversions applied to everything else. It updates only after 20 m of travel, clamps to ±30%, and EMA-blends 50/50. The anchor can strand itself (activity restart, distance running backwards, inputs dropping out), so there are three recovery paths — `onTimerReset()`, the negative-`distDiff` re-seed, and the `GRADE_STALL_LIMIT` counter in `ageGradeWindow()`. All three exist because of real bugs; don't remove one as redundant.
@@ -113,6 +123,6 @@ The right panel is dual-purpose: with no power data (`mHasPowerData == false`) i
 - Anything read from device settings, the user profile or app properties is read in `readSettings()` and cached — never on the 1 Hz path. `DashApp.onSettingsChanged()` re-runs it, which is what makes an FTP edit take effect without recreating the field.
 - `compute(info)` uses `info` for everything. It is the current `Activity.Info`, so the `Activity.getActivityInfo()` "fallbacks" this used to make on every tick returned the same object and could never differ; the `has` guards sit on `info` instead.
 - Constant label rows (`TOP_LABELS`, `BOTTOM_LABELS`, `COMPACT_TOP_LABELS`, `COMPACT_FOOTER_COLUMNS`) are class constants, not Arrays rebuilt per draw call.
-- `manifest.xml` declares only the permissions the code uses: `Background`, `Sensor`, `SensorHistory`, `UserProfile`. Do not re-add `Ant`/`BluetoothLowEnergy`/`DataFieldAlert`/`PersistedContent`/`Positioning` — none of them is used, and they show on the store listing.
+- `manifest.xml` declares only the permissions the code uses: `Background`, `FitContributor`, `Sensor`, `SensorHistory`, `UserProfile`. Do not re-add `Ant`/`BluetoothLowEnergy`/`DataFieldAlert`/`PersistedContent`/`Positioning` — none of them is used, and they show on the store listing.
 - Dark/light is driven by `getBackgroundColor()`; colors are chosen at the top of `onUpdate` from the `isDark` flag rather than hardcoded per draw call.
 - Never commit `developer_key`/`*.der`/`*.pem`, `bin/`, or `*.prg` — already covered by `.gitignore`.
