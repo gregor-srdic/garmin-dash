@@ -56,7 +56,7 @@ Dash is a full-screen field: add it to a **1-Field** data screen so it has the w
     - Current heart rate (center left)
     - Average heart rate (bottom left)
     - Current 3s power (center right)
-    - Average 3s power (bottom right)
+    - Average 3s power, or the training metric picked in **Power panel stat** (bottom right)
     - Current power, scaled to your FTP or your session max power, whichever is higher (right gauge)
 
 5. **Bottom row**
@@ -85,6 +85,18 @@ These are 2.6" screens at 246 × 322 px, about a fifth of the pixel area of a 10
 
 What is dropped is the data you look at after the ride rather than during it: average heart rate, average power, total ascent and calories. Without a power meter the right bar becomes a cadence bar as above, and the cadence slot in the bottom row shows total ascent instead.
 
+### Power training metrics
+
+With a power meter, the row under the power gauge can show any one of: average power, Normalized Power (NP), W' balance (% of W' left), Training Stress Score (TSS), Intensity Factor (IF) or work (kJ). Pick it with the **Power panel stat** setting. This is on the full layout only; the compact layout has no room for it.
+
+W' balance uses Skiba's differential model, with your **Critical Power** and **W'** settings. It drops when you ride above CP and recovers below it. If it goes negative, your CP or W' is set too low.
+
+Dash calculates these numbers itself, because Connect IQ does not give data fields the Edge's own NP or TSS. They will usually agree with the Edge's values to within a few percent, but not exactly: the FTP source, how zeros are averaged and how sensor dropouts are handled can all differ.
+
+### In Garmin Connect
+
+On rides with power, Dash adds a **W' Balance** chart to the activity and records the lowest W' balance for the ride and for each lap. NP, IF, TSS and work are not written again, because the Edge already records them. Rides without a power meter get no Dash data.
+
 ### Units & appearance
 
 All values automatically adapt to your device settings: speed in km/h or mph, distance in km or miles, elevation and ascent in metres or feet, and temperature in °C or °F. The UI also follows your device's light or dark background colour setting.
@@ -104,6 +116,9 @@ Configurable in Garmin Connect (or Connect IQ) under the app's settings:
 | **FTP (Watts)** | 50–600 | 200 | Functional threshold power, used to derive the power zone colours and to scale the power gauge. Only used when your Garmin user profile has no FTP set, or when the device cannot report it. |
 | **Speed Gauge Max** | 0–200 | 0 | Full-scale value of the speed gauge, in your display units (km/h or mph). 0 keeps the built-in default of 60 km/h / 40 mph. |
 | **Visualize average/max speed** | on / off | on | Shows your average speed (orange) and max speed (green) as markers on the speed gauge. |
+| **Critical Power (Watts)** | 0–600 | 0 | Critical power for W' balance. 0 uses your FTP. |
+| **W' (Joules)** | 5000–60000 | 20000 | Your anaerobic work capacity above CP, for W' balance. |
+| **Power panel stat** | list | Average power | What the row under the power gauge shows on the full layout: average power, NP, W' balance, TSS, IF or kJ. |
 
 Setting changes take effect immediately, including mid-ride.
 
@@ -159,6 +174,15 @@ $sdk = (Get-Content "$env:APPDATA\Garmin\ConnectIQ\current-sdk.cfg").Trim()
 
 The layout is tuned per device, so build against more than one target after changing anything that draws.
 
+### Unit tests
+
+The power metrics have unit tests (`source/PowerMetricsTest.mc`). Build with `--unit-test` and run them in the simulator with `/t`:
+
+```powershell
+& "$sdk\bin\monkeyc.bat" -f monkey.jungle -o bin/DashTest.prg -y <developer_key.der> -d edge1050 -l 2 --unit-test
+& "$sdk\bin\monkeydo.bat" bin/DashTest.prg edge1050 /t
+```
+
 ### Project structure
 
 - `source/` — Monkey C source files
@@ -171,6 +195,7 @@ The layout is tuned per device, so build against more than one target after chan
 
 - `DashApp.mc` — application entry point; registers a background service that runs every 5 minutes to fetch ambient temperature from the device sensor, and forwards setting changes to the view
 - `DashView.mc` — UI logic; computes and renders every metric, resolves the device layout, and calculates real-time grade from GPS altitude and distance (updated every 20 m, capped at ±30%)
+- `PowerMetrics.mc` — NP, IF, TSS, work and W' balance, kept free of UI code so it can be unit tested
 - `DeviceProfiles.mc` — the per-device table of pixel offsets and font choices the layout is built from
 - `GlobalBackgroundService.mc` — global background handler
 

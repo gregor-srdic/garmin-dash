@@ -5,4 +5,18 @@
     <string id="ftpTitle">FTP (Watts)</string>
     <string id="speedGaugeMaxTitle">Speed Gauge Max (0 = default)</string>
     <string id="visualizeSpeedIndicatorTitle">visualize average/max speed</string>
+    <string id="cpTitle">Critical Power (Watts, 0 = use FTP)</string>
+    <string id="wPrimeTitle">W' (Joules)</string>
+    <string id="powerPanelStatTitle">Power panel stat</string>
+    <string id="statAvg">Average power</string>
+    <string id="statNp">Normalized Power (NP)</string>
+    <string id="statWbal">W' balance (%)</string>
+    <string id="statTss">Training Stress Score (TSS)</string>
+    <string id="statIf">Intensity Factor (IF)</string>
+    <string id="statKj">Work (kJ)</string>
+
+    <string id="wbalChartTitle">W' Balance</string>
+    <string id="wbalLabel">W' Balance</string>
+    <string id="wbalMinLabel">Min W' Balance</string>
+    <string id="kjUnits">kJ</string>
 </strings>

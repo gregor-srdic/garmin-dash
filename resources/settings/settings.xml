@@ -10,4 +10,21 @@
     <setting propertyKey="@Properties.visualizeSpeedIndicator" title="@Strings.visualizeSpeedIndicatorTitle">
         <settingConfig type="boolean"/>
     </setting>
+    <setting propertyKey="@Properties.cp" title="@Strings.cpTitle">
+        <settingConfig type="numeric" min="0" max="600"/>
+    </setting>
+    <!-- min is not 0: W' is the divisor in the recovery exponent. -->
+    <setting propertyKey="@Properties.wPrime" title="@Strings.wPrimeTitle">
+        <settingConfig type="numeric" min="5000" max="60000"/>
+    </setting>
+    <setting propertyKey="@Properties.powerPanelStat" title="@Strings.powerPanelStatTitle">
+        <settingConfig type="list">
+            <listEntry value="0">@Strings.statAvg</listEntry>
+            <listEntry value="1">@Strings.statNp</listEntry>
+            <listEntry value="2">@Strings.statWbal</listEntry>
+            <listEntry value="3">@Strings.statTss</listEntry>
+            <listEntry value="4">@Strings.statIf</listEntry>
+            <listEntry value="5">@Strings.statKj</listEntry>
+        </settingConfig>
+    </setting>
 </settings>

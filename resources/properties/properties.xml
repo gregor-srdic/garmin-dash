@@ -4,4 +4,11 @@
          0 keeps the built-in default (60 km/h / 40 mph). -->
     <property id="speedGaugeMax" type="number">0</property>
     <property id="visualizeSpeedIndicator" type="boolean">true</property>
+    <!-- Critical power in watts for W' balance. 0 uses the resolved FTP. -->
+    <property id="cp" type="number">0</property>
+    <!-- W' (anaerobic work capacity) in joules. -->
+    <property id="wPrime" type="number">20000</property>
+    <!-- What the row under the :full power gauge shows: 0 AVG, 1 NP,
+         2 W'bal %, 3 TSS, 4 IF, 5 kJ. Indexes RIGHT_PANEL_STAT_LABELS. -->
+    <property id="powerPanelStat" type="number">0</property>
 </properties>
