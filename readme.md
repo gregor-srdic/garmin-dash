@@ -55,8 +55,8 @@ Dash is a full-screen field: add it to a **1-Field** data screen so it has the w
     - Current heart rate, scaled to your heart rate zones (left gauge)
     - Current heart rate (center left)
     - Average heart rate (bottom left)
-    - Current 3s power (center right)
-    - Average 3s power (bottom right)
+    - Current power, 3-second average or raw per the **Power Display** setting (center right)
+    - Average power (bottom right)
     - Current power, scaled to your FTP or your session max power, whichever is higher (right gauge)
 
 5. **Bottom row**
@@ -102,6 +102,7 @@ Configurable in Garmin Connect (or Connect IQ) under the app's settings:
 | Setting | Range | Default | What it does |
 |---|---|---|---|
 | **FTP (Watts)** | 50–600 | 200 | Functional threshold power, used to derive the power zone colours and to scale the power gauge. Only used when your Garmin user profile has no FTP set, or when the device cannot report it. |
+| **Power Display** | 3s average / Raw (1s) | 3s average | Whether the live power number and the power gauge show a rolling 3-second average or the raw 1-second reading. The average restarts after a power meter dropout rather than blending in pre-dropout watts. |
 | **Speed Gauge Max** | 0–200 | 0 | Full-scale value of the speed gauge, in your display units (km/h or mph). 0 keeps the built-in default of 60 km/h / 40 mph. |
 | **Visualize average/max speed** | on / off | on | Shows your average speed (orange) and max speed (green) as markers on the speed gauge. |
 
