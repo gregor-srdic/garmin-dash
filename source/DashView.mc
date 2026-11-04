@@ -20,7 +20,7 @@ class DashView extends WatchUi.DataField {
     private var mDistance as Float = 0.0;
     private var mElapsedMs as Number = 0;
     private var mHeartRate as Number? = null;
-    private var mPower3s as Number? = null;
+    private var mPower as Number? = null;
     private var mTemp as Float? = null;
     private var mCadence as Number? = null;
     private var mCalories as Number = 0;
@@ -29,6 +29,17 @@ class DashView extends WatchUi.DataField {
     private var mAvgPower as Number = 0;
     private var mMaxPower as Number = 0;
     private var mHasPowerData as Boolean = false;
+
+    // Power smoothing, from the powerAveraging setting: the number of 1 Hz
+    // samples averaged into mPower. 3 is Garmin's "3s Power"; 1 is raw.
+    // mPowerSamples is a ring buffer sized for the largest window; only the
+    // first mPowerSampleCount entries hold real samples.
+    private const POWER_WINDOW_DEFAULT = 3;
+    private const POWER_WINDOW_MAX = 3;
+    private var mPowerWindow as Number = POWER_WINDOW_DEFAULT;
+    private var mPowerSamples as Array<Number> = [0, 0, 0];
+    private var mPowerSampleCount as Number = 0;
+    private var mPowerSampleIndex as Number = 0;
 
     // Header Fields
     private var mGrade as Float = 0.0;
@@ -204,6 +215,20 @@ class DashView extends WatchUi.DataField {
         // toggling the setting mid-ride takes effect through onSettingsChanged.
         var showIndicators = Application.Properties.getValue("visualizeSpeedIndicator");
         mShowSpeedIndicators = !(showIndicators instanceof Lang.Boolean) || showIndicators;
+
+        // Power smoothing window in seconds: 3 (default) or 1 (raw). Anything
+        // else — null, corrupt, or out of the buffer's range — falls back to 3.
+        // A change empties the buffer so the new window starts clean instead
+        // of averaging over samples laid down at the old stride.
+        var window = Application.Properties.getValue("powerAveraging");
+        if (!(window instanceof Lang.Number) || window < 1 || window > POWER_WINDOW_MAX) {
+            window = POWER_WINDOW_DEFAULT;
+        }
+        if (window != mPowerWindow) {
+            mPowerWindow = window;
+            mPowerSampleCount = 0;
+            mPowerSampleIndex = 0;
+        }
     }
 
     // Called by DashApp when the user edits the app's settings.
@@ -267,7 +292,7 @@ class DashView extends WatchUi.DataField {
     // readSettings, which is what keeps this from dividing by zero.
     private function rightFillRatio() as Float {
         if (mHasPowerData) {
-            var power = mPower3s;
+            var power = mPower;
             if (power == null) {
                 return 0.0;
             }
@@ -314,7 +339,7 @@ class DashView extends WatchUi.DataField {
         if (!mHasPowerData) {
             return COLOR_CADENCE;
         }
-        var power = mPower3s;
+        var power = mPower;
         return zoneColor(power != null ? power : 0, mPowerZoneBoundaries, COLOR_POWER);
     }
 
@@ -322,6 +347,26 @@ class DashView extends WatchUi.DataField {
     // cleared explicitly. Otherwise the anchor keeps the finished activity's
     // distance, the new activity's distance starts back at zero, and no update
     // can ever land again.
+    // Pushes one power sample into the ring buffer and returns the mean of the
+    // samples held, rounded to whole watts. Until the window fills (ride start,
+    // or just after a dropout) it averages what it has rather than padding
+    // with zeros, which would drag the first seconds of a reading down.
+    private function smoothPower(sample as Number) as Number {
+        if (mPowerWindow <= 1) {
+            return sample;
+        }
+        mPowerSamples[mPowerSampleIndex] = sample;
+        mPowerSampleIndex = (mPowerSampleIndex + 1) % mPowerWindow;
+        if (mPowerSampleCount < mPowerWindow) {
+            mPowerSampleCount += 1;
+        }
+        var sum = 0;
+        for (var i = 0; i < mPowerSampleCount; i++) {
+            sum += mPowerSamples[i];
+        }
+        return Math.round(sum.toFloat() / mPowerSampleCount).toNumber();
+    }
+
     function onTimerReset() as Void {
         mGrade = 0.0;
         mGradeLastAlt = null;
@@ -396,14 +441,23 @@ class DashView extends WatchUi.DataField {
             }
         }
 
-        // 3s Power. mPower3s goes back to null the moment the meter stops
-        // reporting, so a dropout shows "--" rather than freezing the last
-        // watt number on screen. mHasPowerData stays true for the rest of the
-        // ride once any power has been seen, which is what keeps the right
-        // panel a power gauge instead of flipping to cadence at every gap.
-        mPower3s = info.currentPower;
-        if (mPower3s != null) {
+        // Power: a rolling mean of the last mPowerWindow samples (3 s by
+        // default, 1 = raw). compute() runs at 1 Hz, so a sample is a second.
+        // mPower goes back to null the moment the meter stops reporting, so a
+        // dropout shows "--" rather than freezing the last watt number on
+        // screen, and the window is emptied so the first reading after a
+        // reconnect is not averaged against pre-dropout watts. mHasPowerData
+        // stays true for the rest of the ride once any power has been seen,
+        // which is what keeps the right panel a power gauge instead of
+        // flipping to cadence at every gap.
+        var rawPower = info.currentPower;
+        if (rawPower == null) {
+            mPower = null;
+            mPowerSampleCount = 0;
+            mPowerSampleIndex = 0;
+        } else {
             mHasPowerData = true;
+            mPower = smoothPower(rawPower);
         }
         if (info.averagePower != null) {
             mAvgPower = info.averagePower;
@@ -1264,7 +1318,7 @@ class DashView extends WatchUi.DataField {
             Graphics.TEXT_JUSTIFY_CENTER
         );
 
-        // ---- RIGHT PANEL: 3s Power ----
+        // ---- RIGHT PANEL: power (3s or raw, per the powerAveraging setting) ----
         // Start at bottom-right (e.g., 330 deg)
         var pwrStartAngle = 360.0 - arcSweepDeg / 2.0;
 
@@ -1342,7 +1396,7 @@ class DashView extends WatchUi.DataField {
     // What the right-hand gauge prints: watts with a meter attached, rpm
     // without, "--" when that sensor is not currently reporting.
     private function rightValueString() as String {
-        var value = mHasPowerData ? mPower3s : mCadence;
+        var value = mHasPowerData ? mPower : mCadence;
         return value != null ? value.toString() : NO_VALUE;
     }
 

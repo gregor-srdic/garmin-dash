@@ -4,6 +4,12 @@
     <setting propertyKey="@Properties.ftp" title="@Strings.ftpTitle">
         <settingConfig type="numeric" min="50" max="600"/>
     </setting>
+    <setting propertyKey="@Properties.powerAveraging" title="@Strings.powerAveragingTitle">
+        <settingConfig type="list">
+            <listEntry value="3">@Strings.powerAveraging3s</listEntry>
+            <listEntry value="1">@Strings.powerAveragingRaw</listEntry>
+        </settingConfig>
+    </setting>
     <setting propertyKey="@Properties.speedGaugeMax" title="@Strings.speedGaugeMaxTitle">
         <settingConfig type="numeric" min="0" max="200"/>
     </setting>

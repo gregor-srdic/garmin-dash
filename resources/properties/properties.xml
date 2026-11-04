@@ -3,5 +3,8 @@
     <!-- Full-scale value for the speed gauge, in the rider's display units.
          0 keeps the built-in default (60 km/h / 40 mph). -->
     <property id="speedGaugeMax" type="number">0</property>
+    <!-- Seconds of power averaged into the live power reading: 3 (default,
+         "3s power") or 1 (raw). -->
+    <property id="powerAveraging" type="number">3</property>
     <property id="visualizeSpeedIndicator" type="boolean">true</property>
 </properties>

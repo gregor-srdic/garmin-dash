@@ -55,9 +55,9 @@ Dash is a full-screen field: add it to a **1-Field** data screen so it has the w
     - Current heart rate, scaled to your heart rate zones (left gauge)
     - Current heart rate (center left)
     - Average heart rate (bottom left)
-    - Current 3s power (center right)
-    - Average 3s power (bottom right)
-    - Current power, scaled to your FTP or your session max power, whichever is higher (right gauge)
+    - Current power, 3-second average or raw per the **Power Display** setting (center right)
+    - Average power (bottom right)
+    - Current power (same 3s or raw value as the number), scaled to your FTP or your session max power, whichever is higher (right gauge)
 
 5. **Bottom row**
     - Total ascent (left)
@@ -80,7 +80,7 @@ These are 2.6" screens at 246 × 322 px, about a fifth of the pixel area of a 10
 
 1. Ambient temperature, current time, elevation and Di2 gears
 2. Speed gauge with the current speed at its centre, average and max speed above it, and the same average/max markers on the arc
-3. Heart rate and power as horizontal zone bars, coloured by training zone exactly as the round gauges are
+3. Heart rate and power as horizontal zone bars, coloured by training zone exactly as the round gauges are (power follows the **Power Display** setting here too)
 4. Elapsed time, cadence, grade and distance
 
 What is dropped is the data you look at after the ride rather than during it: average heart rate, average power, total ascent and calories. Without a power meter the right bar becomes a cadence bar as above, and the cadence slot in the bottom row shows total ascent instead.
@@ -102,6 +102,7 @@ Configurable in Garmin Connect (or Connect IQ) under the app's settings:
 | Setting | Range | Default | What it does |
 |---|---|---|---|
 | **FTP (Watts)** | 50–600 | 200 | Functional threshold power, used to derive the power zone colours and to scale the power gauge. Only used when your Garmin user profile has no FTP set, or when the device cannot report it. |
+| **Power Display** | 3s average / Raw (1s) | 3s average | Whether the live power number and the power gauge show a rolling 3-second average or the raw 1-second reading. The average restarts after a power meter dropout rather than blending in pre-dropout watts. |
 | **Speed Gauge Max** | 0–200 | 0 | Full-scale value of the speed gauge, in your display units (km/h or mph). 0 keeps the built-in default of 60 km/h / 40 mph. |
 | **Visualize average/max speed** | on / off | on | Shows your average speed (orange) and max speed (green) as markers on the speed gauge. |
 
