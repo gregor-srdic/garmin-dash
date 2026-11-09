@@ -10,6 +10,13 @@
             <listEntry value="1">@Strings.powerAveragingRaw</listEntry>
         </settingConfig>
     </setting>
+    <setting propertyKey="@Properties.mainGauge" title="@Strings.mainGaugeTitle">
+        <settingConfig type="list">
+            <listEntry value="0">@Strings.mainGaugeSpeed</listEntry>
+            <listEntry value="1">@Strings.mainGaugePower</listEntry>
+            <listEntry value="2">@Strings.mainGaugeHr</listEntry>
+        </settingConfig>
+    </setting>
     <setting propertyKey="@Properties.speedGaugeMax" title="@Strings.speedGaugeMaxTitle">
         <settingConfig type="numeric" min="0" max="200"/>
     </setting>

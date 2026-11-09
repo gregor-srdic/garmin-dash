@@ -6,5 +6,8 @@
     <!-- Seconds of power averaged into the live power reading: 3 (default,
          "3s power") or 1 (raw). -->
     <property id="powerAveraging" type="number">3</property>
+    <!-- Metric on the main central gauge: 0 Speed, 1 Power (or cadence without
+         power data), 2 Heart rate. Matches the METRIC_* ids in DashView.mc. -->
+    <property id="mainGauge" type="number">0</property>
     <property id="visualizeSpeedIndicator" type="boolean">true</property>
 </properties>
