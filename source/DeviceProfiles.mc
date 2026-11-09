@@ -30,9 +30,9 @@ module DeviceProfiles {
     //                            measured up from the gauge and the gauge going down pulls
     //                            it up. It used to move the central speed digits +2x —
     //                            computeFullLayout bakes the offset into centerY and
-    //                            drawSpeedGauge added it a second time — which left every
+    //                            drawMainGauge added it a second time — which left every
     //                            profile's digits 2x its offset off the arc centre as a
-    //                            side effect. drawSpeedGauge no longer re-adds it; the
+    //                            side effect. drawMainGauge no longer re-adds it; the
     //                            per-profile :speedYOffset values absorbed the difference,
     //                            so the rendering is unchanged. The HR/power gauge is not
     //                            read from this key but still shifts +0.5x — see

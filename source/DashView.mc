@@ -28,6 +28,8 @@ class DashView extends WatchUi.DataField {
     private var mAvgCadence as Number = 0;
     private var mAvgPower as Number = 0;
     private var mMaxPower as Number = 0;
+    private var mMaxHeartRate as Number = 0;
+    private var mMaxCadence as Number = 0;
     private var mHasPowerData as Boolean = false;
 
     // Power smoothing, from the powerAveraging setting: the number of 1 Hz
@@ -96,8 +98,7 @@ class DashView extends WatchUi.DataField {
     private const COLOR_HR = 0xff2200;
     private const COLOR_POWER = 0x9900ff;
     private const COLOR_CADENCE = 0xff8800;
-    private const COLOR_AVG_INDICATOR = 0xff8800;   //orange
-    private const COLOR_MAX_INDICATOR = 0x00aa00;   //green
+    private const COLOR_MAX_INDICATOR = 0xff0000;   //red
 
     // Band label rows. Constant for the life of the field, so they live here
     // rather than being rebuilt as fresh Arrays on every draw call.
@@ -105,6 +106,15 @@ class DashView extends WatchUi.DataField {
     private const BOTTOM_LABELS = ["ASC", "DIST", "CAL"];
     private const COMPACT_TOP_LABELS = ["TEMP", "CLOCK", "ELEV", "DI2"];
     private const COMPACT_FOOTER_COLUMNS = [0.18, 0.45, 0.66, 0.87];
+
+    // Metrics a gauge slot can show. The numbers are also the values of the
+    // mainGauge setting, so the main slot's metric is mMainGauge itself;
+    // leftMetric() / rightMetric() derive the small slots from it.
+    private const METRIC_SPEED = 0;
+    private const METRIC_RIGHT = 1;   // power, or cadence while mHasPowerData is false
+    private const METRIC_HR = 2;
+    // Which metric the main gauge shows, from the mainGauge setting.
+    private var mMainGauge as Number = METRIC_SPEED;
 
     // Placeholder for a metric whose sensor is not reporting.
     private const NO_VALUE = "--";
@@ -216,6 +226,14 @@ class DashView extends WatchUi.DataField {
         var showIndicators = Application.Properties.getValue("visualizeSpeedIndicator");
         mShowSpeedIndicators = !(showIndicators instanceof Lang.Boolean) || showIndicators;
 
+        // Main gauge metric: 0 speed, 1 power (cadence), 2 heart rate. Anything
+        // else falls back to speed.
+        var mainGauge = Application.Properties.getValue("mainGauge");
+        if (!(mainGauge instanceof Lang.Number) || mainGauge < METRIC_SPEED || mainGauge > METRIC_HR) {
+            mainGauge = METRIC_SPEED;
+        }
+        mMainGauge = mainGauge;
+
         // Power smoothing window in seconds: 3 (default) or 1 (raw). Anything
         // else — null, corrupt, or out of the buffer's range — falls back to 3.
         // A change empties the buffer so the new window starts clean instead
@@ -260,53 +278,148 @@ class DashView extends WatchUi.DataField {
         return ZONE_COLORS[4];
     }
 
-    // How full the HR gauge should be, 0.0 to 1.0. Scaled across the user's
-    // own zone span when the profile has zones, 0-200 bpm otherwise.
+    // --- METRIC HELPERS -----------------------------------------------------
     //
-    // Shared by drawPanels and drawCompactBars. The two render paths
-    // deliberately share no geometry, but this is metric arithmetic rather
-    // than geometry, and keeping one copy is what stops the arc and the bar
-    // disagreeing about what a given heart rate means.
-    private function hrFillRatio() as Float {
-        var hr = mHeartRate;
-        if (hr == null) {
-            return 0.0;
-        }
-        var hrMin = 0.0;
-        var hrMax = 200.0;
-        var hrZones = mHrZoneBoundaries;
-        if (hrZones != null && hrZones.size() >= 6) {
-            hrMin = hrZones[0].toFloat();
-            hrMax = hrZones[5].toFloat();
-        }
-        var hrRange = hrMax - hrMin;
-        if (hrRange <= 0) {
-            return 0.0;
-        }
-        return clampRatio((hr.toFloat() - hrMin) / hrRange);
+    // The gauge slots (main, left, right) are filled by mMainGauge: 0 speed in
+    // the main slot, HR left, RIGHT right; 1 puts RIGHT in the main slot and
+    // speed on the right; 2 puts HR in the main slot and speed on the left.
+    // Everything a slot prints or fills comes through the helpers below, so
+    // the arc, the bar and the main gauge cannot disagree about what a given
+    // value means. The two render paths deliberately share no geometry, but
+    // this is metric arithmetic rather than geometry.
+
+    // The metric in the left small slot (:full left panel, :compact left bar).
+    private function leftMetric() as Number {
+        return mMainGauge == METRIC_HR ? METRIC_SPEED : METRIC_HR;
     }
 
-    // How full the right-hand gauge should be, 0.0 to 1.0. Power against FTP
-    // (or the ride's max power, once it exceeds FTP) when a meter is present,
-    // otherwise cadence against 150 rpm. mFtp is guaranteed positive by
-    // readSettings, which is what keeps this from dividing by zero.
-    private function rightFillRatio() as Float {
-        if (mHasPowerData) {
-            var power = mPower;
-            if (power == null) {
+    // The metric in the right small slot.
+    private function rightMetric() as Number {
+        return mMainGauge == METRIC_RIGHT ? METRIC_SPEED : METRIC_RIGHT;
+    }
+
+    // Live value, or null while the sensor is not reporting.
+    private function currentValue(metric as Number) as Numeric? {
+        if (metric == METRIC_SPEED) {
+            return mSpeed;
+        }
+        if (metric == METRIC_HR) {
+            return mHeartRate;
+        }
+        return mHasPowerData ? mPower : mCadence;
+    }
+
+    private function avgValue(metric as Number) as Numeric {
+        if (metric == METRIC_SPEED) {
+            return mAvgSpeed;
+        }
+        if (metric == METRIC_HR) {
+            return mAvgHeartRate;
+        }
+        return mHasPowerData ? mAvgPower : mAvgCadence;
+    }
+
+    private function maxValue(metric as Number) as Numeric {
+        if (metric == METRIC_SPEED) {
+            return mMaxSpeed;
+        }
+        if (metric == METRIC_HR) {
+            return mMaxHeartRate;
+        }
+        return mHasPowerData ? mMaxPower : mMaxCadence;
+    }
+
+    // How full a gauge should be for `value`, 0.0 to 1.0; null reads as empty.
+    //   speed: against mSpeedGaugeMax.
+    //   HR:    across the user's own zone span when the profile has zones,
+    //          0-200 bpm otherwise.
+    //   RIGHT: power against FTP (or the ride's max power, once it exceeds
+    //          FTP) when a meter is present, otherwise cadence against
+    //          150 rpm. mFtp is guaranteed positive by readSettings, which is
+    //          what keeps this from dividing by zero.
+    private function metricRatio(metric as Number, value as Numeric?) as Float {
+        if (value == null) {
+            return 0.0;
+        }
+        if (metric == METRIC_SPEED) {
+            return clampRatio(value.toFloat() / mSpeedGaugeMax);
+        }
+        if (metric == METRIC_HR) {
+            var hrMin = 0.0;
+            var hrMax = 200.0;
+            var hrZones = mHrZoneBoundaries;
+            if (hrZones != null && hrZones.size() >= 6) {
+                hrMin = hrZones[0].toFloat();
+                hrMax = hrZones[5].toFloat();
+            }
+            var hrRange = hrMax - hrMin;
+            if (hrRange <= 0) {
                 return 0.0;
             }
+            return clampRatio((value.toFloat() - hrMin) / hrRange);
+        }
+        if (mHasPowerData) {
             var powerScaleMax = mFtp.toFloat();
             if (mMaxPower > powerScaleMax) {
                 powerScaleMax = mMaxPower.toFloat();
             }
-            return clampRatio(power.toFloat() / powerScaleMax);
+            return clampRatio(value.toFloat() / powerScaleMax);
         }
-        var cadence = mCadence;
-        if (cadence == null) {
-            return 0.0;
+        return clampRatio(value.toFloat() / 150.0);
+    }
+
+    // The colour a gauge lights up in, from the metric's current value.
+    private function metricColor(metric as Number) as Number {
+        if (metric == METRIC_SPEED) {
+            return COLOR_SPEED;
         }
-        return clampRatio(cadence.toFloat() / 150.0);
+        var value = currentValue(metric);
+        var shown = value != null ? value : 0;
+        if (metric == METRIC_HR) {
+            return zoneColor(shown, mHrZoneBoundaries, COLOR_HR);
+        }
+        if (!mHasPowerData) {
+            return COLOR_CADENCE;
+        }
+        return zoneColor(shown, mPowerZoneBoundaries, COLOR_POWER);
+    }
+
+    // What a gauge prints for its live value: one decimal for speed, whole
+    // numbers otherwise, "--" when that sensor is not currently reporting.
+    private function metricString(metric as Number, value as Numeric?) as String {
+        if (value == null) {
+            return NO_VALUE;
+        }
+        return value.format(metric == METRIC_SPEED ? "%.1f" : "%d");
+    }
+
+    // The same for a small slot (:full panel, :compact bar), where speed has
+    // no room for a decimal: whole km/h or mph, rounded. HR, power and cadence
+    // print exactly as metricString does.
+    private function slotString(metric as Number, value as Numeric?) as String {
+        if (value == null) {
+            return NO_VALUE;
+        }
+        return value.format(metric == METRIC_SPEED ? "%.0f" : "%d");
+    }
+
+    private function avgString(metric as Number) as String {
+        return avgValue(metric).format(metric == METRIC_SPEED ? "%.1f" : "%.0f");
+    }
+
+    private function maxString(metric as Number) as String {
+        return maxValue(metric).format(metric == METRIC_SPEED ? "%.1f" : "%.0f");
+    }
+
+    // Unit / name label for a metric.
+    private function metricLabel(metric as Number) as String {
+        if (metric == METRIC_SPEED) {
+            return mIsMetric ? "KMH" : "MPH";
+        }
+        if (metric == METRIC_HR) {
+            return "HR";
+        }
+        return mHasPowerData ? "PWR" : "CAD";
     }
 
     private function clampRatio(ratio as Float) as Float {
@@ -332,15 +445,6 @@ class DashView extends WatchUi.DataField {
             lit = 1;
         }
         return lit;
-    }
-
-    // The colour the right-hand gauge lights up in.
-    private function rightZoneColor() as Number {
-        if (!mHasPowerData) {
-            return COLOR_CADENCE;
-        }
-        var power = mPower;
-        return zoneColor(power != null ? power : 0, mPowerZoneBoundaries, COLOR_POWER);
     }
 
     // The DataField object outlives a timer reset, so the grade window has to be
@@ -419,6 +523,9 @@ class DashView extends WatchUi.DataField {
         if (info.averageHeartRate != null) {
             mAvgHeartRate = info.averageHeartRate;
         }
+        if (info.maxHeartRate != null) {
+            mMaxHeartRate = info.maxHeartRate;
+        }
 
         // Shifting
         mGearInfo = NO_VALUE;
@@ -476,6 +583,9 @@ class DashView extends WatchUi.DataField {
         mCadence = info.currentCadence;
         if (info.averageCadence != null) {
             mAvgCadence = info.averageCadence;
+        }
+        if (info.maxCadence != null) {
+            mMaxCadence = info.maxCadence;
         }
 
         // Calories
@@ -570,12 +680,12 @@ class DashView extends WatchUi.DataField {
 
         if (layout[:variant] == :compact) {
             drawCompactTopBar(dc, layout);
-            drawCompactSpeedGauge(dc, layout);
+            drawCompactMainGauge(dc, layout);
             drawCompactBars(dc, layout);
             drawCompactFooter(dc, layout);
         } else {
             drawTopBar(dc, layout);
-            drawSpeedGauge(dc, layout);
+            drawMainGauge(dc, layout);
             drawMiddleRow(dc, layout);
             drawPanels(dc, layout);
             drawFooter(dc, layout);
@@ -967,9 +1077,41 @@ class DashView extends WatchUi.DataField {
         }
     }
 
-    // Band 2: the segmented speed arc, the AVG/MAX pair inside its crown, and
-    // the central speed readout with its unit label.
-    private function drawSpeedGauge(
+    // Band 2: the segmented main arc, the AVG/MAX pair inside its crown, and
+    // the central readout with its unit label. Which metric it shows is
+    // mMainGauge (speed, power / cadence or heart rate); the arc keeps its
+    // geometry and only the fill ratio, lit colour and strings change. The AVG
+    // marker is in the values colour (white / black) like the small gauges'
+    // AVG markers, so it shows on any fill, orange cadence included; MAX is red.
+    //
+    // Fonts and geometry are the speed gauge's, so the other metrics are fitted
+    // by measuring, not by tuning. Numbers are px at each device's own
+    // resolution, read with getTextWidthInPixels in the simulator. The worst
+    // strings are "188" (speed in a small slot, as wide as the "152" / "245"
+    // the panels were laid out around) and "1250" (a four-digit power peak, in
+    // the central readout and as the MAX crown value).
+    //
+    // Speed in a small slot prints without decimals (slotString): "88.8" in
+    // :panelValueFont did not fit the 1050 / 1060 panel, about -0.5 px from
+    // the arc's inner edge, so the digits touched the arc.
+    //             small slot, :panelValueFont        crown "1250"   central "1250"
+    //             width "88" / "188" / "88.8"  room   width / gap    width / room
+    //                                       "88" / "188"
+    //   1050      106 / 159 / 186          39 / 13      72 / 39       236 / 20
+    //   850        60 /  90 / 105          51 / 36      72 /  9       160 / 18
+    //   1040       48 /  72 /  84          31 / 19      40 / 25       128 / 18
+    //   1030       48 /  72 /  84          31 / 19      48 / 17       132 / 16
+    //   Explore 2  48 /  72 /  84          22 / 10      44 / 11       128 /  5
+    // "Room per side" is measured from the panel arc's INNER edge, not its
+    // pen centre (panelRadius reaches the centre of the pen): (panelRadius -
+    // panelBarW - width) / 2. The AVG marker's pen is barW + 4, so it stands
+    // 2 px proud of the track; subtract 2 for the marker (1050: 11 px for
+    // "188", 37 px for "88"). With "88.8" the room would be -0.5 px on the 1050
+    // and 4 px on the Explore 2, 13 on the 1040 / 1030, 29 on the 850. For the
+    // central readout it is (2 * radius - trackWidth - width) / 2. The
+    // tightest on :full are the Explore 2's central "1250" and the 850's AVG
+    // and MAX power values; none overruns.
+    private function drawMainGauge(
         dc as Graphics.Dc,
         layout as Lang.Dictionary
     ) as Void {
@@ -981,7 +1123,6 @@ class DashView extends WatchUi.DataField {
         var avgLabelOffset = mDeviceProfile[:avgLabelOffset];
         var speedAvgValueOffset = mDeviceProfile[:speedAvgValueOffset];
 
-        var maxVal = mSpeedGaugeMax;
         var gaugeStart = 210.0;
         var gaugeSweep = 240.0;
 
@@ -991,18 +1132,13 @@ class DashView extends WatchUi.DataField {
         var segGapDeg = 2.5;
         
         // --- 1. VALUE CLAMPING ---
-        var ratio = mSpeed / maxVal;
-        if (ratio > 1.0) { ratio = 1.0; }
-        if (ratio < 0.0) { ratio = 0.0; }
+        var metric = mMainGauge;
+        var ratio = metricRatio(metric, currentValue(metric));
         var activeSweep = ratio * gaugeSweep;
 
-        var avgRatio = mAvgSpeed / maxVal;
-        if (avgRatio > 1.0) { avgRatio = 1.0; }
-        if (avgRatio < 0.0) { avgRatio = 0.0; }
-
-        var maxRatio = mMaxSpeed / maxVal;
-        if (maxRatio > 1.0) { maxRatio = 1.0; }
-        if (maxRatio < 0.0) { maxRatio = 0.0; }
+        var avgRatio = metricRatio(metric, avgValue(metric));
+        var maxRatio = metricRatio(metric, maxValue(metric));
+        var fillColor = metricColor(metric);
 
         dc.setPenWidth(layout[:trackWidth]);
 
@@ -1016,7 +1152,7 @@ class DashView extends WatchUi.DataField {
         }
 
         // --- 3. STEP TWO: OVERLAY THE ACTIVE SPEED (SMOOTH FILL) ---
-        dc.setColor(COLOR_SPEED, Graphics.COLOR_TRANSPARENT);
+        dc.setColor(fillColor, Graphics.COLOR_TRANSPARENT);
         for (var i = 0; i < arcSegCount; i++) {
             var segStartDeg = gaugeStart - i * segArcLen;
             var segEndDeg = segStartDeg - segArcLen + segGapDeg;
@@ -1045,9 +1181,9 @@ class DashView extends WatchUi.DataField {
         }
 
         // --- 4. STEP THREE: DRAW THE AVERAGE SPEED INDICATOR ---
-        if (mAvgSpeed > 0.0 and mShowSpeedIndicators) {
+        if (avgValue(metric) > 0 and mShowSpeedIndicators) {
             var avgAngleDeg = gaugeStart - (avgRatio * gaugeSweep);
-            dc.setColor(COLOR_AVG_INDICATOR, Graphics.COLOR_TRANSPARENT);
+            dc.setColor(mValuesColor, Graphics.COLOR_TRANSPARENT);
             dc.setPenWidth(layout[:trackWidth] + 4);
             
             dc.drawArc(
@@ -1061,7 +1197,7 @@ class DashView extends WatchUi.DataField {
         }
 
         // --- 5. STEP FOUR: DRAW THE MAX SPEED INDICATOR ---
-        if (mMaxSpeed > 0.0 and mShowSpeedIndicators) {
+        if (maxValue(metric) > 0 and mShowSpeedIndicators) {
             var maxAngleDeg = gaugeStart - (maxRatio * gaugeSweep);
             dc.setColor(COLOR_MAX_INDICATOR, Graphics.COLOR_TRANSPARENT);
             dc.setPenWidth(layout[:trackWidth] + 4);
@@ -1097,14 +1233,14 @@ class DashView extends WatchUi.DataField {
             centerX - radius * 0.35,
             centerY - radius * 0.54 + avgLabelOffset + speedAvgValueOffset,
             Graphics.FONT_MEDIUM,
-            mAvgSpeed.format("%.1f"),
+            avgString(metric),
             Graphics.TEXT_JUSTIFY_CENTER
         );
         dc.drawText(
             centerX + radius * 0.35,
             centerY - radius * 0.54 + avgLabelOffset + speedAvgValueOffset,
             Graphics.FONT_MEDIUM,
-            mMaxSpeed.format("%.1f"),
+            maxString(metric),
             Graphics.TEXT_JUSTIFY_CENTER
         );
 
@@ -1114,7 +1250,7 @@ class DashView extends WatchUi.DataField {
             centerX,
             centerY + speedYOffset,
             mDeviceProfile[:speedFont],
-            mSpeed.format("%.1f"),
+            metricString(metric, currentValue(metric)),
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
         );
         dc.setColor(mLabelsColor, Graphics.COLOR_TRANSPARENT);
@@ -1122,7 +1258,7 @@ class DashView extends WatchUi.DataField {
             centerX,
             centerY + radius * 0.3 + unitLabelYOffset,
             mDeviceProfile[:unitLabelFont],
-            mIsMetric ? "KMH" : "MPH",
+            metricLabel(metric),
             Graphics.TEXT_JUSTIFY_CENTER
         );
     }
@@ -1209,18 +1345,33 @@ class DashView extends WatchUi.DataField {
         );
     }
 
-    // Band 4: the HR panel on the left and the power (or, with no power data,
-    // cadence) panel on the right, each a zone-coloured segmented arc.
+    // Band 4: two zone-coloured segmented arcs. Which metric each shows
+    // follows mMainGauge (see leftMetric / rightMetric): with the default,
+    // heart rate on the left and power (or, with no power data, cadence) on
+    // the right.
     private function drawPanels(
         dc as Graphics.Dc,
         layout as Lang.Dictionary
+    ) as Void {
+        drawPanel(dc, layout, leftMetric(), true);
+        drawPanel(dc, layout, rightMetric(), false);
+    }
+
+    // One panel: label, 10-segment arc with the AVG marker across it, value,
+    // then AVG with its value. The left panel starts at bottom-left and runs
+    // clockwise, the right panel starts at bottom-right and runs
+    // counter-clockwise.
+    private function drawPanel(
+        dc as Graphics.Dc,
+        layout as Lang.Dictionary,
+        metric as Number,
+        isLeft as Boolean
     ) as Void {
         var centerX = layout[:centerX];
         var sideCenterY = layout[:panelCenterY];
         var sideRadius = layout[:panelRadius];
         var barW = layout[:panelBarW];
-        var lPanelCenterX = layout[:panelLeftX];
-        var rPanelCenterX = layout[:panelRightX];
+        var panelCenterX = isLeft ? layout[:panelLeftX] : layout[:panelRightX];
         var panelLabelOffset = layout[:panelLabelOffset];
         var xtinyH = layout[:xtinyH];
 
@@ -1239,37 +1390,50 @@ class DashView extends WatchUi.DataField {
         var totalGapSweep = gapDeg * (segCount - 1);
         var segSweepDeg = (arcSweepDeg - totalGapSweep) / segCount;
 
-        // ---- LEFT PANEL: Heart Rate ----
-        // Start at bottom-left (e.g., 210 deg)
-        var hrStartAngle = 180.0 + arcSweepDeg / 2.0;
+        // Left starts at bottom-left (e.g., 210 deg), right at bottom-right
+        // (e.g., 330 deg).
+        var startAngle = isLeft
+            ? 180.0 + arcSweepDeg / 2.0
+            : 360.0 - arcSweepDeg / 2.0;
 
         dc.setColor(mLabelsColor, Graphics.COLOR_TRANSPARENT);
         dc.drawText(
-            lPanelCenterX,
+            panelCenterX,
             sideCenterY - panelLabelOffset + panelTopLabelYOffset,
             unitLabelFont,
-            "HR",
+            metricLabel(metric),
             Graphics.TEXT_JUSTIFY_CENTER
         );
 
-        var heartRate = mHeartRate;
-        var litSegs = litSegments(hrFillRatio(), segCount, heartRate != null);
-        var hrZoneColor = zoneColor(
-            heartRate != null ? heartRate : 0,
-            mHrZoneBoundaries,
-            COLOR_HR
+        // HR keeps one segment lit while a reading is present, so a live but
+        // very low heart rate is not an empty gauge. Zero watts is a real
+        // reading, so nothing else floors.
+        var value = currentValue(metric);
+        var litSegs = litSegments(
+            metricRatio(metric, value),
+            segCount,
+            metric == METRIC_HR && value != null
         );
+        var zoneFill = metricColor(metric);
 
         dc.setPenWidth(barW);
 
         for (var i = 0; i < segCount; i++) {
-            // Clockwise goes down in angle
-            var segStart = hrStartAngle - i * (segSweepDeg + gapDeg);
-            var segEnd = segStart - segSweepDeg;
+            var segStart;
+            var segEnd;
+            if (isLeft) {
+                // Clockwise goes down in angle
+                segStart = startAngle - i * (segSweepDeg + gapDeg);
+                segEnd = segStart - segSweepDeg;
+            } else {
+                // Right side goes Counter-Clockwise (increases in angle)
+                segStart = startAngle + i * (segSweepDeg + gapDeg);
+                segEnd = segStart + segSweepDeg;
+            }
 
             // Set lit color or dark background color
             dc.setColor(
-                i < litSegs ? hrZoneColor : mTrackColor,
+                i < litSegs ? zoneFill : mTrackColor,
                 Graphics.COLOR_TRANSPARENT
             );
 
@@ -1278,95 +1442,44 @@ class DashView extends WatchUi.DataField {
                 centerX,
                 sideCenterY,
                 sideRadius,
-                Graphics.ARC_CLOCKWISE,
+                isLeft ? Graphics.ARC_CLOCKWISE : Graphics.ARC_COUNTER_CLOCKWISE,
                 segStart,
                 segEnd
             );
         }
 
-        dc.setColor(mValuesColor, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(
-            lPanelCenterX,
-            sideCenterY + panelTextYOffset,
-            panelValueFont,
-            heartRate != null ? heartRate.toString() : NO_VALUE,
-            Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
-        );
-        dc.setColor(mLabelsColor, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(
-            lPanelCenterX,
-            sideCenterY +
-                panelLabelOffset -
-                xtinyH -
-                1 +
-                avgLabelOffset +
-                panelTextYOffset,
-            Graphics.FONT_XTINY,
-            "AVG",
-            Graphics.TEXT_JUSTIFY_CENTER
-        );
-        dc.setColor(mValuesColor, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(
-            lPanelCenterX,
-            sideCenterY +
-                panelLabelOffset +
-                panelAvgValueOffset +
-                avgLabelOffset +
-                panelTextYOffset,
-            Graphics.FONT_MEDIUM,
-            mAvgHeartRate.format("%.0f"),
-            Graphics.TEXT_JUSTIFY_CENTER
-        );
-
-        // ---- RIGHT PANEL: power (3s or raw, per the powerAveraging setting) ----
-        // Start at bottom-right (e.g., 330 deg)
-        var pwrStartAngle = 360.0 - arcSweepDeg / 2.0;
-
-        dc.setColor(mLabelsColor, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(
-            rPanelCenterX,
-            sideCenterY - panelLabelOffset + panelTopLabelYOffset,
-            unitLabelFont,
-            mHasPowerData ? "PWR" : "CAD",
-            Graphics.TEXT_JUSTIFY_CENTER
-        );
-
-        var litPwrSegs = litSegments(rightFillRatio(), segCount, false);
-        var pwrZoneColor = rightZoneColor();
-
-        dc.setPenWidth(barW);
-
-        for (var i = 0; i < segCount; i++) {
-            // Right side goes Counter-Clockwise (increases in angle)
-            var pwrSegStart = pwrStartAngle + i * (segSweepDeg + gapDeg);
-            var pwrSegEnd = pwrSegStart + segSweepDeg;
-
-            dc.setColor(
-                i < litPwrSegs ? pwrZoneColor : mTrackColor,
-                Graphics.COLOR_TRANSPARENT
-            );
-
+        // AVG marker: a short arc across the track at the AVG value's place on
+        // the same scale as the fill, in the values colour so it reads on lit
+        // and unlit segments alike. Nothing below draws an arc, so the wider
+        // pen needs no restoring. No MAX marker on the small gauges.
+        if (mShowSpeedIndicators and avgValue(metric) > 0) {
+            var avgRatio = metricRatio(metric, avgValue(metric));
+            var avgAngleDeg = isLeft
+                ? startAngle - avgRatio * arcSweepDeg
+                : startAngle + avgRatio * arcSweepDeg;
+            dc.setColor(mValuesColor, Graphics.COLOR_TRANSPARENT);
+            dc.setPenWidth(barW + 4);
             dc.drawArc(
                 centerX,
                 sideCenterY,
                 sideRadius,
-                Graphics.ARC_COUNTER_CLOCKWISE,
-                pwrSegStart,
-                pwrSegEnd
+                isLeft ? Graphics.ARC_CLOCKWISE : Graphics.ARC_COUNTER_CLOCKWISE,
+                isLeft ? avgAngleDeg + 2 : avgAngleDeg - 2,
+                isLeft ? avgAngleDeg - 2 : avgAngleDeg + 2
             );
         }
 
         dc.setColor(mValuesColor, Graphics.COLOR_TRANSPARENT);
         dc.drawText(
-            rPanelCenterX,
+            panelCenterX,
             sideCenterY + panelTextYOffset,
             panelValueFont,
-            rightValueString(),
+            slotString(metric, value),
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
         );
         dc.setColor(mLabelsColor, Graphics.COLOR_TRANSPARENT);
         dc.drawText(
-            rPanelCenterX,
+            panelCenterX,
             sideCenterY +
                 panelLabelOffset -
                 xtinyH -
@@ -1379,25 +1492,16 @@ class DashView extends WatchUi.DataField {
         );
         dc.setColor(mValuesColor, Graphics.COLOR_TRANSPARENT);
         dc.drawText(
-            rPanelCenterX,
+            panelCenterX,
             sideCenterY +
                 panelLabelOffset +
                 panelAvgValueOffset +
                 avgLabelOffset +
                 panelTextYOffset,
             Graphics.FONT_MEDIUM,
-            mHasPowerData
-                ? mAvgPower.format("%.0f")
-                : mAvgCadence.format("%.0f"),
+            avgString(metric),
             Graphics.TEXT_JUSTIFY_CENTER
         );
-    }
-
-    // What the right-hand gauge prints: watts with a meter attached, rpm
-    // without, "--" when that sensor is not currently reporting.
-    private function rightValueString() as String {
-        var value = mHasPowerData ? mPower : mCadence;
-        return value != null ? value.toString() : NO_VALUE;
     }
 
     // Band 5: ascent, distance and calories across three columns.
@@ -1504,11 +1608,27 @@ class DashView extends WatchUi.DataField {
         }
     }
 
-    // Compact band 2: the speed arc, the AVG/MAX pair inside its crown and the
-    // central readout, in the same stack the full layout uses.
+    // Compact band 2: the main arc, the AVG/MAX pair inside its crown and the
+    // central readout, in the same stack the full layout uses. Which metric it
+    // shows is mMainGauge; only the fill ratio, lit colour and strings change.
     // 12 segments rather than the full layout's 24: the 830 is 2019 hardware
-    // and drawArc is the most expensive call in the pass.
-    private function drawCompactSpeedGauge(
+    // and drawArc is the most expensive call in the pass. The AVG marker is in
+    // the values colour (visible on any fill), the MAX marker red.
+    //
+    // Widths measured in the simulator for the strings the other metrics add
+    // (px; 830 / 840):
+    //   central "1250" in :speedFont   140 / 132 against 178 / 171 inside the
+    //     arc, so 19 / 20 px a side.
+    //   crown "88.8" in :crownValueFont 38 / 50 — the string the column offset
+    //     is sized for. A four-digit power peak, "1250", is 44 / 56, 6 px wider,
+    //     so it eats the 2 px arc margin and touches the arc by ~1 px a side
+    //     once max power passes 999 W. AVG and MAX stay 25 / 10 px apart.
+    //   small slot "88.8" in :barValueFont   63 / 53 (speed itself prints "88",
+    //     narrower), with "KMH" 21 / 20 px and a 2 px gap taken out of the
+    //     111 px half-width, leaving 88 / 89: clear by 25 / 36 px. "250" bpm
+    //     is 54 / 45.
+    // The one accepted overrun is the four-digit crown value above.
+    private function drawCompactMainGauge(
         dc as Graphics.Dc,
         layout as Lang.Dictionary
     ) as Void {
@@ -1516,7 +1636,6 @@ class DashView extends WatchUi.DataField {
         var centerY = layout[:centerY];
         var radius = layout[:radius];
 
-        var maxVal = mSpeedGaugeMax;
         var gaugeStart = 210.0;
         var gaugeSweep = 240.0;
 
@@ -1525,18 +1644,13 @@ class DashView extends WatchUi.DataField {
         var segGapDeg = 3.5;
         
         // --- 1. VALUE CLAMPING ---
-        var ratio = mSpeed / maxVal;
-        if (ratio > 1.0) { ratio = 1.0; }
-        if (ratio < 0.0) { ratio = 0.0; }
+        var metric = mMainGauge;
+        var ratio = metricRatio(metric, currentValue(metric));
         var activeSweep = ratio * gaugeSweep;
 
-        var avgRatio = mAvgSpeed / maxVal;
-        if (avgRatio > 1.0) { avgRatio = 1.0; }
-        if (avgRatio < 0.0) { avgRatio = 0.0; }
-
-        var maxRatio = mMaxSpeed / maxVal;
-        if (maxRatio > 1.0) { maxRatio = 1.0; }
-        if (maxRatio < 0.0) { maxRatio = 0.0; }
+        var avgRatio = metricRatio(metric, avgValue(metric));
+        var maxRatio = metricRatio(metric, maxValue(metric));
+        var fillColor = metricColor(metric);
 
         dc.setPenWidth(layout[:trackWidth]);
 
@@ -1550,7 +1664,7 @@ class DashView extends WatchUi.DataField {
         }
 
         // --- 3. STEP TWO: OVERLAY THE ACTIVE SPEED (SMOOTH FILL) ---
-        dc.setColor(COLOR_SPEED, Graphics.COLOR_TRANSPARENT);
+        dc.setColor(fillColor, Graphics.COLOR_TRANSPARENT);
         for (var i = 0; i < arcSegCount; i++) {
             var segStartDeg = gaugeStart - i * segArcLen;
             var segEndDeg = segStartDeg - segArcLen + segGapDeg;
@@ -1579,9 +1693,9 @@ class DashView extends WatchUi.DataField {
         }
 
         // --- 4. STEP THREE: DRAW THE AVERAGE SPEED INDICATOR ---
-        if (mAvgSpeed > 0.0 and mShowSpeedIndicators) {
+        if (avgValue(metric) > 0 and mShowSpeedIndicators) {
             var avgAngleDeg = gaugeStart - (avgRatio * gaugeSweep);
-            dc.setColor(COLOR_AVG_INDICATOR, Graphics.COLOR_TRANSPARENT);
+            dc.setColor(mValuesColor, Graphics.COLOR_TRANSPARENT);
             dc.setPenWidth(layout[:trackWidth] + 4);
             
             dc.drawArc(
@@ -1595,7 +1709,7 @@ class DashView extends WatchUi.DataField {
         }
 
         // --- 5. STEP FOUR: DRAW THE MAX SPEED INDICATOR ---
-        if (mMaxSpeed > 0.0 and mShowSpeedIndicators) {
+        if (maxValue(metric) > 0 and mShowSpeedIndicators) {
             var maxAngleDeg = gaugeStart - (maxRatio * gaugeSweep);
             dc.setColor(COLOR_MAX_INDICATOR, Graphics.COLOR_TRANSPARENT);
             dc.setPenWidth(layout[:trackWidth] + 4);
@@ -1641,14 +1755,14 @@ class DashView extends WatchUi.DataField {
             avgX,
             avgValueY,
             crownFont,
-            mAvgSpeed.format("%.1f"),
+            avgString(metric),
             Graphics.TEXT_JUSTIFY_CENTER
         );
         dc.drawText(
             maxX,
             avgValueY,
             crownFont,
-            mMaxSpeed.format("%.1f"),
+            maxString(metric),
             Graphics.TEXT_JUSTIFY_CENTER
         );
 
@@ -1657,7 +1771,7 @@ class DashView extends WatchUi.DataField {
             centerX,
             centerY + mDeviceProfile[:speedYOffset],
             mDeviceProfile[:speedFont],
-            mSpeed.format("%.1f"),
+            metricString(metric, currentValue(metric)),
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
         );
         dc.setColor(mLabelsColor, Graphics.COLOR_TRANSPARENT);
@@ -1668,19 +1782,35 @@ class DashView extends WatchUi.DataField {
             centerX,
             centerY + radius * 0.38 - 10 + mDeviceProfile[:unitLabelYOffset],
             mDeviceProfile[:unitLabelFont],
-            mIsMetric ? "KMH" : "MPH",
+            metricLabel(metric),
             Graphics.TEXT_JUSTIFY_CENTER
         );
     }
 
-    // Compact band 3: HR and power as horizontal zone bars. Horizontal because
-    // a bar costs a fraction of the vertical space an arc does at the same
-    // length, and reads at a glance from the corner of the eye. Same
-    // no-power-data fallback as the full layout's right panel: the bar becomes
-    // a 0-150 rpm cadence bar, label and all.
+    // Compact band 3: two metrics as horizontal zone bars, left and right per
+    // mMainGauge (see leftMetric / rightMetric): with the default, HR on the
+    // left and power on the right. Horizontal because a bar costs a fraction of
+    // the vertical space an arc does at the same length, and reads at a glance
+    // from the corner of the eye. The RIGHT metric keeps the no-power-data
+    // fallback: it becomes a 0-150 rpm cadence bar, label and all.
     private function drawCompactBars(
         dc as Graphics.Dc,
         layout as Lang.Dictionary
+    ) as Void {
+        drawCompactBar(dc, layout, leftMetric(), true);
+        drawCompactBar(dc, layout, rightMetric(), false);
+    }
+
+    // One bar: label and value on a shared line with the 10 segments under
+    // them, and the AVG marker across the segments. Segment 0 is the one
+    // nearest the centre, so the left bar grows out towards the left screen
+    // edge (slot 9 lands exactly on lX0) and the right bar mirrors it towards
+    // the right edge (slot 9 lands exactly on rX1).
+    private function drawCompactBar(
+        dc as Graphics.Dc,
+        layout as Lang.Dictionary,
+        metric as Number,
+        isLeft as Boolean
     ) as Void {
         var valueY = layout[:barsValueY];
         var barY = layout[:barsBarY];
@@ -1697,80 +1827,59 @@ class DashView extends WatchUi.DataField {
         // Sit the label on the same baseline as the much taller value.
         var labelY = valueY + layout[:barValueH] - xtinyH - 2;
 
-        // ---- LEFT: heart rate, filling centre-outward ----
-        var heartRate = mHeartRate;
-        var litHrSegs = litSegments(hrFillRatio(), 10, heartRate != null);
-        var hrZoneColor = zoneColor(
-            heartRate != null ? heartRate : 0,
-            mHrZoneBoundaries,
-            COLOR_HR
+        var value = currentValue(metric);
+        var litSegs = litSegments(
+            metricRatio(metric, value),
+            10,
+            metric == METRIC_HR && value != null
         );
+        var zoneFill = metricColor(metric);
 
         dc.setColor(mLabelsColor, Graphics.COLOR_TRANSPARENT);
         dc.drawText(
-            lX0,
+            isLeft ? lX0 : rX1,
             labelY,
             Graphics.FONT_XTINY,
-            "HR",
-            Graphics.TEXT_JUSTIFY_LEFT
+            metricLabel(metric),
+            isLeft ? Graphics.TEXT_JUSTIFY_LEFT : Graphics.TEXT_JUSTIFY_RIGHT
         );
         dc.setColor(mValuesColor, Graphics.COLOR_TRANSPARENT);
         dc.drawText(
-            lX1,
+            isLeft ? lX1 : rX0,
             valueY,
             barValueFont,
-            heartRate != null ? heartRate.toString() : NO_VALUE,
-            Graphics.TEXT_JUSTIFY_RIGHT
+            slotString(metric, value),
+            isLeft ? Graphics.TEXT_JUSTIFY_RIGHT : Graphics.TEXT_JUSTIFY_LEFT
         );
 
-        // Segment 0 is the one nearest the centre, so the bar grows out towards
-        // the left screen edge. Slot 9 lands exactly on lX0.
         for (var i = 0; i < 10; i++) {
             dc.setColor(
-                i < litHrSegs ? hrZoneColor : mTrackColor,
+                i < litSegs ? zoneFill : mTrackColor,
                 Graphics.COLOR_TRANSPARENT
             );
             dc.fillRectangle(
-                lX1 - segLen - i * (segLen + segGap),
+                isLeft
+                    ? lX1 - segLen - i * (segLen + segGap)
+                    : rX0 + i * (segLen + segGap),
                 barY,
                 segLen,
                 barH
             );
         }
 
-        // ---- RIGHT: power, or cadence when the bike has no power meter ----
-        var litPwrSegs = litSegments(rightFillRatio(), 10, false);
-        var pwrZoneColor = rightZoneColor();
-
-        dc.setColor(mLabelsColor, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(
-            rX1,
-            labelY,
-            Graphics.FONT_XTINY,
-            mHasPowerData ? "PWR" : "CAD",
-            Graphics.TEXT_JUSTIFY_RIGHT
-        );
-        dc.setColor(mValuesColor, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(
-            rX0,
-            valueY,
-            barValueFont,
-            rightValueString(),
-            Graphics.TEXT_JUSTIFY_LEFT
-        );
-
-        // Mirror of the HR bar: segment 0 sits nearest the centre and the fill
-        // runs out towards the right screen edge. Slot 9 lands exactly on rX1.
-        for (var i = 0; i < 10; i++) {
-            dc.setColor(
-                i < litPwrSegs ? pwrZoneColor : mTrackColor,
-                Graphics.COLOR_TRANSPARENT
-            );
+        // AVG marker: 3 px wide, 2 px proud of the bar above and below, at the
+        // AVG value's place along the bar's full extent (gaps included), in the
+        // values colour. No MAX marker on the small gauges.
+        if (mShowSpeedIndicators and avgValue(metric) > 0) {
+            var barLen = 10 * segLen + 9 * segGap;
+            var avgOffset = metricRatio(metric, avgValue(metric)) * barLen;
+            var avgX = isLeft ? lX1 - avgOffset : rX0 + avgOffset;
+            dc.setColor(mValuesColor, Graphics.COLOR_TRANSPARENT);
             dc.fillRectangle(
-                rX0 + i * (segLen + segGap),
-                barY,
-                segLen,
-                barH
+                (avgX - 1.0).toNumber(),
+                barY - 2,
+                3,
+                barH + 4
             );
         }
     }

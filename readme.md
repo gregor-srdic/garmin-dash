@@ -39,11 +39,12 @@ Dash is a full-screen field: add it to a **1-Field** data screen so it has the w
     - Current time (center)
     - Current elevation (right)
 
-2. **Speed gauge** — a 24-segment arc reading 0–60 km/h (0–40 mph) by default, filling smoothly with your current speed
-    - Average speed (orange) and max speed (green) markers on the arc
+2. **Main gauge** — by default the speed gauge: a 24-segment arc reading 0–60 km/h (0–40 mph), filling smoothly with your current speed. The **Main Gauge** setting can show power or heart rate here instead (see below)
+    - Average (white on dark, black on light) and max (red) markers on the arc
     - Average speed (top left)
     - Max speed (top right)
     - Current speed (center)
+    - With **Main Gauge** set to Power (Cadence) or Heart Rate, the same layout shows that metric: its current value in the center, its average and max in the crown, and a zone-coloured arc. The average/max markers follow the metric and still obey **Visualize average/max values**. The two small gauges (or bars) also carry a white/black average marker at the average of their own metric
 
 3. **Middle row**
     - Elapsed time (top)
@@ -51,7 +52,7 @@ Dash is a full-screen field: add it to a **1-Field** data screen so it has the w
     - Di2 current gears (bottom center)
     - Grade (bottom right)
 
-4. **Heart rate & power gauges**
+4. **Heart rate & power gauges** (with **Main Gauge** set to Power or Heart Rate, speed takes the slot of the small gauge it displaces: right gauge in Power mode, left in Heart Rate mode, shown there as whole km/h or mph)
     - Current heart rate, scaled to your heart rate zones (left gauge)
     - Current heart rate (center left)
     - Average heart rate (bottom left)
@@ -79,8 +80,8 @@ If you don't have a power meter, the right gauge becomes a cadence gauge reading
 These are 2.6" screens at 246 × 322 px, about a fifth of the pixel area of a 1050. Everything above still fits at a readable size only if some of it goes, so those four devices get a condensed four-band layout:
 
 1. Ambient temperature, current time, elevation and Di2 gears
-2. Speed gauge with the current speed at its centre, average and max speed above it, and the same average/max markers on the arc
-3. Heart rate and power as horizontal zone bars, coloured by training zone exactly as the round gauges are (power follows the **Power Display** setting here too)
+2. Main gauge (speed by default) with the current value at its centre, average and max above it, and the same average/max markers on the arc (average white/black, max red); the small gauges and bars carry an average marker too
+3. Heart rate and power as horizontal zone bars, coloured by training zone exactly as the round gauges are (power follows the **Power Display** setting here too). With **Main Gauge** set to Power or Heart Rate, speed takes the corresponding bar, as whole km/h or mph
 4. Elapsed time, cadence, grade and distance
 
 What is dropped is the data you look at after the ride rather than during it: average heart rate, average power, total ascent and calories. Without a power meter the right bar becomes a cadence bar as above, and the cadence slot in the bottom row shows total ascent instead.
@@ -103,8 +104,9 @@ Configurable in Garmin Connect (or Connect IQ) under the app's settings:
 |---|---|---|---|
 | **FTP (Watts)** | 50–600 | 200 | Functional threshold power, used to derive the power zone colours and to scale the power gauge. Only used when your Garmin user profile has no FTP set, or when the device cannot report it. |
 | **Power Display** | 3s average / Raw (1s) | 3s average | Whether the live power number and the power gauge show a rolling 3-second average or the raw 1-second reading. The average restarts after a power meter dropout rather than blending in pre-dropout watts. |
+| **Main Gauge** | Speed / Power (Cadence) / Heart Rate | Speed | Which metric the large central gauge shows, with its AVG/MAX pair in the crown and a zone-coloured arc for power and heart rate. Speed moves into the small gauge it displaces (right in Power mode, left in Heart Rate mode; the matching bar on the compact layout). Power mode falls back to cadence without a power meter. |
 | **Speed Gauge Max** | 0–200 | 0 | Full-scale value of the speed gauge, in your display units (km/h or mph). 0 keeps the built-in default of 60 km/h / 40 mph. |
-| **Visualize average/max speed** | on / off | on | Shows your average speed (orange) and max speed (green) as markers on the speed gauge. |
+| **Visualize average/max values** | on / off | on | Shows the average (white on dark, black on light) and max (red) markers on the main gauge, and the average marker on both small gauges and bars. |
 
 Setting changes take effect immediately, including mid-ride.
 

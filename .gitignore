@@ -19,3 +19,5 @@ developer_key
 # --- OS Specific ---
 .DS_Store
 Thumbs.db
+# --- Agent runs ---
+.agent-runs/

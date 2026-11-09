@@ -6,6 +6,10 @@
     <string id="powerAveragingTitle">Power Display</string>
     <string id="powerAveraging3s">3s average</string>
     <string id="powerAveragingRaw">Raw (1s)</string>
+    <string id="mainGaugeTitle">Main Gauge</string>
+    <string id="mainGaugeSpeed">Speed</string>
+    <string id="mainGaugePower">Power (Cadence)</string>
+    <string id="mainGaugeHr">Heart Rate</string>
     <string id="speedGaugeMaxTitle">Speed Gauge Max (0 = default)</string>
-    <string id="visualizeSpeedIndicatorTitle">visualize average/max speed</string>
+    <string id="visualizeSpeedIndicatorTitle">Visualize average/max values</string>
 </strings>
