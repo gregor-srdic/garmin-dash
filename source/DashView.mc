@@ -122,6 +122,9 @@ class DashView extends WatchUi.DataField {
     // Fallback full-scale speed when the speedGaugeMax setting is left at 0.
     private const SPEED_MAX_DEFAULT_METRIC = 60.0;
     private const SPEED_MAX_DEFAULT_STATUTE = 40.0;
+    // Minimum px between the left and right panels' big values at their widest
+    // (computeFullLayout, :panelValueDX).
+    private const PANEL_VALUE_MIN_GAP = 8;
     // Used when FTP is missing or nonsensical. The setting itself is clamped to
     // 50 W at the bottom, but a null or corrupt stored value still lands here.
     private const FTP_DEFAULT = 200;
@@ -736,7 +739,10 @@ class DashView extends WatchUi.DataField {
     //   :radius :centerY :trackWidth               — band 2, speed gauge
     //   :elapsedY :middleRowY                      — band 3, the two text rows
     //   :panelTop :panelH :panelCenterY :panelRadius :panelBarW
-    //   :panelLeftX :panelRightX :panelLabelOffset — band 4, HR / power panels
+    //   :panelLabelOffset                          — band 4, HR / power panels
+    //   :panelValueDX                              — band 4, x of each panel's
+    //                                                label and big value, as an
+    //                                                offset from centerX
     //   :panelStatOuterDX :panelStatInnerDX        — band 4, AVG / MAX column
     //                                                offsets from centerX, as
     //                                                0.73 / 0.27 of the arc's
@@ -779,7 +785,6 @@ class DashView extends WatchUi.DataField {
         var panelH = footerY - panelTop - (height * 0.01).toNumber();
         var barW = (width * 0.063).toNumber();
         var lBarX = (width * 0.021).toNumber();
-        var rBarX = width - (width * 0.038).toNumber();
 
         var panelCenterY =
             panelTop +
@@ -828,6 +833,26 @@ class DashView extends WatchUi.DataField {
             }
         }
 
+        // The label and big value sit centred over their AVG / MAX pair, i.e.
+        // halfway between the two columns: centerX -/+ 0.5 * reach. Moving
+        // them in from the arc's midpoint brings the two panels' values closer
+        // together, and the widest pair that can show at once, a three-digit
+        // HR beside a four-digit power peak, must still clear the other panel
+        // by PANEL_VALUE_MIN_GAP. That floor binds on the 1050 / 1060, where
+        // the values sit ~10 px out from the pair's centre, and on the
+        // Explore 2 (~2 px out); the 850, 1040 and 1030 are centred exactly.
+        // Measured gaps for "188" + "1250" when centred: 1050 -12.2,
+        // 850 53.7, 1030 22.8, 1040 21.3, Explore 2 3.6.
+        var valueFont = mDeviceProfile[:panelValueFont];
+        var widestPair =
+            dc.getTextWidthInPixels("188", valueFont) +
+            dc.getTextWidthInPixels("1250", valueFont);
+        var valueDX = 0.5 * reach;
+        var minValueDX = widestPair / 4.0 + PANEL_VALUE_MIN_GAP / 2.0;
+        if (valueDX < minValueDX) {
+            valueDX = minValueDX;
+        }
+
         return {
             :variant => :full,
             :width => width,
@@ -859,15 +884,14 @@ class DashView extends WatchUi.DataField {
             :panelCenterY => panelCenterY,
             :panelRadius => panelRadius,
             :panelBarW => barW,
-            :panelLeftX => (lBarX + barW / 2 + centerX) / 2.0,
-            :panelRightX => (centerX + rBarX - barW / 2) / 2.0,
             :panelLabelOffset => panelLabelOffset,
+            :panelValueDX => valueDX,
             // Why 0.73 / 0.27: see docs/changes/2026-11-16-small-gauge-max/
             // spec.md. The outer column stays clear of the arc; the split
             // leaves the gap between panels about twice the gap inside one,
-            // so each AVG/MAX pair reads as a group. The pair is deliberately
-            // not centred under the big value (spec concern 3): there, the
-            // outer value would hit the arc.
+            // so each AVG/MAX pair reads as a group. The big value is centred
+            // over the pair (:panelValueDX), not the pair under the value: at
+            // the value's old x the outer stat would hit the arc.
             :panelStatOuterDX => 0.73 * reach,
             :panelStatInnerDX => 0.27 * reach,
 
@@ -1428,7 +1452,9 @@ class DashView extends WatchUi.DataField {
         var sideCenterY = layout[:panelCenterY];
         var sideRadius = layout[:panelRadius];
         var barW = layout[:panelBarW];
-        var panelCenterX = isLeft ? layout[:panelLeftX] : layout[:panelRightX];
+        var panelCenterX = isLeft
+            ? centerX - layout[:panelValueDX]
+            : centerX + layout[:panelValueDX];
         var panelLabelOffset = layout[:panelLabelOffset];
         var xtinyH = layout[:xtinyH];
 
