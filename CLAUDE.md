@@ -49,6 +49,8 @@ Metrics that can drop out mid-ride — heart rate, power, cadence, temperature �
 
 The two paths share no draw code. `:compact` drops the metrics it has no room for (AVG HR, AVG power, calories) rather than shrinking them, and draws the small-gauge zone bars as horizontal `fillRectangle` runs instead of arcs. `:compact` issues 12 `drawArc` calls per frame against `:full`'s 44 segment arcs plus up to 2 panel AVG markers (46), each count before the main fill and main markers, which matters on the 830 (2019 hardware). The AVG marker (values colour, white/black) sits on both small gauges (an arc on `:full`, a 3 px rectangle on `:compact`) and the main gauge's AVG marker is the same colour; `mShowSpeedIndicators` controls all of them, MAX only on the main gauge. Current speed in a small slot prints as whole numbers (`slotString`), because `"88.8"` does not fit the 1050 panel.
 
+On `:full` each panel also prints AVG and MAX side by side under the arc, AVG left and MAX right in both panels, always shown. The column offsets come from the arc's reach at that row (`:panelStatOuterDX` / `:panelStatInnerDX` in `computeFullLayout`), and the value font is the profile key `:panelStatFont` (`FONT_SMALL` on the Explore 2, `FONT_MEDIUM` elsewhere). `:compact` has no AVG/MAX text. Measurements: `docs/changes/2026-11-16-small-gauge-max/spec.md`.
+
 The metric-to-gauge arithmetic — `metricRatio`, `metricColor`, `metricString`, `clampRatio`, `litSegments` — is shared by both render paths, and the small slots are parameterised by metric id (`drawPanel` / `drawCompactBar` take a `METRIC_*`), not hard-wired to HR or power. The two paths share no *geometry* on purpose, but a heart rate has to mean the same fill on an arc as on a bar, so that arithmetic lives in one place.
 
 ### Device targeting: two mechanisms, order-sensitive
@@ -69,17 +71,17 @@ To add a device: add the `<iq:product>` to `manifest.xml`, add `resources-<produ
 
 Font heights are **not** derivable from ppi or from the SDK's `simulator.json` point sizes, and devices with identical resolution and ppi do not necessarily share them. Measure them: build a `(:debug)` `System.println` of `dc.getFontHeight()` / `dc.getTextWidthInPixels()` for the fonts and worst-case strings you plan to use, then `monkeydo` it and read the console. Known values:
 
-| Font | 830 | 840 | 1040 | Explore 2 | 1050 / 1060 / 850 |
-|---|---|---|---|---|---|
-| xtiny | 13 | 11 | 13 | 12 | 21 |
-| tiny | 20 | 14 | 17 | 16 | 28 |
-| small | 22 | 17 | 19 | 19 | 33 |
-| medium | 26 | 19 | 22 | 22 | 38 |
-| large | 41 | 31 | 36 | 36 | 61 |
-| numberMild | 36 | 35 | 42 | 41 | 71 |
-| numberMedium | 42 | 42 | 48 | 48 | 82 |
-| numberHot | 56 | 55 | 64 | 64 | 109 |
-| numberThaiHot | 70 | 67 | 80 | 81 | 136 |
+| Font | 830 | 840 | 1030 / Plus / Bontrager | 1040 | Explore 2 | 1050 / 1060 / 850 |
+|---|---|---|---|---|---|---|
+| xtiny | 13 | 11 | 16 | 13 | 12 | 21 |
+| tiny | 20 | 14 | 22 | 17 | 16 | 28 |
+| small | 22 | 17 | 26 | 19 | 19 | 33 |
+| medium | 26 | 19 | 29 | 22 | 22 | 38 |
+| large | 41 | 31 | 48 | 36 | 36 | 61 |
+| numberMild | 36 | 35 | 42 | 42 | 41 | 71 |
+| numberMedium | 42 | 42 | 49 | 48 | 48 | 82 |
+| numberHot | 56 | 55 | 66 | 64 | 64 | 109 |
+| numberThaiHot | 70 | 67 | 81 | 80 | 81 | 136 |
 
 ### Temperature: spans all four files
 

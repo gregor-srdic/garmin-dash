@@ -737,6 +737,12 @@ class DashView extends WatchUi.DataField {
     //   :elapsedY :middleRowY                      — band 3, the two text rows
     //   :panelTop :panelH :panelCenterY :panelRadius :panelBarW
     //   :panelLeftX :panelRightX :panelLabelOffset — band 4, HR / power panels
+    //   :panelStatOuterDX :panelStatInnerDX        — band 4, AVG / MAX column
+    //                                                offsets from centerX, as
+    //                                                0.73 / 0.27 of the arc's
+    //                                                reach at that row (spec.md
+    //                                                in docs/changes/2026-11-16-
+    //                                                small-gauge-max)
     //   :footerY                                   — band 5, bottom stats bar
     //   :xtinyH :rowValueH                         — font heights the bands stack from
     private function computeLayout(dc as Graphics.Dc) as Lang.Dictionary {
@@ -775,6 +781,53 @@ class DashView extends WatchUi.DataField {
         var lBarX = (width * 0.021).toNumber();
         var rBarX = width - (width * 0.038).toNumber();
 
+        var panelCenterY =
+            panelTop +
+            panelH / 2.0 +
+            (height * 0.01).toNumber() +
+            mDeviceProfile[:hrPwrGaugeCenterYOffset];
+        var panelRadius = centerX - lBarX - barW / 2.0;
+        var panelLabelOffset = (height * 0.088).toNumber();
+
+        // How far from centerX the panel arc's AVG-marker pen comes at the rows
+        // the AVG/MAX text occupies. The arc curves in towards centerX as it
+        // descends, so this is the room the outer column has before it touches
+        // the arc. Static inputs only, hence computed here and cached.
+        var penHalf = (barW + 4) / 2.0;
+        var penIn = panelRadius - penHalf;
+        var penOut = panelRadius + penHalf;
+        var sinH = Math.sin(
+            Math.toRadians(mDeviceProfile[:panelArcSweep] / 2.0 + 2.0)
+        );
+        var statRowsY =
+            panelCenterY +
+            panelLabelOffset +
+            mDeviceProfile[:avgLabelOffset] +
+            mDeviceProfile[:panelTextYOffset];
+        var rowTop = (statRowsY - xtinyH - 1).toNumber();
+        var rowBottom = (
+            statRowsY +
+            mDeviceProfile[:panelAvgValueOffset] +
+            dc.getFontHeight(mDeviceProfile[:panelStatFont])
+        ).toNumber();
+        var reach = penIn;
+        var foundRow = false;
+        for (var y = rowTop; y <= rowBottom; y++) {
+            var dy = (y - panelCenterY).abs();
+            var rho = dy / sinH;
+            if (rho < penIn) {
+                rho = penIn;
+            }
+            if (rho > penOut) {
+                continue;
+            }
+            var r = Math.sqrt(rho * rho - dy * dy);
+            if (!foundRow or r < reach) {
+                reach = r;
+                foundRow = true;
+            }
+        }
+
         return {
             :variant => :full,
             :width => width,
@@ -803,16 +856,20 @@ class DashView extends WatchUi.DataField {
 
             :panelTop => panelTop,
             :panelH => panelH,
-            :panelCenterY =>
-                panelTop +
-                panelH / 2.0 +
-                (height * 0.01).toNumber() +
-                mDeviceProfile[:hrPwrGaugeCenterYOffset],
-            :panelRadius => centerX - lBarX - barW / 2.0,
+            :panelCenterY => panelCenterY,
+            :panelRadius => panelRadius,
             :panelBarW => barW,
             :panelLeftX => (lBarX + barW / 2 + centerX) / 2.0,
             :panelRightX => (centerX + rBarX - barW / 2) / 2.0,
-            :panelLabelOffset => (height * 0.088).toNumber(),
+            :panelLabelOffset => panelLabelOffset,
+            // Why 0.73 / 0.27: see docs/changes/2026-11-16-small-gauge-max/
+            // spec.md. The outer column stays clear of the arc; the split
+            // leaves the gap between panels about twice the gap inside one,
+            // so each AVG/MAX pair reads as a group. The pair is deliberately
+            // not centred under the big value (spec concern 3): there, the
+            // outer value would hit the arc.
+            :panelStatOuterDX => 0.73 * reach,
+            :panelStatInnerDX => 0.27 * reach,
 
             :footerY => footerY,
 
@@ -1358,9 +1415,9 @@ class DashView extends WatchUi.DataField {
     }
 
     // One panel: label, 10-segment arc with the AVG marker across it, value,
-    // then AVG with its value. The left panel starts at bottom-left and runs
-    // clockwise, the right panel starts at bottom-right and runs
-    // counter-clockwise.
+    // then an AVG and a MAX column side by side, AVG on the left in both
+    // panels. The left panel starts at bottom-left and runs clockwise, the
+    // right panel starts at bottom-right and runs counter-clockwise.
     private function drawPanel(
         dc as Graphics.Dc,
         layout as Lang.Dictionary,
@@ -1477,29 +1534,53 @@ class DashView extends WatchUi.DataField {
             slotString(metric, value),
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
         );
+        var outerDX = layout[:panelStatOuterDX];
+        var innerDX = layout[:panelStatInnerDX];
+        var avgX = isLeft ? centerX - outerDX : centerX + innerDX;
+        var maxX = isLeft ? centerX - innerDX : centerX + outerDX;
+        var statLabelY =
+            sideCenterY +
+            panelLabelOffset -
+            xtinyH -
+            1 +
+            avgLabelOffset +
+            panelTextYOffset;
+        var statValueY =
+            sideCenterY +
+            panelLabelOffset +
+            panelAvgValueOffset +
+            avgLabelOffset +
+            panelTextYOffset;
+        var statFont = mDeviceProfile[:panelStatFont];
+
         dc.setColor(mLabelsColor, Graphics.COLOR_TRANSPARENT);
         dc.drawText(
-            panelCenterX,
-            sideCenterY +
-                panelLabelOffset -
-                xtinyH -
-                1 +
-                avgLabelOffset +
-                panelTextYOffset,
+            avgX,
+            statLabelY,
             Graphics.FONT_XTINY,
             "AVG",
             Graphics.TEXT_JUSTIFY_CENTER
         );
+        dc.drawText(
+            maxX,
+            statLabelY,
+            Graphics.FONT_XTINY,
+            "MAX",
+            Graphics.TEXT_JUSTIFY_CENTER
+        );
         dc.setColor(mValuesColor, Graphics.COLOR_TRANSPARENT);
         dc.drawText(
-            panelCenterX,
-            sideCenterY +
-                panelLabelOffset +
-                panelAvgValueOffset +
-                avgLabelOffset +
-                panelTextYOffset,
-            Graphics.FONT_MEDIUM,
+            avgX,
+            statValueY,
+            statFont,
             avgString(metric),
+            Graphics.TEXT_JUSTIFY_CENTER
+        );
+        dc.drawText(
+            maxX,
+            statValueY,
+            statFont,
+            maxString(metric),
             Graphics.TEXT_JUSTIFY_CENTER
         );
     }

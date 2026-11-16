@@ -39,6 +39,10 @@ module DeviceProfiles {
     //                            :hrPwrGaugeCenterYOffset.
     //   :speedFont             (Graphics.FontType) — font for the central speed readout [compact]
     //   :panelValueFont        (Graphics.FontType) — font for HR and power panel values
+    //   :panelStatFont         (Graphics.FontType) — font for the AVG and MAX values under
+    //                            the HR and power panels. FONT_MEDIUM except on the Explore 2,
+    //                            where FONT_SMALL is what lets "1250" or "88.8" sit beside the
+    //                            panel's AVG without touching it — see drawPanel. [full only]
     //   :rowValueFont          (Graphics.FontType) — font for the top bar, elapsed time,
     //                            cadence/gear/grade and footer values. FONT_LARGE on 1.67
     //                            aspect screens; shorter screens step it down. [compact]
@@ -128,6 +132,7 @@ module DeviceProfiles {
                 :elapsedTimeYOffset => 12,
                 :speedFont => Graphics.FONT_NUMBER_MEDIUM,
                 :panelValueFont => Graphics.FONT_NUMBER_MILD,
+                :panelStatFont => Graphics.FONT_MEDIUM,
                 :rowValueFont => Graphics.FONT_MEDIUM,
                 :gaugeRadiusFactor => 0.275,
                 :bottomLabelOffset => 0,
@@ -159,6 +164,7 @@ module DeviceProfiles {
                 :elapsedTimeYOffset => 0,
                 :speedFont => Graphics.FONT_NUMBER_THAI_HOT,
                 :panelValueFont => Graphics.FONT_NUMBER_HOT,
+                :panelStatFont => Graphics.FONT_MEDIUM,
                 :rowValueFont => Graphics.FONT_LARGE,
                 :gaugeRadiusFactor => 0.33,
                 :bottomLabelOffset => 0,
@@ -190,6 +196,7 @@ module DeviceProfiles {
                 :elapsedTimeYOffset => -10,
                 :speedFont => Graphics.FONT_NUMBER_HOT,
                 :panelValueFont => Graphics.FONT_NUMBER_MEDIUM,
+                :panelStatFont => Graphics.FONT_SMALL,
                 :rowValueFont => Graphics.FONT_LARGE,
                 :gaugeRadiusFactor => 0.33,
                 :bottomLabelOffset => 0,
@@ -291,6 +298,7 @@ module DeviceProfiles {
                 :elapsedTimeYOffset => -13,
                 :speedFont => Graphics.FONT_NUMBER_HOT,
                 :panelValueFont => Graphics.FONT_NUMBER_MEDIUM,
+                :panelStatFont => Graphics.FONT_MEDIUM,
                 :rowValueFont => Graphics.FONT_LARGE,
                 :gaugeRadiusFactor => 0.33,
                 :bottomLabelOffset => 2,
@@ -321,6 +329,7 @@ module DeviceProfiles {
             :elapsedTimeYOffset => -10,
             :speedFont => Graphics.FONT_NUMBER_HOT,
             :panelValueFont => Graphics.FONT_NUMBER_MEDIUM,
+            :panelStatFont => Graphics.FONT_MEDIUM,
             :rowValueFont => Graphics.FONT_LARGE,
             :gaugeRadiusFactor => 0.33,
             :bottomLabelOffset => 0,
