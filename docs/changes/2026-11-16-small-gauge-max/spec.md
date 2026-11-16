@@ -46,13 +46,27 @@ confirm, or a risk carried into the plan.
    `:panelLeftX` / `:panelRightX` (which also removes concern 7's 4 px
    asymmetry). That brings the two panels' big values closer together; the
    widest pair that can show at once, `"188"` beside `"1250"` in
-   `:panelValueFont`, must keep 8 px (`PANEL_VALUE_MIN_GAP`) between them, and
-   the offset is floored to guarantee it. Gap when exactly centred: 1050
-   −12.2, 850 53.7, 1030 22.8, 1040 21.3, Explore 2 3.6. So the floor binds on
-   the 1050 / 1060 (values ~10 px out from the pair's centre) and the
-   Explore 2 (~2 px out); the 850, 1040 and 1030 are exactly centred. Value
-   widths on the 1050: 53 px per digit (fixed-width), `"188"` 159, `"1250"`
-   212; 850 90 / 120; 1030 / 1040 / Explore 2 72 / 96.
+   `:panelValueFont`, must keep 8 px (`PANEL_VALUE_MIN_GAP`) between them.
+   Gap when exactly centred: 1050 −12.2, 850 53.7, 1030 22.8, 1040 21.3,
+   Explore 2 3.6. Value widths on the 1050: 53 px per digit (fixed-width),
+   `"188"` 159, `"1250"` 212; 850 90 / 120; 1030 / 1040 / Explore 2 72 / 96.
+
+   **Revised after a second visual check (2026-11-16):** a first version
+   floored the offset to keep the 8 px, which left the value ~10 px outward
+   of the pair's centre on the 1050 / 1060 (~1.3 px on the Explore 2) on every
+   frame — visibly off-centre even for `"--"`. The value is now **always**
+   exactly centred, and the gap is kept per frame instead: `drawPanels`
+   measures the two strings actually shown, and when
+   `leftW + rightW > 4 × :panelValueDX − 2 × PANEL_VALUE_MIN_GAP` the wider one
+   is drawn one `FONT_NUMBER_*` step smaller (`smallerNumberFont`), then the
+   other too if still needed. Three digits beside three digits always fit
+   (`"888"` + `"888"`: 1050 318 of 330.7 allowed, Explore 2 144 of 162.8), so
+   in practice only a four-digit power steps down, and only on the 1050 /
+   1060 (`FONT_NUMBER_HOT` 109 px → `FONT_NUMBER_MEDIUM` 82 px, `"1250"` 212 →
+   160 px, gap 13.8) and the Explore 2 (`FONT_NUMBER_MEDIUM` 48 → `MILD` 41,
+   96 → 72 px, gap 17.4). The 850, 1030 and 1040 never step down. The value is
+   drawn `TEXT_JUSTIFY_VCENTER`, so the smaller face stays on the same centre
+   line. Cost: two `getTextWidthInPixels` per frame on `:full`.
 
 4. **Grouping of four numbers in one row.** The row reads, left to right,
    `AVG MAX | AVG MAX`. If the four values are evenly spaced, nothing shows

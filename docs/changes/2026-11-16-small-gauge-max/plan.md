@@ -93,8 +93,13 @@ listed, which only adds clearance): 1050/1060 173.2, 850/550 158.4, 1040
 
 The arc and the AVG marker stay exactly as they are. **Drift (2026-11-16):**
 the big value and its HR/PWR label no longer stay at `:panelLeftX` /
-`:panelRightX`; they centre over the AVG/MAX pair via `:panelValueDX`, floored
-so `"188"` and `"1250"` keep 8 px between panels (spec concern 3).
+`:panelRightX`; they centre over the AVG/MAX pair via `:panelValueDX`
+(`0.5 × reach`, never floored). `drawPanels` resolves both value strings and
+passes each `drawPanel` its text and font; when the two would come within 8 px
+of each other the wider steps down one number font (`smallerNumberFont`).
+See spec concern 3 for the measurements. A first version floored
+`:panelValueDX` instead, which left the 1050 values ~10 px off-centre; it was
+replaced after the simulator check.
 
 ### T3 — `CLAUDE.md`, parallel with T1
 

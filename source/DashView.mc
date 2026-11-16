@@ -122,8 +122,8 @@ class DashView extends WatchUi.DataField {
     // Fallback full-scale speed when the speedGaugeMax setting is left at 0.
     private const SPEED_MAX_DEFAULT_METRIC = 60.0;
     private const SPEED_MAX_DEFAULT_STATUTE = 40.0;
-    // Minimum px between the left and right panels' big values at their widest
-    // (computeFullLayout, :panelValueDX).
+    // Minimum px between the left and right panels' big values. Below it,
+    // drawPanels draws the wider value one number font smaller.
     private const PANEL_VALUE_MIN_GAP = 8;
     // Used when FTP is missing or nonsensical. The setting itself is clamped to
     // 50 W at the bottom, but a null or corrupt stored value still lands here.
@@ -834,24 +834,14 @@ class DashView extends WatchUi.DataField {
         }
 
         // The label and big value sit centred over their AVG / MAX pair, i.e.
-        // halfway between the two columns: centerX -/+ 0.5 * reach. Moving
-        // them in from the arc's midpoint brings the two panels' values closer
-        // together, and the widest pair that can show at once, a three-digit
-        // HR beside a four-digit power peak, must still clear the other panel
-        // by PANEL_VALUE_MIN_GAP. That floor binds on the 1050 / 1060, where
-        // the values sit ~10 px out from the pair's centre, and on the
-        // Explore 2 (~2 px out); the 850, 1040 and 1030 are centred exactly.
-        // Measured gaps for "188" + "1250" when centred: 1050 -12.2,
-        // 850 53.7, 1030 22.8, 1040 21.3, Explore 2 3.6.
-        var valueFont = mDeviceProfile[:panelValueFont];
-        var widestPair =
-            dc.getTextWidthInPixels("188", valueFont) +
-            dc.getTextWidthInPixels("1250", valueFont);
+        // halfway between the two columns: centerX -/+ 0.5 * reach, on every
+        // device. That brings the two panels' values closer together than the
+        // arc midpoints did, so a three-digit HR beside a four-digit power peak
+        // no longer fits everywhere; drawPanels steps the wider value down a
+        // font for those frames instead of moving it off centre. Measured gaps
+        // for "188" + "1250" at this x: 1050 -12.2, 850 53.7, 1030 22.8,
+        // 1040 21.3, Explore 2 3.6.
         var valueDX = 0.5 * reach;
-        var minValueDX = widestPair / 4.0 + PANEL_VALUE_MIN_GAP / 2.0;
-        if (valueDX < minValueDX) {
-            valueDX = minValueDX;
-        }
 
         return {
             :variant => :full,
@@ -1434,8 +1424,57 @@ class DashView extends WatchUi.DataField {
         dc as Graphics.Dc,
         layout as Lang.Dictionary
     ) as Void {
-        drawPanel(dc, layout, leftMetric(), true);
-        drawPanel(dc, layout, rightMetric(), false);
+        var left = leftMetric();
+        var right = rightMetric();
+        var leftText = slotString(left, currentValue(left));
+        var rightText = slotString(right, currentValue(right));
+
+        // Both values are centred at centerX -/+ :panelValueDX, so their gap
+        // is 2 * DX - (leftW + rightW) / 2. When that drops below
+        // PANEL_VALUE_MIN_GAP, the wider value steps down one number font,
+        // then the other if that is still not enough. In practice only a
+        // four-digit power does this, on the 1050 / 1060 and Explore 2; three
+        // digits beside three digits fit on every :full device.
+        var font = mDeviceProfile[:panelValueFont];
+        var leftFont = font;
+        var rightFont = font;
+        var maxSum = 4 * layout[:panelValueDX] - 2 * PANEL_VALUE_MIN_GAP;
+        var leftW = dc.getTextWidthInPixels(leftText, font);
+        var rightW = dc.getTextWidthInPixels(rightText, font);
+        if (leftW + rightW > maxSum) {
+            if (leftW >= rightW) {
+                leftFont = smallerNumberFont(font);
+                leftW = dc.getTextWidthInPixels(leftText, leftFont);
+            } else {
+                rightFont = smallerNumberFont(font);
+                rightW = dc.getTextWidthInPixels(rightText, rightFont);
+            }
+        }
+        if (leftW + rightW > maxSum) {
+            leftFont = smallerNumberFont(font);
+            rightFont = leftFont;
+        }
+
+        drawPanel(dc, layout, left, true, leftText, leftFont);
+        drawPanel(dc, layout, right, false, rightText, rightFont);
+    }
+
+    // One step down the FONT_NUMBER_* scale. FONT_NUMBER_MILD is the bottom:
+    // below it the next face is FONT_LARGE, which does not match the number
+    // glyphs, and the 850 that uses MILD has 50 px to spare anyway.
+    private function smallerNumberFont(
+        font as Graphics.FontType
+    ) as Graphics.FontType {
+        if (font == Graphics.FONT_NUMBER_THAI_HOT) {
+            return Graphics.FONT_NUMBER_HOT;
+        }
+        if (font == Graphics.FONT_NUMBER_HOT) {
+            return Graphics.FONT_NUMBER_MEDIUM;
+        }
+        if (font == Graphics.FONT_NUMBER_MEDIUM) {
+            return Graphics.FONT_NUMBER_MILD;
+        }
+        return font;
     }
 
     // One panel: label, 10-segment arc with the AVG marker across it, value,
@@ -1446,7 +1485,9 @@ class DashView extends WatchUi.DataField {
         dc as Graphics.Dc,
         layout as Lang.Dictionary,
         metric as Number,
-        isLeft as Boolean
+        isLeft as Boolean,
+        valueText as String,
+        valueFont as Graphics.FontType
     ) as Void {
         var centerX = layout[:centerX];
         var sideCenterY = layout[:panelCenterY];
@@ -1458,7 +1499,6 @@ class DashView extends WatchUi.DataField {
         var panelLabelOffset = layout[:panelLabelOffset];
         var xtinyH = layout[:xtinyH];
 
-        var panelValueFont = mDeviceProfile[:panelValueFont];
         var unitLabelFont = mDeviceProfile[:unitLabelFont];
         var panelTextYOffset = mDeviceProfile[:panelTextYOffset];
         var panelTopLabelYOffset = mDeviceProfile[:panelTopLabelYOffset];
@@ -1556,8 +1596,8 @@ class DashView extends WatchUi.DataField {
         dc.drawText(
             panelCenterX,
             sideCenterY + panelTextYOffset,
-            panelValueFont,
-            slotString(metric, value),
+            valueFont,
+            valueText,
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
         );
         var outerDX = layout[:panelStatOuterDX];
