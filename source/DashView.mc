@@ -387,13 +387,22 @@ class DashView extends WatchUi.DataField {
         return zoneColor(shown, mPowerZoneBoundaries, COLOR_POWER);
     }
 
-    // What a gauge prints for its live value: one decimal for speed, whole
-    // numbers otherwise, "--" when that sensor is not currently reporting.
+    // Speed above 100 prints as a whole number, rounded: "100.0" is a digit
+    // wider than "88.8" and the decimal carries nothing at that speed. The
+    // cut is 99.95 rather than 100 so a value that would round up to "100.0"
+    // drops its decimal too.
+    private function speedString(value as Numeric) as String {
+        return value.format(value >= 99.95 ? "%.0f" : "%.1f");
+    }
+
+    // What a gauge prints for its live value: one decimal for speed (none
+    // from 100 up, see speedString), whole numbers otherwise, "--" when that
+    // sensor is not currently reporting.
     private function metricString(metric as Number, value as Numeric?) as String {
         if (value == null) {
             return NO_VALUE;
         }
-        return value.format(metric == METRIC_SPEED ? "%.1f" : "%d");
+        return metric == METRIC_SPEED ? speedString(value) : value.format("%d");
     }
 
     // The same for a small slot (:full panel, :compact bar), where speed has
@@ -407,11 +416,13 @@ class DashView extends WatchUi.DataField {
     }
 
     private function avgString(metric as Number) as String {
-        return avgValue(metric).format(metric == METRIC_SPEED ? "%.1f" : "%.0f");
+        var value = avgValue(metric);
+        return metric == METRIC_SPEED ? speedString(value) : value.format("%.0f");
     }
 
     private function maxString(metric as Number) as String {
-        return maxValue(metric).format(metric == METRIC_SPEED ? "%.1f" : "%.0f");
+        var value = maxValue(metric);
+        return metric == METRIC_SPEED ? speedString(value) : value.format("%.0f");
     }
 
     // Unit / name label for a metric.
