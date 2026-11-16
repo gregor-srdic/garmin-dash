@@ -55,9 +55,9 @@ Dash is a full-screen field: add it to a **1-Field** data screen so it has the w
 4. **Heart rate & power gauges** (with **Main Gauge** set to Power or Heart Rate, speed takes the slot of the small gauge it displaces: right gauge in Power mode, left in Heart Rate mode, shown there as whole km/h or mph)
     - Current heart rate, scaled to your heart rate zones (left gauge)
     - Current heart rate (center left)
-    - Average heart rate (bottom left)
+    - Average and max heart rate, side by side (bottom left)
     - Current power, 3-second average or raw per the **Power Display** setting (center right)
-    - Average power (bottom right)
+    - Average and max power, side by side (bottom right)
     - Current power (same 3s or raw value as the number), scaled to your FTP or your session max power, whichever is higher (right gauge)
 
 5. **Bottom row**
@@ -73,7 +73,7 @@ Heart rate zones are taken from your Garmin user profile for the current sport. 
 
 ### No power meter?
 
-If you don't have a power meter, the right gauge becomes a cadence gauge reading 0–150 rpm, showing current and average cadence, label and all.
+If you don't have a power meter, the right gauge becomes a cadence gauge reading 0–150 rpm, showing current, average and max cadence, label and all.
 
 ### The compact layout — Edge 840 / 540 and 830 / 530
 
@@ -84,7 +84,7 @@ These are 2.6" screens at 246 × 322 px, about a fifth of the pixel area of a 10
 3. Heart rate and power as horizontal zone bars, coloured by training zone exactly as the round gauges are (power follows the **Power Display** setting here too). With **Main Gauge** set to Power or Heart Rate, speed takes the corresponding bar, as whole km/h or mph
 4. Elapsed time, cadence, grade and distance
 
-What is dropped is the data you look at after the ride rather than during it: average heart rate, average power, total ascent and calories. Without a power meter the right bar becomes a cadence bar as above, and the cadence slot in the bottom row shows total ascent instead.
+What is dropped is the data you look at after the ride rather than during it: average and max heart rate, average and max power, total ascent and calories. Without a power meter the right bar becomes a cadence bar as above, and the cadence slot in the bottom row shows total ascent instead.
 
 ### Units & appearance
 

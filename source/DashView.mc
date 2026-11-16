@@ -122,6 +122,9 @@ class DashView extends WatchUi.DataField {
     // Fallback full-scale speed when the speedGaugeMax setting is left at 0.
     private const SPEED_MAX_DEFAULT_METRIC = 60.0;
     private const SPEED_MAX_DEFAULT_STATUTE = 40.0;
+    // Minimum px between the left and right panels' big values. Below it,
+    // drawPanels draws the wider value one number font smaller.
+    private const PANEL_VALUE_MIN_GAP = 8;
     // Used when FTP is missing or nonsensical. The setting itself is clamped to
     // 50 W at the bottom, but a null or corrupt stored value still lands here.
     private const FTP_DEFAULT = 200;
@@ -384,13 +387,22 @@ class DashView extends WatchUi.DataField {
         return zoneColor(shown, mPowerZoneBoundaries, COLOR_POWER);
     }
 
-    // What a gauge prints for its live value: one decimal for speed, whole
-    // numbers otherwise, "--" when that sensor is not currently reporting.
+    // Speed above 100 prints as a whole number, rounded: "100.0" is a digit
+    // wider than "88.8" and the decimal carries nothing at that speed. The
+    // cut is 99.95 rather than 100 so a value that would round up to "100.0"
+    // drops its decimal too.
+    private function speedString(value as Numeric) as String {
+        return value.format(value >= 99.95 ? "%.0f" : "%.1f");
+    }
+
+    // What a gauge prints for its live value: one decimal for speed (none
+    // from 100 up, see speedString), whole numbers otherwise, "--" when that
+    // sensor is not currently reporting.
     private function metricString(metric as Number, value as Numeric?) as String {
         if (value == null) {
             return NO_VALUE;
         }
-        return value.format(metric == METRIC_SPEED ? "%.1f" : "%d");
+        return metric == METRIC_SPEED ? speedString(value) : value.format("%d");
     }
 
     // The same for a small slot (:full panel, :compact bar), where speed has
@@ -404,11 +416,13 @@ class DashView extends WatchUi.DataField {
     }
 
     private function avgString(metric as Number) as String {
-        return avgValue(metric).format(metric == METRIC_SPEED ? "%.1f" : "%.0f");
+        var value = avgValue(metric);
+        return metric == METRIC_SPEED ? speedString(value) : value.format("%.0f");
     }
 
     private function maxString(metric as Number) as String {
-        return maxValue(metric).format(metric == METRIC_SPEED ? "%.1f" : "%.0f");
+        var value = maxValue(metric);
+        return metric == METRIC_SPEED ? speedString(value) : value.format("%.0f");
     }
 
     // Unit / name label for a metric.
@@ -736,7 +750,16 @@ class DashView extends WatchUi.DataField {
     //   :radius :centerY :trackWidth               — band 2, speed gauge
     //   :elapsedY :middleRowY                      — band 3, the two text rows
     //   :panelTop :panelH :panelCenterY :panelRadius :panelBarW
-    //   :panelLeftX :panelRightX :panelLabelOffset — band 4, HR / power panels
+    //   :panelLabelOffset                          — band 4, HR / power panels
+    //   :panelValueDX                              — band 4, x of each panel's
+    //                                                label and big value, as an
+    //                                                offset from centerX
+    //   :panelStatOuterDX :panelStatInnerDX        — band 4, AVG / MAX column
+    //                                                offsets from centerX, as
+    //                                                0.73 / 0.27 of the arc's
+    //                                                reach at that row (spec.md
+    //                                                in docs/changes/2026-11-16-
+    //                                                small-gauge-max)
     //   :footerY                                   — band 5, bottom stats bar
     //   :xtinyH :rowValueH                         — font heights the bands stack from
     private function computeLayout(dc as Graphics.Dc) as Lang.Dictionary {
@@ -773,7 +796,63 @@ class DashView extends WatchUi.DataField {
         var panelH = footerY - panelTop - (height * 0.01).toNumber();
         var barW = (width * 0.063).toNumber();
         var lBarX = (width * 0.021).toNumber();
-        var rBarX = width - (width * 0.038).toNumber();
+
+        var panelCenterY =
+            panelTop +
+            panelH / 2.0 +
+            (height * 0.01).toNumber() +
+            mDeviceProfile[:hrPwrGaugeCenterYOffset];
+        var panelRadius = centerX - lBarX - barW / 2.0;
+        var panelLabelOffset = (height * 0.088).toNumber();
+
+        // How far from centerX the panel arc's AVG-marker pen comes at the rows
+        // the AVG/MAX text occupies. The arc curves in towards centerX as it
+        // descends, so this is the room the outer column has before it touches
+        // the arc. Static inputs only, hence computed here and cached.
+        var penHalf = (barW + 4) / 2.0;
+        var penIn = panelRadius - penHalf;
+        var penOut = panelRadius + penHalf;
+        var sinH = Math.sin(
+            Math.toRadians(mDeviceProfile[:panelArcSweep] / 2.0 + 2.0)
+        );
+        var statRowsY =
+            panelCenterY +
+            panelLabelOffset +
+            mDeviceProfile[:avgLabelOffset] +
+            mDeviceProfile[:panelTextYOffset];
+        var rowTop = (statRowsY - xtinyH - 1).toNumber();
+        var rowBottom = (
+            statRowsY +
+            mDeviceProfile[:panelAvgValueOffset] +
+            dc.getFontHeight(mDeviceProfile[:panelStatFont])
+        ).toNumber();
+        var reach = penIn;
+        var foundRow = false;
+        for (var y = rowTop; y <= rowBottom; y++) {
+            var dy = (y - panelCenterY).abs();
+            var rho = dy / sinH;
+            if (rho < penIn) {
+                rho = penIn;
+            }
+            if (rho > penOut) {
+                continue;
+            }
+            var r = Math.sqrt(rho * rho - dy * dy);
+            if (!foundRow or r < reach) {
+                reach = r;
+                foundRow = true;
+            }
+        }
+
+        // The label and big value sit centred over their AVG / MAX pair, i.e.
+        // halfway between the two columns: centerX -/+ 0.5 * reach, on every
+        // device. That brings the two panels' values closer together than the
+        // arc midpoints did, so a three-digit HR beside a four-digit power peak
+        // no longer fits everywhere; drawPanels steps the wider value down a
+        // font for those frames instead of moving it off centre. Measured gaps
+        // for "188" + "1250" at this x: 1050 -12.2, 850 53.7, 1030 22.8,
+        // 1040 21.3, Explore 2 3.6.
+        var valueDX = 0.5 * reach;
 
         return {
             :variant => :full,
@@ -803,16 +882,19 @@ class DashView extends WatchUi.DataField {
 
             :panelTop => panelTop,
             :panelH => panelH,
-            :panelCenterY =>
-                panelTop +
-                panelH / 2.0 +
-                (height * 0.01).toNumber() +
-                mDeviceProfile[:hrPwrGaugeCenterYOffset],
-            :panelRadius => centerX - lBarX - barW / 2.0,
+            :panelCenterY => panelCenterY,
+            :panelRadius => panelRadius,
             :panelBarW => barW,
-            :panelLeftX => (lBarX + barW / 2 + centerX) / 2.0,
-            :panelRightX => (centerX + rBarX - barW / 2) / 2.0,
-            :panelLabelOffset => (height * 0.088).toNumber(),
+            :panelLabelOffset => panelLabelOffset,
+            :panelValueDX => valueDX,
+            // Why 0.73 / 0.27: see docs/changes/2026-11-16-small-gauge-max/
+            // spec.md. The outer column stays clear of the arc; the split
+            // leaves the gap between panels about twice the gap inside one,
+            // so each AVG/MAX pair reads as a group. The big value is centred
+            // over the pair (:panelValueDX), not the pair under the value: at
+            // the value's old x the outer stat would hit the arc.
+            :panelStatOuterDX => 0.73 * reach,
+            :panelStatInnerDX => 0.27 * reach,
 
             :footerY => footerY,
 
@@ -1353,29 +1435,81 @@ class DashView extends WatchUi.DataField {
         dc as Graphics.Dc,
         layout as Lang.Dictionary
     ) as Void {
-        drawPanel(dc, layout, leftMetric(), true);
-        drawPanel(dc, layout, rightMetric(), false);
+        var left = leftMetric();
+        var right = rightMetric();
+        var leftText = slotString(left, currentValue(left));
+        var rightText = slotString(right, currentValue(right));
+
+        // Both values are centred at centerX -/+ :panelValueDX, so their gap
+        // is 2 * DX - (leftW + rightW) / 2. When that drops below
+        // PANEL_VALUE_MIN_GAP, the wider value steps down one number font,
+        // then the other if that is still not enough. In practice only a
+        // four-digit power does this, on the 1050 / 1060 and Explore 2; three
+        // digits beside three digits fit on every :full device.
+        var font = mDeviceProfile[:panelValueFont];
+        var leftFont = font;
+        var rightFont = font;
+        var maxSum = 4 * layout[:panelValueDX] - 2 * PANEL_VALUE_MIN_GAP;
+        var leftW = dc.getTextWidthInPixels(leftText, font);
+        var rightW = dc.getTextWidthInPixels(rightText, font);
+        if (leftW + rightW > maxSum) {
+            if (leftW >= rightW) {
+                leftFont = smallerNumberFont(font);
+                leftW = dc.getTextWidthInPixels(leftText, leftFont);
+            } else {
+                rightFont = smallerNumberFont(font);
+                rightW = dc.getTextWidthInPixels(rightText, rightFont);
+            }
+        }
+        if (leftW + rightW > maxSum) {
+            leftFont = smallerNumberFont(font);
+            rightFont = leftFont;
+        }
+
+        drawPanel(dc, layout, left, true, leftText, leftFont);
+        drawPanel(dc, layout, right, false, rightText, rightFont);
+    }
+
+    // One step down the FONT_NUMBER_* scale. FONT_NUMBER_MILD is the bottom:
+    // below it the next face is FONT_LARGE, which does not match the number
+    // glyphs, and the 850 that uses MILD has 50 px to spare anyway.
+    private function smallerNumberFont(
+        font as Graphics.FontType
+    ) as Graphics.FontType {
+        if (font == Graphics.FONT_NUMBER_THAI_HOT) {
+            return Graphics.FONT_NUMBER_HOT;
+        }
+        if (font == Graphics.FONT_NUMBER_HOT) {
+            return Graphics.FONT_NUMBER_MEDIUM;
+        }
+        if (font == Graphics.FONT_NUMBER_MEDIUM) {
+            return Graphics.FONT_NUMBER_MILD;
+        }
+        return font;
     }
 
     // One panel: label, 10-segment arc with the AVG marker across it, value,
-    // then AVG with its value. The left panel starts at bottom-left and runs
-    // clockwise, the right panel starts at bottom-right and runs
-    // counter-clockwise.
+    // then an AVG and a MAX column side by side, AVG on the left in both
+    // panels. The left panel starts at bottom-left and runs clockwise, the
+    // right panel starts at bottom-right and runs counter-clockwise.
     private function drawPanel(
         dc as Graphics.Dc,
         layout as Lang.Dictionary,
         metric as Number,
-        isLeft as Boolean
+        isLeft as Boolean,
+        valueText as String,
+        valueFont as Graphics.FontType
     ) as Void {
         var centerX = layout[:centerX];
         var sideCenterY = layout[:panelCenterY];
         var sideRadius = layout[:panelRadius];
         var barW = layout[:panelBarW];
-        var panelCenterX = isLeft ? layout[:panelLeftX] : layout[:panelRightX];
+        var panelCenterX = isLeft
+            ? centerX - layout[:panelValueDX]
+            : centerX + layout[:panelValueDX];
         var panelLabelOffset = layout[:panelLabelOffset];
         var xtinyH = layout[:xtinyH];
 
-        var panelValueFont = mDeviceProfile[:panelValueFont];
         var unitLabelFont = mDeviceProfile[:unitLabelFont];
         var panelTextYOffset = mDeviceProfile[:panelTextYOffset];
         var panelTopLabelYOffset = mDeviceProfile[:panelTopLabelYOffset];
@@ -1473,33 +1607,57 @@ class DashView extends WatchUi.DataField {
         dc.drawText(
             panelCenterX,
             sideCenterY + panelTextYOffset,
-            panelValueFont,
-            slotString(metric, value),
+            valueFont,
+            valueText,
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
         );
+        var outerDX = layout[:panelStatOuterDX];
+        var innerDX = layout[:panelStatInnerDX];
+        var avgX = isLeft ? centerX - outerDX : centerX + innerDX;
+        var maxX = isLeft ? centerX - innerDX : centerX + outerDX;
+        var statLabelY =
+            sideCenterY +
+            panelLabelOffset -
+            xtinyH -
+            1 +
+            avgLabelOffset +
+            panelTextYOffset;
+        var statValueY =
+            sideCenterY +
+            panelLabelOffset +
+            panelAvgValueOffset +
+            avgLabelOffset +
+            panelTextYOffset;
+        var statFont = mDeviceProfile[:panelStatFont];
+
         dc.setColor(mLabelsColor, Graphics.COLOR_TRANSPARENT);
         dc.drawText(
-            panelCenterX,
-            sideCenterY +
-                panelLabelOffset -
-                xtinyH -
-                1 +
-                avgLabelOffset +
-                panelTextYOffset,
+            avgX,
+            statLabelY,
             Graphics.FONT_XTINY,
             "AVG",
             Graphics.TEXT_JUSTIFY_CENTER
         );
+        dc.drawText(
+            maxX,
+            statLabelY,
+            Graphics.FONT_XTINY,
+            "MAX",
+            Graphics.TEXT_JUSTIFY_CENTER
+        );
         dc.setColor(mValuesColor, Graphics.COLOR_TRANSPARENT);
         dc.drawText(
-            panelCenterX,
-            sideCenterY +
-                panelLabelOffset +
-                panelAvgValueOffset +
-                avgLabelOffset +
-                panelTextYOffset,
-            Graphics.FONT_MEDIUM,
+            avgX,
+            statValueY,
+            statFont,
             avgString(metric),
+            Graphics.TEXT_JUSTIFY_CENTER
+        );
+        dc.drawText(
+            maxX,
+            statValueY,
+            statFont,
+            maxString(metric),
             Graphics.TEXT_JUSTIFY_CENTER
         );
     }
